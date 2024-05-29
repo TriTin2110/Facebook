@@ -1,0 +1,103 @@
+body {
+    padding-top: 72px;
+    padding-bottom: 112px;
+    background-color: var(--background-color);
+}
+
+.container {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 20px 0;
+    display: flex;
+}
+
+.logo {
+    padding-right: 32px;
+}
+
+.logo__img {
+    margin: 0 !important;
+    padding-top: 112px;
+    padding-bottom: 16px;
+    font-size: 50px;
+    font-weight: 750;
+    color: var(--main-color);
+}
+
+.logo__des {
+    margin: 0 !important;
+    font-size: 28px;
+    font-weight: 500;
+    padding-bottom: 20px;
+    color: var(--text-color);
+}
+
+.form__input {
+    font-size: 17px;
+    color: var(--text-color);
+    margin: 6px 0;
+    padding: 14px 16px;
+    width: 100%;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+::placeholder {
+    color: #878383;
+}
+
+.bg__form form {
+    width: 396px;
+    display: flex;
+    flex-direction: column;
+    margin-top: 40px;
+    margin-bottom: 28px;
+    padding: 10px 16px;
+    border-radius: 6px;
+    padding-bottom: 24px;
+    background-color: var(--white-color);
+    box-shadow: -1px 7px 7px 0px rgba(0,0,0,0.01);
+    -webkit-box-shadow: -1px 7px 16px 0px #ccc;
+    -moz-box-shadow: -1px 7px 16px 0px rgba(0,0,0,0.51);
+}
+
+.btn__login {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: #fff;
+    margin: 10px 0;
+    padding: 10px 0;
+    border-radius: 6px;
+    text-align: center;
+    text-decoration: none;
+    background-color: var(--main-color);
+}
+
+.forget__password {
+    font-size: 14px;
+    padding-top: 4px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #ccc;
+    text-align: center;
+    color: var(--text-color);
+    text-decoration: none;
+}
+
+.create__acc {
+    font-size: 15px;
+    font-weight: 600;
+    color: #fff;
+    padding: 10px;
+    margin: 20px 100px 0 100px;
+    border-radius: 6px;
+    text-align: center;
+    text-decoration: none;
+    background-color: #42b72a;
+}
+
+.form p {
+    text-align: center;
+    font-size: 14px;
+    color: var(--text-color);
+}
