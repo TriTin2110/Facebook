@@ -1,0 +1,211 @@
+<mxfile host="app.diagrams.net" modified="2024-05-29T09:30:35.753Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36 Edg/125.0.0.0" etag="8KJaGrvhImVX1JkQuXox" version="24.4.9" type="google">
+  <diagram name="Page-1" id="2YBvvXClWsGukQMizWep">
+    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="pfkAAsE32BpPfaBulQgl-2" value="User" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="90" y="-1060" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="pfkAAsE32BpPfaBulQgl-3" value="User" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="90" y="100" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="pfkAAsE32BpPfaBulQgl-5" value="" style="endArrow=none;dashed=1;html=1;rounded=0;entryX=0.5;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;fontSize=16;" edge="1" parent="1" target="pfkAAsE32BpPfaBulQgl-3">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="105" y="-1000" as="sourcePoint" />
+            <mxPoint x="510" y="-700" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="pfkAAsE32BpPfaBulQgl-6" value="Facebook" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="470" y="-1060" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="pfkAAsE32BpPfaBulQgl-9" value="Facebook" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="470" y="90" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="pfkAAsE32BpPfaBulQgl-12" value="Database" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="790" y="-1060" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="pfkAAsE32BpPfaBulQgl-13" value="Database" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="790" y="90" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="pfkAAsE32BpPfaBulQgl-14" value="" style="endArrow=none;dashed=1;html=1;rounded=0;entryX=0.5;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;fontSize=16;" edge="1" parent="1" source="pfkAAsE32BpPfaBulQgl-6" target="pfkAAsE32BpPfaBulQgl-9">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="730" y="-650" as="sourcePoint" />
+            <mxPoint x="780" y="-700" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="pfkAAsE32BpPfaBulQgl-15" value="" style="endArrow=none;dashed=1;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;exitPerimeter=0;fontSize=16;" edge="1" parent="1" source="pfkAAsE32BpPfaBulQgl-13" target="pfkAAsE32BpPfaBulQgl-12">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="730" y="-650" as="sourcePoint" />
+            <mxPoint x="780" y="-700" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="pfkAAsE32BpPfaBulQgl-18" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="480" y="-950" width="10" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="pfkAAsE32BpPfaBulQgl-19" value="Open Log In Page" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;entryX=0;entryY=0;entryDx=0;entryDy=5;fontSize=16;" edge="1" parent="1" target="pfkAAsE32BpPfaBulQgl-18">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="110" y="-945" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="pfkAAsE32BpPfaBulQgl-20" value="Return Log In Form" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;exitX=0;exitY=1;exitDx=0;exitDy=-5;fontSize=16;" edge="1" parent="1" source="pfkAAsE32BpPfaBulQgl-18">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="110" y="-876" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="pfkAAsE32BpPfaBulQgl-24" value="Fill Log In Form" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;fontSize=16;" edge="1" parent="1">
+          <mxGeometry width="80" relative="1" as="geometry">
+            <mxPoint x="110" y="-820" as="sourcePoint" />
+            <mxPoint x="480" y="-820" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="pfkAAsE32BpPfaBulQgl-25" value="alt" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;recursiveResize=0;container=1;collapsible=0;width=160;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="40" y="-800" width="1020" height="540" as="geometry" />
+        </mxCell>
+        <mxCell id="pfkAAsE32BpPfaBulQgl-26" value="&lt;b style=&quot;font-size: 16px;&quot;&gt;[Login with Email]&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=16;" vertex="1" parent="pfkAAsE32BpPfaBulQgl-25">
+          <mxGeometry x="170" width="160" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="pfkAAsE32BpPfaBulQgl-29" value="alt" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;recursiveResize=0;container=1;collapsible=0;width=160;fontSize=16;" vertex="1" parent="pfkAAsE32BpPfaBulQgl-25">
+          <mxGeometry x="20" y="60" width="960" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="pfkAAsE32BpPfaBulQgl-30" value="&lt;b style=&quot;font-size: 16px;&quot;&gt;[Email Credentials Valid]&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=16;" vertex="1" parent="pfkAAsE32BpPfaBulQgl-29">
+          <mxGeometry x="150" width="210" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="pfkAAsE32BpPfaBulQgl-33" value="&lt;b style=&quot;font-size: 16px;&quot;&gt;[Email Credentials Invalid]&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=16;" vertex="1" parent="pfkAAsE32BpPfaBulQgl-29">
+          <mxGeometry x="15" y="60" width="220" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="pfkAAsE32BpPfaBulQgl-36" value="Log In Failed, Invalid Email" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;fontSize=16;" edge="1" parent="pfkAAsE32BpPfaBulQgl-29">
+          <mxGeometry width="80" relative="1" as="geometry">
+            <mxPoint x="420" y="140" as="sourcePoint" />
+            <mxPoint x="50" y="140" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="pfkAAsE32BpPfaBulQgl-57" value="&lt;span style=&quot;font-size: 16px;&quot;&gt;Email Credentials Valid&lt;/span&gt;" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="pfkAAsE32BpPfaBulQgl-29">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="790" y="40" as="sourcePoint" />
+            <mxPoint x="430" y="40" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="pfkAAsE32BpPfaBulQgl-32" value="" style="endArrow=none;html=1;rounded=0;exitX=-0.003;exitY=0.373;exitDx=0;exitDy=0;exitPerimeter=0;fontSize=16;" edge="1" parent="pfkAAsE32BpPfaBulQgl-25" source="pfkAAsE32BpPfaBulQgl-29">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="710" y="250" as="sourcePoint" />
+            <mxPoint x="980" y="123" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="pfkAAsE32BpPfaBulQgl-38" value="&lt;b style=&quot;font-size: 16px;&quot;&gt;[Log In with Phone Number]&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=16;" vertex="1" parent="pfkAAsE32BpPfaBulQgl-25">
+          <mxGeometry x="30" y="250" width="240" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="pfkAAsE32BpPfaBulQgl-39" value="Validate Phone Number Credentials" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;fontSize=16;" edge="1" parent="pfkAAsE32BpPfaBulQgl-25">
+          <mxGeometry x="0.1111" y="10" width="80" relative="1" as="geometry">
+            <mxPoint x="450" y="290" as="sourcePoint" />
+            <mxPoint x="810" y="290" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="pfkAAsE32BpPfaBulQgl-40" value="alt" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;recursiveResize=0;container=1;collapsible=0;width=160;fontSize=16;" vertex="1" parent="pfkAAsE32BpPfaBulQgl-25">
+          <mxGeometry x="10" y="310" width="980" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="pfkAAsE32BpPfaBulQgl-41" value="&lt;b style=&quot;font-size: 16px;&quot;&gt;[Phone Credentials Valid]&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=16;" vertex="1" parent="pfkAAsE32BpPfaBulQgl-40">
+          <mxGeometry x="155" width="220" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="pfkAAsE32BpPfaBulQgl-44" value="&lt;b style=&quot;font-size: 16px;&quot;&gt;[Phone Number Credentials Invalid]&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=16;" vertex="1" parent="pfkAAsE32BpPfaBulQgl-40">
+          <mxGeometry x="20" y="68" width="290" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="pfkAAsE32BpPfaBulQgl-46" value="Log In Failed, Invalid Phone Number" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;fontSize=16;" edge="1" parent="pfkAAsE32BpPfaBulQgl-40">
+          <mxGeometry width="80" relative="1" as="geometry">
+            <mxPoint x="430" y="150" as="sourcePoint" />
+            <mxPoint x="50" y="150" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="pfkAAsE32BpPfaBulQgl-43" value="" style="endArrow=none;html=1;rounded=0;exitX=0;exitY=0.339;exitDx=0;exitDy=0;exitPerimeter=0;entryX=1;entryY=0.339;entryDx=0;entryDy=0;entryPerimeter=0;fontSize=16;" edge="1" parent="pfkAAsE32BpPfaBulQgl-25" source="pfkAAsE32BpPfaBulQgl-40" target="pfkAAsE32BpPfaBulQgl-40">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="770" y="330" as="sourcePoint" />
+            <mxPoint x="820" y="280" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="pfkAAsE32BpPfaBulQgl-27" value="" style="html=1;verticalAlign=bottom;labelBackgroundColor=none;endArrow=block;endFill=1;rounded=0;fontSize=16;" edge="1" parent="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="490" y="-760" as="sourcePoint" />
+            <mxPoint x="850" y="-760" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="pfkAAsE32BpPfaBulQgl-28" value="Validate Email Credentials" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="465" y="-792" width="210" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="pfkAAsE32BpPfaBulQgl-37" value="" style="endArrow=none;dashed=1;html=1;dashPattern=1 3;strokeWidth=2;rounded=0;entryX=0.998;entryY=0.447;entryDx=0;entryDy=0;entryPerimeter=0;exitX=-0.002;exitY=0.449;exitDx=0;exitDy=0;exitPerimeter=0;fontSize=16;" edge="1" parent="1" source="pfkAAsE32BpPfaBulQgl-25" target="pfkAAsE32BpPfaBulQgl-25">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="30" y="-555" as="sourcePoint" />
+            <mxPoint x="900" y="-570" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="pfkAAsE32BpPfaBulQgl-47" value="alt" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;recursiveResize=0;container=1;collapsible=0;width=160;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="40" y="-220" width="1020" height="290" as="geometry" />
+        </mxCell>
+        <mxCell id="pfkAAsE32BpPfaBulQgl-48" value="&lt;b style=&quot;font-size: 16px;&quot;&gt;[Credentials valid]&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=16;" vertex="1" parent="pfkAAsE32BpPfaBulQgl-47">
+          <mxGeometry x="150" width="160" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="pfkAAsE32BpPfaBulQgl-49" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};fontSize=16;" vertex="1" parent="pfkAAsE32BpPfaBulQgl-47">
+          <mxGeometry x="800" y="40" width="10" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="pfkAAsE32BpPfaBulQgl-50" value="Fetch User Data" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;entryX=0;entryY=0;entryDx=0;entryDy=5;fontSize=16;" edge="1" parent="pfkAAsE32BpPfaBulQgl-47" target="pfkAAsE32BpPfaBulQgl-49">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="450" y="45" as="sourcePoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="pfkAAsE32BpPfaBulQgl-51" value="Return User Data" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;exitX=0;exitY=1;exitDx=0;exitDy=-5;fontSize=16;" edge="1" parent="pfkAAsE32BpPfaBulQgl-47" source="pfkAAsE32BpPfaBulQgl-49">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="440" y="115" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="pfkAAsE32BpPfaBulQgl-52" value="Log In Successful, Return User Data" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;fontSize=16;" edge="1" parent="pfkAAsE32BpPfaBulQgl-47">
+          <mxGeometry width="80" relative="1" as="geometry">
+            <mxPoint x="440" y="160" as="sourcePoint" />
+            <mxPoint x="70" y="160" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="pfkAAsE32BpPfaBulQgl-55" value="&lt;b style=&quot;font-size: 16px;&quot;&gt;[Credentials Invalid]&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=16;" vertex="1" parent="pfkAAsE32BpPfaBulQgl-47">
+          <mxGeometry x="40" y="220" width="180" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="pfkAAsE32BpPfaBulQgl-56" value="Log In Failed, Show Error Message" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;fontSize=16;" edge="1" parent="pfkAAsE32BpPfaBulQgl-47">
+          <mxGeometry width="80" relative="1" as="geometry">
+            <mxPoint x="440" y="270" as="sourcePoint" />
+            <mxPoint x="60" y="270" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="pfkAAsE32BpPfaBulQgl-53" value="Show User Dashboard" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;fontSize=16;" edge="1" parent="1">
+          <mxGeometry width="80" relative="1" as="geometry">
+            <mxPoint x="110" y="-20" as="sourcePoint" />
+            <mxPoint x="480" y="-20" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="pfkAAsE32BpPfaBulQgl-54" value="" style="endArrow=none;html=1;rounded=0;exitX=0.003;exitY=0.772;exitDx=0;exitDy=0;exitPerimeter=0;entryX=1.003;entryY=0.783;entryDx=0;entryDy=0;entryPerimeter=0;fontSize=16;" edge="1" parent="1" source="pfkAAsE32BpPfaBulQgl-47" target="pfkAAsE32BpPfaBulQgl-47">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="680" y="150" as="sourcePoint" />
+            <mxPoint x="730" y="100" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="pfkAAsE32BpPfaBulQgl-58" value="&lt;span style=&quot;font-size: 16px;&quot;&gt;Email Credentials Invalid&lt;/span&gt;" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="850" y="-640" as="sourcePoint" />
+            <mxPoint x="490" y="-640" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="pfkAAsE32BpPfaBulQgl-61" value="&lt;span style=&quot;font-size: 16px;&quot;&gt;Phone Number Credentials Valid&lt;/span&gt;" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="850" y="-460" as="sourcePoint" />
+            <mxPoint x="480" y="-460" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="pfkAAsE32BpPfaBulQgl-64" value="&lt;span style=&quot;font-size: 16px;&quot;&gt;Phone Number Credentials Invalid&lt;/span&gt;" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="850" y="-390" as="sourcePoint" />
+            <mxPoint x="490" y="-390" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
