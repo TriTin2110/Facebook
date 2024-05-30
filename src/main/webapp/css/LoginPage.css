@@ -135,9 +135,16 @@ form {
 input[type="text"],
 input[type="password"],
 select {
+    outline: #1877f2;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 3px;
+}
+
+.modal-body input:focus,
+.modal-body select:focus {
+    border: 1px solid #1877f2;
+    box-shadow: 0px 0px 5px 0px blue;
 }
 
 .form-group .name {
@@ -156,6 +163,9 @@ h6 {
 
 select {
     width: 30%;
+    max-height: 50px;
+    overflow-y: auto;
+    display: block;
 }
 
 .form-group-1 {
