@@ -1,37 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>BodyBook</title>
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" />
-<link rel="stylesheet" href="../css/base.css" />
-<link rel="stylesheet" href="../css/login.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/CSS/base.css">
+    <link rel="stylesheet" href="/CSS/login.css">
 </head>
+
 <body>
-	<div class="container">
-		<div class="logo">
-			<h1 class="logo__img">BodyBook</h1>
-			<h2 class="logo__des">Bodybook giúp bạn kết nối và chia sẻ với
-				mọi người trong cuộc sống của của bạn.</h2>
-		</div>
-		<div class="form">
-			<div class="bg__form">
-				<form action="">
-					<input type="text" class="form__input"
-						placeholder="Email hoặc số điện thoại" /> <input
-						type="password" class="form__input" placeholder="Mật khẩu" /> <a
-						href="" class="btn__login">Đăng nhập</a> <a href=""
-						class="forget__password">Quên mật khẩu?</a> <a href=""
-						class="create__acc">Tạo tài khoản mới</a>
-				</form>
-			</div>
-			<p>
-				<b>Tạo Trang</b> dành cho người nổi tiếng, thương hiệu hoặc doanh
-				nghiệp.
-			</p>
-		</div>
-	</div>
+    <section class="vh-100 d-flex justify-content-end align-items-center">
+        <div class="container">
+            <div class="row justify-content-center align-items-center">
+                <div class="col-md-6">
+                    <div class="container-left text-center">
+                        <h1 class="logo">BodyBook</h1>
+                        <h3 class="description">Bodybook giúp bạn kết nối và chia sẻ với mọi người trong cuộc sống của của bạn.</h3>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="container-right">
+                        <div class="card shadow-2-strong">
+                            <div class="card__body p-5 text-center">
+                                <h3 class="form__title mb-5">Sign in</h3>
+                                <form class="form">
+                                    <div class="form__group form-outline mb-4">
+                                        <input type="email" id="typeEmail" class="form__input form-control" placeholder="Email hoặc số điện thoại" required>
+                                    </div>
+                                    <div class="form__group form-outline mb-4">
+                                        <input type="password" id="typePassword" class="form__input form-control" placeholder="Mật khẩu" required>
+                                    </div>
+                                    <div class="form__check form-check d-flex justify-content-start mb-4">
+                                        <input class="form__check-input form-check-input" type="checkbox" value="" id="rememberMe">
+                                        <label class="form__check-label form-check-label" for="rememberMe"> Lưu mật khẩu </label>
+                                    </div>
+                                    <button class="form__submit btn btn-primary btn-block mb-4" type="submit">Đăng nhập</button>
+                                    <a href="#" class="form__forgot-password">Quên mật khẩu?</a>
+                                    <hr class="form__separator my-4">
+                                    <button class="form__create-account btn btn-lg btn-block btn-primary mb-2" style="background-color: #dd4b39;" type="button">
+                                        Tạo tài khoản mới
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
 </body>
+
 </html>
