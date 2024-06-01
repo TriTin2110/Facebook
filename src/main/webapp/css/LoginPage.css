@@ -155,11 +155,23 @@ footer {
 /* Modal */
 .modal-content {
     width: 430px;
-    transform: translateX(+25%);
 }
 
 .modal-header .title-des {
     margin: 0;
+    font-weight: 400;
+}
+
+.close {
+    position: relative;
+    top: -20px;
+    font-size: 30px;
+    border: none;
+    background-color: #fff;
+}
+
+.close:hover {
+    color: #ccc;
 }
 
 form {
@@ -168,6 +180,7 @@ form {
 }
 
 .form-group {
+    margin: 4px 0;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -220,12 +233,15 @@ select {
 
 .form-group-1 label {
     position: relative;
-    font-weight: 200;
-    top: 4px;
+    font-weight: 400;
+    top: -1px;
 }
 
-h6 {
-    margin: 0;
+.modal-body h6 {
+    margin-top: 12px;
+    font-size: 12px;
+    font-weight: 400;
+    color: #000;
 }
 
 .btn-register {
