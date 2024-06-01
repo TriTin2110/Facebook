@@ -36,6 +36,12 @@ public class User {
 	public User() {
 	}
 
+	public User(String userId, String email, String password) {
+		this.userId = userId;
+		this.email = email;
+		this.password = password;
+	}
+
 	public User(String userId, String email, UserInformation userInformation, String password, Integer friendQuantity,
 			List<User> listFriend, String avatar, List<Group> listGroup, List<Post> postList) {
 		this.userId = userId;

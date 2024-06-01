@@ -1,22 +1,35 @@
 <%@page import="java.sql.Date"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%
+String url = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+		+ request.getContextPath();
+%>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<link rel="stylesheet" href="../css/LoginPage.css" />
-<link
+<link rel="stylesheet" type="text/css" href="<%=url%>/css/LoginPage.css" />
+<link rel="stylesheet" type="text/css"
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-	rel="stylesheet"
 	integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
 	crossorigin="anonymous" />
-<link rel="stylesheet" href="../css/base.css" />
+<link rel="stylesheet" type="text/css" href="<%=url%>/css/base.css" />
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <title>Đăng nhập Facebook</title>
 </head>
-
-<body>
+<%
+String lastName = (request.getAttribute("lastName") == null) ? "" : request.getAttribute("lastName") + "";
+String firstName = (request.getAttribute("firstName") == null) ? "" : request.getAttribute("firstName") + "";
+String dOB = (request.getAttribute("dOB") == null) ? "1" : request.getAttribute("dOB") + "";
+String mOB = (request.getAttribute("mOB") == null) ? "1" : request.getAttribute("mOB") + "";
+String yOB = (request.getAttribute("yOB") == null) ? "1960" : request.getAttribute("yOB") + "";
+String gender = (request.getAttribute("gender") == null) ? "" : request.getAttribute("gender") + "";
+%>
+<body onload="showingErrorSignUp()">
+	<!-- Kiểm tra lỗi khi load trang -->
 	<section class="vh-100 d-flex justify-content-end align-items-center">
 		<div class="container">
 			<div class="row justify-content-center align-items-center">
@@ -46,21 +59,18 @@
 									<div
 										class="form__check form-check d-flex justify-content-start mb-4">
 										<input class="form__check-input form-check-input"
-											type="checkbox" value="" id="rememberMe" />
-										<label class="form__check-label form-check-label"
-											for="rememberMe"> Lưu mật
-											khẩu </label>
+											type="checkbox" value="" id="rememberMe" /> <label
+											class="form__check-label form-check-label" for="rememberMe">
+											Lưu mật khẩu </label>
 									</div>
 									<button class="form__submit btn btn-primary btn-block mb-4"
-										style="font-size: 20px" type="submit">
-										Đăng nhập</button>
+										style="font-size: 20px" type="submit">Đăng nhập</button>
 									<a href="#" class="form__forgot-password">Quên mật khẩu?</a>
 									<hr class="form__separator my-4" />
 									<button
 										class="form__create-account btn btn-lg btn-block btn-primary mb-2"
 										id="creat-account" type="button" data-bs-toggle="modal"
-										data-bs-target="#myModal">Tạo
-										tài khoản mới</button>
+										data-bs-target="#myModal">Tạo tài khoản mới</button>
 								</form>
 							</div>
 						</div>
@@ -89,15 +99,16 @@
 
 				<!-- Modal body -->
 				<div class="modal-body">
-					<form action="#">
+					<form action="<%=url%>/dang-ky" method="post">
 						<div class="form-group">
 							<input type="text" id="ho" class="name" name="ho" required
-								placeholder="Họ" /> <input type="text"
-								id="ten" class="name" name="ten" required placeholder="Tên" />
+								placeholder="Họ" value="<%=lastName%>" /> <input type="text"
+								id="ten" class="name" name="ten" required placeholder="Tên"
+								value="<%=firstName%>" />
 						</div>
 
 						<div class="form-group">
-							<input type="text" id="sdt" name="sdt" required
+							<input type="text" id="email" name="email" required
 								placeholder="Số di động hoặc email" />
 						</div>
 
@@ -107,33 +118,35 @@
 						</div>
 
 						<h6 for="ngaysinh">Ngày sinh</h6>
-							<div class="form-group">
+						<div class="form-group">
 							<select id="ngaysinh" name="ngaysinh" required>
-							<%
-								for(int i = 1; i <= 31; i++)
-								{
-									%><option value="<%=i%>"><%=i%></option><%
+								<%
+								for (int i = 1; i <= 31; i++) {
+								%><option value="<%=i%>"
+									<%=(i == Integer.parseInt(dOB)) ? "selected" : ""%>><%=i%></option>
+								<%
 								}
-							%>
-								
-							</select>
-				
-							<select id="thangsinh" name="thangsinh" onchange="checkingDay()"
+								%>
+
+							</select> <select id="thangsinh" name="thangsinh" onchange="checkingDay()"
 								required>
 								<%
 								for (int i = 1; i <= 12; i++) {
 								%>
-								<option value="<%=i%>">Tháng
+								<option value="<%=i%>"
+									<%=(i == Integer.parseInt(mOB)) ? "selected" : ""%>>Tháng
 									<%=i%></option>
 								<%
 								}
 								%>
-							</select> <select id="namsinh" name="namsinh" onchange="checkingDay()" required>
+							</select> <select id="namsinh" name="namsinh" onchange="checkingDay()"
+								required>
 								<%
 								int year = new Date(System.currentTimeMillis()).getYear() + 1900;
 								for (int i = 1960; i <= year; i++) {
 								%>
-								<option value="<%=i%>"><%=i%></option>
+								<option value="<%=i%>"
+									<%=(i == Integer.parseInt(yOB)) ? "selected" : ""%>><%=i%></option>
 								<%
 								}
 								%>
@@ -144,11 +157,13 @@
 						<div class="form-group">
 							<div class="form-group-1">
 								<label for="nu">Nữ</label> <input type="radio" id="nu"
-									name="gioitinh" value="nu" />
+									name="gioitinh" value="Nữ"
+									<%=(gender.equals("Nữ")) ? "checked" : ""%> />
 							</div>
 							<div class="form-group-1">
 								<label for="nam">Nam</label> <input type="radio" id="nam"
-									name="gioitinh" value="nam" />
+									name="gioitinh" value="Nam"
+									<%=(gender.equals("Nam")) ? "checked" : ""%> />
 							</div>
 						</div>
 
@@ -185,10 +200,10 @@
 
 <script type="text/javascript">
 	function checkingDay() {
-		document.getElementById("ngaysinh").length = 0;
 		var ngay = 1;
 		month = document.getElementById("thangsinh").value;
 		year = document.getElementById("namsinh").value;
+		day = document.getElementById("ngaysinh").value;
 		switch (month) {
 		case "1":
 		case "3":
@@ -216,14 +231,27 @@
 			}
 		break;
 		}
-
-		
-		for (var i = 1; i <= ngay; i++) {
-			var option = document.createElement('option');
-			option.value = i;
-			option.innerHTML = i;
-			document.getElementById("ngaysinh").appendChild(option);
+			document.getElementById("ngaysinh").length = 0;
+			for (var i = 1; i <= ngay; i++) {
+				var option = document.createElement('option');
+				option.value = i;
+				option.innerHTML = i;
+				if(i == day)
+				{
+					if(day <= ngay)
+					{
+						option.selected = true;
+					}
+				}
+				document.getElementById("ngaysinh").appendChild(option);
 		}
+	}
+	function showingErrorSignUp() {
+		<%if (request.getAttribute("errorSignUp") != null) {%>
+			$("#myModal").modal('show');
+			alert("<%=request.getAttribute("errorSignUp")%>
+	");
+<%}%>
 	}
 </script>
 </html>
