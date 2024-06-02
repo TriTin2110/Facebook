@@ -28,7 +28,7 @@ String mOB = (request.getAttribute("mOB") == null) ? "1" : request.getAttribute(
 String yOB = (request.getAttribute("yOB") == null) ? "1960" : request.getAttribute("yOB") + "";
 String gender = (request.getAttribute("gender") == null) ? "" : request.getAttribute("gender") + "";
 %>
-<body onload="showingErrorSignUp()">
+<body onload="showingError()">
 	<!-- Kiểm tra lỗi khi load trang -->
 	<section class="vh-100 d-flex justify-content-end align-items-center">
 		<div class="container">
@@ -45,14 +45,14 @@ String gender = (request.getAttribute("gender") == null) ? "" : request.getAttri
 						<div class="card shadow-2-strong">
 							<div class="card__body p-5 text-center">
 								<h3 class="form__title mb-5">Đăng nhập</h3>
-								<form class="form">
+								<form class="form" action="<%=url%>/dang-nhap" method="post">
 									<div class="form__group form-outline mb-4">
-										<input type="email" id="typeEmail"
+										<input type="email" name="typeEmail" id="typeEmail"
 											class="form__input form-control"
 											placeholder="Email hoặc số điện thoại" required />
 									</div>
 									<div class="form__group form-outline mb-4">
-										<input type="password" id="typePassword"
+										<input type="password" name="typePassword" id="typePassword"
 											class="form__input form-control" placeholder="Mật khẩu"
 											required />
 									</div>
@@ -246,12 +246,10 @@ String gender = (request.getAttribute("gender") == null) ? "" : request.getAttri
 				document.getElementById("ngaysinh").appendChild(option);
 		}
 	}
-	function showingErrorSignUp() {
-		<%if (request.getAttribute("errorSignUp") != null) {%>
-			$("#myModal").modal('show');
-			alert("<%=request.getAttribute("errorSignUp")%>
-	");
-<%}%>
+	function showingError() {
+		<%if (request.getAttribute("error") != null) {%>
+			alert("<%=request.getAttribute("error")%>");
+	<%}%>
 	}
 </script>
 </html>

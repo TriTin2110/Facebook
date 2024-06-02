@@ -80,16 +80,18 @@ public class UserDAO implements InterfaceDAO<User> {
 		return user;
 	}
 
-	public int selectByEmail(User t) {
+	@SuppressWarnings("unchecked")
+	public User selectByEmail(User t) {
 		// TODO Auto-generated method stub
-		int result = 0;
+		List<User> result = null;
 		SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
 		Session session = sessionFactory.openSession();
 		Query query = session.createQuery("from User where email = :email");
 		query.setParameter("email", t.getEmail());
-		result = query.getResultList().size();
+		result = query.getResultList();
 		sessionFactory.close();
-		return result;
+		return (result.isEmpty()) ? null : result.get(0);
+
 	}
 
 	@Override

@@ -72,8 +72,8 @@ public class SignUp extends HttpServlet {
 //		================================================================================================================
 		// Trường hợp đã tồn tại user trong db
 		// Thông báo không thành công và quay về trang đăng nhập
-		if (userDAO.selectByEmail(user) > 0) {
-			request.setAttribute("errorSignUp", "Email đã tồn tại");
+		if (userDAO.selectByEmail(user) != null) {
+			request.setAttribute("error", "Email đã tồn tại");
 		}
 		// Trường hợp ngược lại thực hiện việc thêm user mới
 		else {
@@ -86,18 +86,18 @@ public class SignUp extends HttpServlet {
 			// Nếu thêm user thành công thì tiếp tục thêm userInformation
 			if (userDAO.add(user) == 1) {
 				if (userInformationDAO.add(userInformation) == 1) {
-					System.out.println("Đã thêm thành công");
+					System.out.println("Đã tạo tài khoản thành công");
 				}
 				// Nếu thêm userInformationDAO không thành công thì loại bỏ user đã thêm trước
 				// đó ra khỏi danh sách
 				else {
-					request.setAttribute("errorSignUp", "Thêm không thành công");
+					request.setAttribute("error", "Tạo tài khoản không thành công");
 					userDAO.remove(user);
 				}
 			}
 			// Trường hợp ngược lại thì thông báo lỗi và quay về trang đăng nhập
 			else {
-				request.setAttribute("errorSignUp", "Thêm không thành công");
+				request.setAttribute("error", "Tạo tài khoản không thành công");
 			}
 		}
 		RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher(url);
