@@ -2,6 +2,7 @@ package Controller;
 
 import java.io.IOException;
 import java.sql.Date;
+import java.util.Random;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -14,6 +15,7 @@ import DAO.UserDAO;
 import DAO.UserInformationDAO;
 import Model.User;
 import Model.UserInformation;
+import util.SendingMail;
 import util.Hash.HashUtil;
 
 /**
@@ -50,7 +52,6 @@ public class SignUp extends HttpServlet {
 		String yOB = request.getParameter("namsinh");
 		String gender = request.getParameter("gioitinh");
 
-		System.out.println(gender);
 //		================================================================================================================
 		// setAttribute cho các thuộc tính để gán giá trị cho các ô input
 		request.setAttribute("firstName", firstName);
@@ -87,6 +88,9 @@ public class SignUp extends HttpServlet {
 			if (userDAO.add(user) == 1) {
 				if (userInformationDAO.add(userInformation) == 1) {
 					System.out.println("Đã tạo tài khoản thành công");
+					Random random = new Random();
+					int ran = random.nextInt(100000, 999999);
+					SendingMail.sendMail(email, ran, firstName + " " + lastName);
 				}
 				// Nếu thêm userInformationDAO không thành công thì loại bỏ user đã thêm trước
 				// đó ra khỏi danh sách
