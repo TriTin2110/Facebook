@@ -2,7 +2,6 @@
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,15 +10,49 @@
   <link rel="stylesheet" href="../css/bootstrap.min.css">
   <link rel="stylesheet" href="../css/messenger.css">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
+  <style>
+		.right {
+		    width: 100%;
+		    text-align: right; 
+		    float: right;
+		}
+		
+		.left {
+		    width: 100%;
+		    text-align: left; 
+		    float: left;
+		}
+</style>
 </head>
+<script type="text/javascript">
+var websocket = new WebSocket("ws://localhost:8080/SummerProject/serverChatting");
+websocket.onopen = function(message) {processOpen(message);};
+websocket.onmessage = function(message) {processMessage(message);};
+websocket.onclose = function(message) {processClose(message);};
+websocket.onerror = function(message) {processError(message);};
 
-<body>
+function processOpen(message) {
+    document.getElementById("outputChatting").innerHTML += "";
+}
+
+function processMessage(message) {
+    document.getElementById("outputChatting").innerHTML += "<div contenteditable=\"false\" class=\"d-flex flex-row justify-content-start\"> <p class=\"small p-2 ms-3 mb-1 rounded-3\" style=\"background-color: #f5f6f7;\">"+message.data+"</p></div><br>";
+}
+
+function processClose(message) {
+    document.getElementById("outputChatting").innerHTML += "";
+}
+
+function processError(message) {
+    document.getElementById("outputChatting").innerHTML += "Có lỗi xảy ra\n";
+}
+</script>
+<body onload="setUser()">
   <section style="background-color: white;">
     <div class="container py-5">
-      <h3>Messenger</h1>
+      <h3>Messenger</h3>
         <div class="row">
           <div class="col-md-12">
-
             <div class="card" id="chat3">
               <div class="card-body">
 
@@ -145,68 +178,66 @@
                       </div>
                     </div>
                   </div>
+                  
                   <div class="col-md-6 col-lg-7 col-xl-8">
-
-                    <div class="pt-3 pe-3" data-mdb-perfect-scrollbar-init style="position: relative; height: 400px">
-
-                      <div class="d-flex flex-row justify-content-start">
-                        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava6-bg.webp"
-                          alt="avatar 1" style="width: 45px; height: 100%;">
-                        <div>
-                          <p class="small p-2 ms-3 mb-1 rounded-3" style="background-color: #f5f6f7;">Lorem ipsum
-                            dolor
-                            sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-                            dolore
-                            magna aliqua.</p>
-                          <p class="small ms-3 mb-3 rounded-3 text-muted float-end">12:00 PM | Aug 13</p>
-                        </div>
+                    <div class="pt-3 pe-3" style="position: relative; height: 400px">
+                    <!-- Hiển thị nội dung chat -->
+                      <div id="outputChatting" style="overflow-y:auto; max-height: 400px;">
                       </div>
-
-                      <div class="d-flex flex-row justify-content-end">
-                        <div>
-                          <p class="small p-2 me-3 mb-1 text-white rounded-3 bg-primary">Ut enim ad minim veniam,
-                            quis
-                            nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                          <p class="small me-3 mb-3 rounded-3 text-muted">12:00 PM | Aug 13</p>
-                        </div>
-                        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
-                          alt="avatar 1" style="width: 45px; height: 100%;">
-                      </div>
-                      <div class="d-flex flex-row justify-content-end">
-                        <div>
-                          <p class="small p-2 me-3 mb-1 text-white rounded-3 bg-primary">Lorem ipsum dolor sit, amet
-                            consectetur adipisicing elit. Vel explicabo voluptatem dolorum fugit perferendis iste neque
-                            magnam quo aspernatur accusantium, repellendus, magni facere, est ea consequuntur! Harum
-                            corrupti eaque facere?</p>
-                          <p class="small me-3 mb-3 rounded-3 text-muted">12:00 PM | Aug 13</p>
-                        </div>
-                        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
-                          alt="avatar 1" style="width: 45px; height: 100%;">
-                      </div>
-
                     </div>
 
+					<!-- Hiển thị khung input -->
                     <div class="text-muted d-flex justify-content-start align-items-center pe-3 pt-3 mt-2">
                       <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava6-bg.webp"
                         alt="avatar 3" style="width: 40px; height: 100%;">
-                      <input type="text" class="form-control form-control-lg" id="exampleFormControlInput2"
+                      <input type="text" class="form-control form-control-lg" id="userInput" 
                         placeholder="Type message">
                       <a class="ms-1 text-muted" href="#!"><i class="fas fa-paperclip"></i></a>
                       <a class="ms-3 text-muted" href="#!"><i class="fas fa-smile"></i></a>
-                      <a class="ms-3 link-info" href="#!"><i class="fas fa-paper-plane"></i></a>
+                      <input onclick="sendMessage()" type="submit" class="ms-3 link-info">
                     </div>
-
                   </div>
                 </div>
-
               </div>
             </div>
-
           </div>
         </div>
-
     </div>
   </section>
 </body>
+
+<script type="text/javascript">
+  function sendMessage() {
+      if(typeof websocket != 'undefined' && websocket.readyState == WebSocket.OPEN)
+      {
+    	  showSelfMessage();
+          websocket.send(document.getElementById("userInput").value);
+          document.getElementById("userInput").value = "";
+      }
+  }
+
+  function showSelfMessage() {
+	  document.getElementById("outputChatting").innerHTML += "<div contenteditable=\"false\" class=\"d-flex flex-row justify-content-end\">"+"<p class=\"small p-2 me-3 mb-1 text-white rounded-3 bg-primary\">"+document.getElementById("userInput").value+"</p></div><br>";
+  }
+  function setUser() {
+	  if(typeof websocket != 'undefined' && websocket.readyState == WebSocket.OPEN)
+      {
+	      <%
+	      if(session.getAttribute("count")!=null)
+	      {
+	    	  session.setAttribute("count", 2);
+	      }
+	      		
+	      else
+	      {
+	    	  session.setAttribute("count", 1);
+	      }
+	      %>
+		  websocket.send("user"+<%=session.getAttribute("count")%>);
+		  count++;
+      }
+	}
+  	
+</script>
 
 </html>
