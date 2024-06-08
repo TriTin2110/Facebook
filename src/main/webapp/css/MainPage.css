@@ -10,6 +10,7 @@ body {
 }
 
 .nav {
+    z-index: 2;
     position: fixed;
     top: 0;
     left: 0;
@@ -120,9 +121,12 @@ body {
 }
 
 .section-left{
+    z-index: 1;
+    position: fixed;
+    height: 100vh;
     padding-top: 80px;
     padding-left: 20px;
-    width: 300px;
+    width: 350px;
     box-shadow: 1px 0px 3px 1px #ccc;
 }
 
@@ -165,4 +169,171 @@ body {
 .section-left h5 {
     color: #000;
     font-weight: 600;
+}
+
+.left-top {
+    border-bottom: 1px solid #ccc;
+}
+
+.left-bot h4 {
+    color: #797b7f;
+    font-weight: 600;
+    margin-top: 12px;
+}
+
+.section-right {
+    float: right;
+    height: 100vh;
+    padding-top: 80px;
+    padding-left: 10px;
+    padding-right: 20px;
+    width: 350px;
+    box-shadow: 0px 1px 3px 2px #ccc;
+}
+
+.advertise {
+    border-bottom: 1px solid #ccc;
+}
+
+.section-right h4 {
+    color: #65676b;
+    font-weight: 600;
+}
+
+.section-right ul {
+    list-style: none;
+}
+
+.section-right li {
+    padding: 8px 10px 8px 0;
+}
+
+.section-right li:hover {
+    border-radius: 10px;
+    background-color: #e4e6eb;
+}
+
+.section-right ul a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.section-right ul i {
+    color: #1877f2;
+    font-size: 23px;
+    width: 30px;
+    margin-right: 20px;
+}
+
+.section-right ul i:hover {
+    color: #1877f2;
+}
+
+.section-right img {
+    width: 130px;
+    border-radius: 8px;
+    margin-right: 20px;
+}
+
+.des h5 {
+    color: #000;
+    font-weight: 500;
+}
+
+.des h6 {
+    color: #65676b;
+}
+
+.addfriend {
+    padding-bottom: 20px;
+    border-bottom: 1px solid #ccc;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header a {
+    color: #0064D1;
+    padding: 8px 12px;
+}
+
+.header a:hover {
+    color: #0064D1;
+    border-radius: 4px;
+    text-decoration: none;
+    background-color: #e4e6eb;
+}
+
+.newfriend {
+    display: flex;
+    padding: 8px;
+    align-items: center;
+}
+
+.newfriend:hover {
+    border-radius: 8px;
+    background-color: #f5efef;
+}
+
+.newfriend img {
+    width: 50px;
+    border-radius: 50%;
+}
+
+.nf-information {
+    display: flex;
+    flex-grow: 1;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.name-acpt h5 {
+    color: #000;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+.name-acpt a {
+    display: inline-block;
+    text-align: center;
+    color: #fff;
+    border-radius: 6px;
+    width: 115px;
+    padding: 8px 0;
+    background-color: #0866ff;
+}
+
+.time-refuse {
+    text-align: right;
+}
+
+.time-refuse a {
+    display: inline-block;
+    text-align: center;
+    color: #000;
+    border-radius: 6px;
+    width: 115px;
+    padding: 8px 0;
+    background-color: #ede2e2;
+}
+
+.name-acpt a:hover {
+    color: #fff;
+    background: #0760f0;
+    text-decoration: none;
+}
+
+.time-refuse a:hover {
+    color: #000;
+    background: #d6cccc;
+    text-decoration: none;
+}
+
+.time-refuse h6 {
+    color: #86888b;
+    margin-bottom: 10px;
 }
