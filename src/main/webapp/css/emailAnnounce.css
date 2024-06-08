@@ -37,10 +37,10 @@ body {
 }
 
 .code__text {
-    font-size: 40px;
+    font-size: 30px;
     border-radius: 30px;
     padding: 8px 20px;
-    letter-spacing: 12px;
+    text-decoration: none;
     background-color: #ccc;
 }
 
