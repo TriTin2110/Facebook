@@ -15,7 +15,9 @@ public class SendingMail {
 	static final String from = "minhtrietpro8@gmail.com";
 	static final String password = "itrjdkdydkllbdgr";
 
-	public static void sendMail(String email, int ran, String fullName) {
+	public static void sendMail(String email, int ran, String fullName, String userId, String url) {
+		String css = "/css/emailAnnounce.css";
+
 		Properties properties = new Properties();
 		properties.put("mail.smtp.host", "smtp.gmail.com");
 		properties.put("mail.smtp.port", "587");
@@ -34,13 +36,35 @@ public class SendingMail {
 		Session session = Session.getInstance(properties, authenticator);
 
 		MimeMessage mimeMessage = new MimeMessage(session);
-
-		String html = "<!DOCTYPE html>\r\n" + "<html>\r\n" + "<head>\r\n" + "<meta charset=\"UTF-8\">\r\n"
-				+ "<title>Insert title here</title>\r\n"
-				+ "<link href=\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css\" rel=\"stylesheet\" integrity=\"sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH\" crossorigin=\"anonymous\">\r\n"
-				+ "</head>\r\n" + "<body>\r\n" + "	<div class=\"container\">\r\n" + "		Xin chào " + fullName
-				+ "! Cảm ơn bạn đã sử dụng BodyBook của chúng tôi\r\n" + "		<p>Mã xác minh của bạn là: <b>" + ran
-				+ "</b></p>\r\n" + "	</div>\r\n" + "</body>\r\n" + "</html>";
+		System.out.println(url + "/css/emailAnnounce.css");
+		String html = "<!DOCTYPE html>\r\n" + "<html>\r\n" + "  <head>\r\n" + "    <meta charset=\"UTF-8\" />\r\n"
+				+ "    <title>Insert title here</title>\r\n" +  "<style type=\"text/css\">\r\n"
+				+ "    body {\r\n" + "    font-family: Arial, sans-serif;\r\n" + "    background-color: #f0f2f5;\r\n"
+				+ "}\r\n" + "\r\n" + "* {\r\n" + "    margin: 0;\r\n" + "    padding: 0;\r\n"
+				+ "    box-sizing: border-box;\r\n" + "}\r\n" + "\r\n" + ".container {\r\n" + "    display: flex;\r\n"
+				+ "    justify-content: center;\r\n" + "    align-items: center;\r\n" + "    height: 100vh;\r\n"
+				+ "}\r\n" + "\r\n" + ".c-email {\r\n" + "    width: 600px;\r\n" + "    text-align: center;\r\n"
+				+ "    border-radius: 50px;\r\n" + "    box-shadow: 0px 1px 3px 1px #ccc;\r\n" + "}\r\n" + "\r\n"
+				+ ".header__title {\r\n" + "    border-top-left-radius: 50px;\r\n"
+				+ "    border-top-right-radius: 50px;\r\n" + "    color: #fff;\r\n" + "    padding: 12px 8px;\r\n"
+				+ "    background-color: #0fd59f;\r\n" + "}\r\n" + "\r\n" + ".content__text-code {\r\n"
+				+ "    font-size: 30px;\r\n" + "    margin: 20px 0 40px 0;\r\n" + "}\r\n" + "\r\n" + ".code__text {\r\n"
+				+ "    font-size: 30px;\r\n" + "    border-radius: 30px;\r\n" + "    padding: 8px 20px;\r\n"
+				+ "    text-decoration: none;\r\n" + "    background-color: #ccc;\r\n" + "}\r\n" + "\r\n"
+				+ ".content__text {\r\n" + "    color: #ccc;\r\n" + "    font-size: 20px;\r\n"
+				+ "    font-style: italic;\r\n" + "    margin: 30px 0 60px 0;\r\n" + "}\r\n" + "</style>"
+				+ "  </head>\r\n" + "  <body style=\"display: flex; justify-content: center;\">\r\n"
+				+ "    <div class=\"container\">\r\n" + "      <div class=\"c-email\">\r\n"
+				+ "        <div class=\"c-email__header\">\r\n" + "          <h2 class=\"header__title\">\r\n"
+				+ "            Xin chào " + fullName + "! Cảm ơn bạn đã sử dụng BodyBook của chúng tôi\r\n"
+				+ "          </h2>\r\n" + "        </div>\r\n" + "        <div class=\"content\">\r\n"
+				+ "          <p class=\"content__text-code\">Để xác minh tài khoản, bạn hãy truy cập vào đường link dưới đây:</p>\r\n"
+				+ "          <div class=\"code\">\r\n" + "            <a class=\"code__text\" href=\"" + url
+				+ "/xac-nhan-email?iduser=" + userId + "\">Nhấn vào đây để lấy mã xác thực</a>\r\n"
+				+ "          </div>\r\n"
+				+ "          <p class=\"content__text\">Mã xác thực này chỉ tồn tại trong 10 phút</p>\r\n"
+				+ "        </div>\r\n" + "        <div class=\"footer\"></div>\r\n" + "      </div>\r\n"
+				+ "    </div>\r\n" + "  </body>\r\n" + "</html>";
 		try {
 			// Đặt header
 			mimeMessage.addHeader("Content-type", "text/html; charset=UTF-8");

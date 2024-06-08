@@ -19,6 +19,7 @@ public class User {
 	private UserInformation userInformation;
 	private String password;
 	private Integer friendQuantity;
+	private boolean identifyStatus;
 
 	@ManyToOne
 	@JoinColumn(name = "user_id")
@@ -53,6 +54,20 @@ public class User {
 		this.avatar = avatar;
 		this.listGroup = listGroup;
 		this.listPost = postList;
+	}
+
+	public User(String userId, String email, UserInformation userInformation, String password, Integer friendQuantity,
+			User self, List<User> listFriend, String avatar, List<Group> listGroup, List<Post> listPost) {
+		this.userId = userId;
+		this.email = email;
+		this.userInformation = userInformation;
+		this.password = password;
+		this.friendQuantity = friendQuantity;
+		this.self = self;
+		this.listFriend = listFriend;
+		this.avatar = avatar;
+		this.listGroup = listGroup;
+		this.listPost = listPost;
 	}
 
 	public String getUserId() {
@@ -125,6 +140,30 @@ public class User {
 
 	public void setPostList(List<Post> postList) {
 		this.listPost = postList;
+	}
+
+	public boolean isIdentifyStatus() {
+		return identifyStatus;
+	}
+
+	public void setIdentifyStatus(boolean identifyStatus) {
+		this.identifyStatus = identifyStatus;
+	}
+
+	public User getSelf() {
+		return self;
+	}
+
+	public void setSelf(User self) {
+		this.self = self;
+	}
+
+	public List<Post> getListPost() {
+		return listPost;
+	}
+
+	public void setListPost(List<Post> listPost) {
+		this.listPost = listPost;
 	}
 
 }

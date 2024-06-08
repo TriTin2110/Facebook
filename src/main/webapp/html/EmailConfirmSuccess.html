@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h1>Bạn đã xác minh email thành công. Trang sẽ tự động chuyển hướng sau <span id="count"></span> giây nữa!</h1>
+</body>
+
+<script type="text/javascript">
+document.getElementById("count").innerHTML = 5;
+	var count = 4;
+	setInterval(() => {
+		document.getElementById("count").innerHTML = count;
+		count--;
+		if(count == -1)
+		{
+			alert("Thành công!")
+		}
+	}, 1000);
+</script>
+</html>
