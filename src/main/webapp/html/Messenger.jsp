@@ -43,8 +43,13 @@ function processMessage(message) {
 	{
 		document.getElementById("userAvaiable").innerHTML += message.data;
 	}
+	else if(message.data.includes("<div contenteditable="))
+	{
+		//Hiển thị tin nhắn của bản thân
+		document.getElementById("outputChatting").innerHTML += message.data;
+	}
 	else {
-		//Hiển thị nội dung đoạn chat
+		//Hiển thị tin nhắn của người khác
 		document.getElementById("outputChatting").innerHTML += "<div contenteditable=\"false\" class=\"d-flex flex-row justify-content-start\"> <p class=\"small p-2 ms-3 mb-1 rounded-3\" style=\"background-color: #f5f6f7;\">"+message.data+"</p></div><br>";
 	}
     
