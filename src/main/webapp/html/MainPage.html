@@ -185,10 +185,32 @@
           <div class="status">
             <div class="post-input">
               <img src="../img/avt.jpg" alt="" />
-              <span>Nguyên ơi, bạn đang nghĩ gì thế?</span>
+              <span
+                type="button"
+                class="btn btn-primary"
+                data-bs-toggle="modal"
+                data-bs-target="#myModal"
+                >Nguyên ơi, bạn đang nghĩ gì thế?</span
+              >
             </div>
-            <div class="post-btn"></div>
+            <div class="post-btn">
+              <ul>
+                <li>
+                  <i class="fa-solid fa-video"></i>
+                  <span>Video trực tiếp</span>
+                </li>
+                <li>
+                  <i class="fa-solid fa-photo-film"></i>
+                  <span>Ảnh/video</span>
+                </li>
+                <li>
+                  <i class="fa-regular fa-face-smile"></i>
+                  <span>Cảm xúc/hoạt động</span>
+                </li>
+              </ul>
+            </div>
           </div>
+          
         </div>
         <div class="section-right">
           <div class="advertise">
@@ -253,6 +275,46 @@
         </div>
       </div>
     </div>
+
+    <!-- Modal -->
+    <div class="modal" id="myModal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <h4 class="modal-title">Tạo bài viết</h4>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+            ></button>
+          </div>
+
+          <!-- Modal body -->
+          <div class="modal-body">
+            <div class="acc__post">
+              <img src="../img/avt.jpg" alt="">
+              <div class="acc__name">
+                <h4>Chí Nguyên</h4>
+                <select name="aithay" id="user_seen">
+                  <option value="congkhai">Công khai</option>
+                  <option value="banbe">Bạn bè</option>
+                  <option value="chiminhtoi">Chỉ mình tôi</option>
+                </select>
+              </div>
+            </div>
+            <div class="content__post">
+              <textarea name="noidungpost" id="content_area" placeholder="Nguyên ơi, bạn đang nghĩ gì thế?"></textarea>
+            </div>
+            <div class="upload__post">
+              <button type="submit">Đăng</button>
+            </div>
+          </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
