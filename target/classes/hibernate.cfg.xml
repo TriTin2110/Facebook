@@ -18,5 +18,6 @@
         <mapping class="Model.UserInformation"/>
         <mapping class="Model.Post"/>
         <mapping class="Model.Comment"/>
+        <mapping class="Model.Messenger"/>
     </session-factory>
 </hibernate-configuration>

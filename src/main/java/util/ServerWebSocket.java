@@ -1,6 +1,7 @@
 package util;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -10,6 +11,9 @@ import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
+
+import DAO.MessengerDAO;
+import Model.Messenger;
 
 //guestName là tên của user muốn kết nối
 //name là tên của user gửi yêu cầu
@@ -37,9 +41,14 @@ public class ServerWebSocket {
 				guestName = message.split("=")[1];
 				session.getUserProperties().put("guestName", guestName);
 				System.out.println("Guest name của: " + name + " là: " + guestName);
+				String messageUserGuest = getMessengerBetweenUserInDB(session, name, guestName);
+				if (messageUserGuest != null) {
+					showMessage(session, name, messageUserGuest);
+				}
+
 			}
-			// khi user yêu cầu đổi guest
-			else {
+			// khi user yêu cầu đổi guest (guest yêu đổi phải khác với guest trước đó)
+			else if (guestName != null) {
 				// Phải lấy đc toàn bộ nội dung của bên guest gửi qua
 				guestName = message.split("=")[1];
 				session.getUserProperties().put("guestName", guestName);
@@ -47,28 +56,17 @@ public class ServerWebSocket {
 				String guestText = "";
 				for (Session session2 : listUser) {
 					if (guestName.equals(session2.getUserProperties().get("username"))) {
-						guestText = getPreviousMessage(session, session2, name, guestName);
+						// Tìm tin nhắn của 2 user trong db
+						guestText = getMessengerBetweenUserInDB(session, name, guestName);
+						// Nếu không tồn tại thì lấy tin nhắn trước đó trong phiên
+						if (guestText == null) {
+							guestText = getPreviousMessage(session, session2, name, guestName);
+						}
 					}
 				}
+				// Nếu đoạn tin nhắn trước đó != null thì in ra
 				if (guestText != null) {
-					try {
-						// Lấy từng đoạn đc ngăn cách = dấu ";"
-						String[] guestTextSplitString = guestText.split(";");
-						// Hiển thị nội dung trước đó của 2 user
-						for (String text : guestTextSplitString) {
-							String[] splitText = text.split(":"); // Chỉ lấy phần nội dung
-							if (splitText[0].equals(name)) {// Khi tin nhắn là của mình
-								session.getBasicRemote().sendText(showSelfMessage(splitText[1]));
-							} else {// Khi tin nhắn là của khách
-								session.getBasicRemote().sendText(splitText[1]);
-							}
-
-						}
-
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+					showMessage(session, name, guestText);
 				}
 			}
 
@@ -102,19 +100,21 @@ public class ServerWebSocket {
 								message = (previousMessage == null) ? name + ":" + message
 										: previousMessage + name + ":" + message;
 								// Thực hiện lưu tin nhắn của 2 user
-								savingMessageBetweenUser(session, session2, name, name2, message);
+								savingMessageBetweenUser(session, session2, name, name2, message + ";");
 
 								// Thực hiện đặt guestName cho user2 = user1 (nếu chưa có)
 								if (session2.getUserProperties().get("guestName") == null) {
 									session2.getUserProperties().put("guestName", name);
-									session2.getBasicRemote().sendText(message.split(":")[1]);
+//									message = getNewestMessage(message);
+//									session2.getBasicRemote().sendText(message.split(":")[1]);
 								}
 
 								// Thực hiện gửi tin nhắn cho guest nếu username của user1 == guestName của user
 								// 2
 								else if (session2.getUserProperties().get("guestName").equals(name)) {
-									if (message.contains(";"))
-										message = message.substring(message.lastIndexOf(";") + 1, message.length());
+//									message = getNewestMessage(message);
+//									session2.getBasicRemote().sendText(message.split(":")[1]);
+									message = getNewestMessage(message);
 									session2.getBasicRemote().sendText(message.split(":")[1]);
 								}
 							}
@@ -136,7 +136,61 @@ public class ServerWebSocket {
 	// Nếu user thoát ra khỏi chtr thì danh sách sẽ xóa user đó ra khỏi danh sách
 	@OnClose
 	public void removeUser(Session session) {
+		// Khi user đóng thì lưu lại tin nhắn trước đó của user với những user khác
+		savingMessageToDB(session, (String) session.getUserProperties().get("username"));
 		listUser.remove(session);
+	}
+
+	public void savingMessageToDB(Session session, String name) {
+		// guest của user1 khác username của user2
+		MessengerDAO messengerDAO = new MessengerDAO();
+		for (Session session2 : listUser) {
+			// Lần lượt lấy từng từng cuộc trò truyện của user và những người khác
+			// Sau đó lưu cuộc trò chuyện của user và guestName tương ứng vào DB
+			String user2Name = (String) session2.getUserProperties().get("username");
+			String messageUserGuest = getPreviousMessage(session, session2, name, user2Name);
+			if (messageUserGuest != null) {
+				String[] userNameGuestName = { name, user2Name };
+				Arrays.sort(userNameGuestName);
+				// Gọi hàm lưu tin nhắn
+				Messenger messenger = new Messenger(userNameGuestName[0] + userNameGuestName[1], messageUserGuest);
+				messengerDAO.add(messenger);
+			}
+		}
+	}
+
+	public String getMessengerBetweenUserInDB(Session session, String name, String guestName) {
+		// Hiển thị tin nhắn của cả 2 từ db (nếu có)
+		String[] userNameGuestName = { name, guestName };
+		Arrays.sort(userNameGuestName);
+		Messenger messenger = new Messenger();
+		messenger.setUserNameGuestName(userNameGuestName[0] + userNameGuestName[1]);
+
+		MessengerDAO messengerDAO = new MessengerDAO();
+		messenger = messengerDAO.selectById(messenger);
+		// Khi tin nhắn giữa 2 người đã tồn tại trong db
+		// Thì gọi hàm savingMessageBetweenUser để lưu tin nhắn trong phiên hiện tại
+		// Và gửi tin nhắn trong db cho user gửi yêu cầu
+		if (messenger != null) {
+			for (Session session2 : listUser) {
+				if (guestName.equals(session2.getUserProperties().get("username"))) {
+					String message = "";
+					String previousMessage = getPreviousMessage(session, session2, name, guestName);
+					if (previousMessage != null) {
+						System.out.println("Đã thực hiện");
+						savingMessageBetweenUser(session, session2, name, guestName, previousMessage);
+						return previousMessage;
+					} else {
+						// Lấy tin nhắn trong db
+						message = messenger.getMessage();
+						savingMessageBetweenUser(session, session2, name, guestName, message);
+						return message;
+					}
+				}
+			}
+		}
+		return null;
+
 	}
 
 	@OnError
@@ -147,9 +201,11 @@ public class ServerWebSocket {
 	public void savingMessageBetweenUser(Session session, Session session2, String user1, String user2,
 			String message) {
 		if (session2.getUserProperties().get("text" + user2 + user1) != null) {
-			session2.getUserProperties().put("text" + user2 + user1, message + ";");
+			session2.getUserProperties().put("text" + user2 + user1, message);
 		} else {
-			session.getUserProperties().put("text" + user1 + user2, message + ";");
+			System.out.println("Đã thực hiện lưu trong phiên");
+			System.out.println(message);
+			session.getUserProperties().put("text" + user1 + user2, message);
 		}
 	}
 
@@ -159,6 +215,30 @@ public class ServerWebSocket {
 		} else {
 			return (String) session.getUserProperties().get("text" + name + name2);
 		}
+	}
+
+	public void showMessage(Session session, String name, String guestText) {
+		try {
+			// Lấy từng đoạn đc ngăn cách = dấu ";"
+			String[] guestTextSplitString = guestText.split(";");
+			// Hiển thị nội dung trước đó của 2 user
+			for (String text : guestTextSplitString) {
+				String[] splitText = text.split(":"); // Chỉ lấy phần nội dung
+				if (splitText[0].equals(name)) {// Khi tin nhắn là của mình
+					session.getBasicRemote().sendText(showSelfMessage(splitText[1]));
+				} else {// Khi tin nhắn là của khách
+					session.getBasicRemote().sendText(splitText[1]);
+				}
+			}
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public String getNewestMessage(String message) {
+		return message.substring(message.lastIndexOf(";") + 1, message.length());
 	}
 
 	// Hiển thị danh sách người dùng bên trái
