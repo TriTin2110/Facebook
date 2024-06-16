@@ -141,6 +141,11 @@ body {
     transform: translateY(+15%);
 }
 
+/* Open Profile Setting */
+#open-profile {
+    position: relative;
+}
+
 .body {
     display: flex;
 }
@@ -153,7 +158,8 @@ body {
     padding-top: 80px;
     margin-left: -10px;
     flex: 1;
-    width: 350px;
+    width: 25%;
+    max-width: 350px;
     overflow-y: scroll;
     box-shadow: 1px 0px 3px 1px #ccc;
 }
@@ -221,7 +227,8 @@ body {
     padding-top: 80px;
     padding-left: 10px;
     flex: 1;
-    width: 350px;
+    width: 25%;
+    max-width: 350px;
     overflow-y: scroll;
     box-shadow: 0px 1px 3px 2px #ccc;
 }
