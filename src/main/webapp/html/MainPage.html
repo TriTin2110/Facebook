@@ -57,19 +57,47 @@
           </ul>
         </div>
         <div class="notify-mess">
-          <ul>
-            <li>
-              <a href="#"><i class="fa-solid fa-ellipsis"></i></a>
+          <ul class="nm_list">
+            <li class="nm_item">
+              <a href="#" class="nm_link"><i class="nm_icon fa-solid fa-ellipsis"></i></a>
             </li>
-            <li>
-              <a href="Messenger.jsp"><i class="fa-solid fa-comments"></i></a>
+            <li class="nm_item">
+              <a href="Messenger.jsp" class="nm_link"><i class="nm_icon fa-solid fa-comments"></i></a>
             </li>
-            <li>
-              <a href="#"><i class="fa-solid fa-bell"></i></a>
+            <li class="nm_item">
+              <a href="#" class="nm_link"><i class="nm_icon fa-solid fa-bell"></i></a>
             </li>
-            <li>
-              <a href="#">
+            <li class="nm_item">
+              <a href="#" class="nm_link">
                 <img src="../img/avt.jpg" alt="" id="open-profile"/>
+                <div class="acc_more">
+                  <ul>
+                    <li><a href="">
+                      <img src="../img/avt.jpg" alt="">
+                      <h3>Chí Nguyên</h3>
+                    </a></li>
+                    <li><a href="#">
+                      <i class="fa-solid fa-gear"></i>
+                      <h4>Cài đặt & quyền riêng tư</h4>
+                    </a></li>
+                    <li><a href="#">
+                      <i class="fa-solid fa-circle-question"></i>
+                      <h4>Trợ giúp & hỗ trợ</h4>
+                    </a></li>
+                    <li><a href="#">
+                      <i class="fa-solid fa-moon"></i>
+                      <h4>Màn hình & trợ năng</h4>
+                    </a></li>
+                    <li><a href="#">
+                      <i class="fa-solid fa-exclamation"></i>
+                      <h4>Đóng góp ý kiến</h4>
+                    </a></li>
+                    <li><a href="../html/LoginPage.jsp">
+                      <i class="fa-solid fa-right-from-bracket"></i>
+                      <h4>Đăng xuất</h4>
+                    </a></li>
+                  </ul>
+                </div>
               </a>
             </li>
           </ul>
@@ -420,5 +448,17 @@
       integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
       crossorigin="anonymous"
     ></script>
+    <script>
+      var open = document.getElementById("open-profile");
+      var moreProfile = document.querySelector(".acc_more");
+      open.onclick = function(e) {
+        e.preventDefault();
+        if (moreProfile.style.display == 'none') {
+          moreProfile.style.display = 'block';
+        } else {
+          moreProfile.style.display = 'none';
+        }
+      }
+    </script>
   </body>
 </html>
