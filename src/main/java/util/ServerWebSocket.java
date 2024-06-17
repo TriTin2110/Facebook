@@ -34,28 +34,35 @@ public class ServerWebSocket {
 	@OnMessage
 	public void sendMessage(String message, Session session) {
 		String name = (String) session.getUserProperties().get("username");
+		String guestText = "";
 		// Kết nối với user khác khi có yêu cầu
 		if (message.contains("connectToUser")) {
 			String guestName = (String) session.getUserProperties().get("guestName");
+
 			if (guestName == null) { // Tạo mới guestName cho user gửi yêu cầu
 				guestName = message.split("=")[1];
-				session.getUserProperties().put("guestName", guestName);
-				System.out.println("Guest name của: " + name + " là: " + guestName);
-				String messageUserGuest = getMessengerBetweenUserInDB(session, name, guestName);
-				if (messageUserGuest != null) {
-					showMessage(session, name, messageUserGuest);
+				for (Session session2 : listUser) {
+					if (session2.getUserProperties().get("username").equals(guestName)) {
+						Session guestTmp = session2;
+						session.getUserProperties().put("guest", guestTmp);
+						session.getUserProperties().put("guestName", guestName);
+					}
 				}
-
+				System.out.println("Guest name của: " + name + " là: " + guestName);
+				guestText = getMessengerBetweenUserInDB(session, name, guestName);
 			}
+
 			// khi user yêu cầu đổi guest (guest yêu đổi phải khác với guest trước đó)
 			else if (guestName != null) {
 				// Phải lấy đc toàn bộ nội dung của bên guest gửi qua
 				guestName = message.split("=")[1];
 				session.getUserProperties().put("guestName", guestName);
 				System.out.println("Guest name của: " + name + " là: " + guestName);
-				String guestText = "";
 				for (Session session2 : listUser) {
 					if (guestName.equals(session2.getUserProperties().get("username"))) {
+						Session guestTmp = session2;
+						session.getUserProperties().put("guest", guestTmp);
+						session.getUserProperties().put("guestName", guestName);
 						// Tìm tin nhắn của 2 user trong db
 						guestText = getMessengerBetweenUserInDB(session, name, guestName);
 						// Nếu không tồn tại thì lấy tin nhắn trước đó trong phiên
@@ -64,12 +71,12 @@ public class ServerWebSocket {
 						}
 					}
 				}
-				// Nếu đoạn tin nhắn trước đó != null thì in ra
-				if (guestText != null) {
-					showMessage(session, name, guestText);
-				}
-			}
+				// Nếu đoạn tin nhắn trước đó tồn tại thì in ra
 
+			}
+			if (guestText != null) {
+				showMessage(session, name, guestText);
+			}
 		}
 		// khi user ko yêu cầu kết nối với user khác
 		else {
@@ -92,33 +99,30 @@ public class ServerWebSocket {
 				// trường hợp user gửi tin nhắn
 				else {
 					try {
-						for (Session session2 : listUser) {
-							String name2 = (String) session2.getUserProperties().get("username");
-							if (name2.equals(session.getUserProperties().get("guestName"))) {
-								// Lấy tin nhắn trước đó giữa 2 người (nếu có)
-								String previousMessage = getPreviousMessage(session, session2, name, name2);
-								message = (previousMessage == null) ? name + ":" + message
-										: previousMessage + name + ":" + message;
-								// Thực hiện lưu tin nhắn của 2 user
-								savingMessageBetweenUser(session, session2, name, name2, message + ";");
+						Session guest = (Session) session.getUserProperties().get("guest");
 
-								// Thực hiện đặt guestName cho user2 = user1 (nếu chưa có)
-								if (session2.getUserProperties().get("guestName") == null) {
-									session2.getUserProperties().put("guestName", name);
-//									message = getNewestMessage(message);
-//									session2.getBasicRemote().sendText(message.split(":")[1]);
-								}
+						// Lấy tin nhắn trước đó giữa 2 người (nếu có)
+						String previousMessage = getPreviousMessage(session, guest, name,
+								(String) session.getUserProperties().get("guestName"));
+						message = (previousMessage == null) ? name + ":" + message
+								: previousMessage + name + ":" + message;
+						// Thực hiện lưu tin nhắn của 2 user
+						savingMessageBetweenUser(session, guest, name,
+								(String) session.getUserProperties().get("guestName"), message + ";");
 
-								// Thực hiện gửi tin nhắn cho guest nếu username của user1 == guestName của user
-								// 2
-								else if (session2.getUserProperties().get("guestName").equals(name)) {
-//									message = getNewestMessage(message);
-//									session2.getBasicRemote().sendText(message.split(":")[1]);
-									message = getNewestMessage(message);
-									session2.getBasicRemote().sendText(message.split(":")[1]);
-								}
+						if (guest.isOpen()) {
+							Session guestOfGuest = (Session) guest.getUserProperties().get("guest");
+							// Thực hiện đặt guestName cho user2 = user1 (nếu chưa có)
+							if (guestOfGuest == null) {
+								guest.getUserProperties().put("guest", session);
 							}
 
+							// Thực hiện gửi tin nhắn cho guest nếu username của user1 == guestName của user
+							// 2
+							else if (guestOfGuest.getUserProperties().get("username").equals(name)) {
+								message = getNewestMessage(message);
+								guest.getBasicRemote().sendText(message.split(":")[1]);
+							}
 						}
 					} catch (Exception e) {
 						// TODO: handle exception
@@ -144,19 +148,20 @@ public class ServerWebSocket {
 	public void savingMessageToDB(Session session, String name) {
 		// guest của user1 khác username của user2
 		MessengerDAO messengerDAO = new MessengerDAO();
-		for (Session session2 : listUser) {
-			// Lần lượt lấy từng từng cuộc trò truyện của user và những người khác
-			// Sau đó lưu cuộc trò chuyện của user và guestName tương ứng vào DB
-			String user2Name = (String) session2.getUserProperties().get("username");
-			String messageUserGuest = getPreviousMessage(session, session2, name, user2Name);
-			if (messageUserGuest != null) {
-				String[] userNameGuestName = { name, user2Name };
-				Arrays.sort(userNameGuestName);
-				// Gọi hàm lưu tin nhắn
-				Messenger messenger = new Messenger(userNameGuestName[0] + userNameGuestName[1], messageUserGuest);
-				messengerDAO.add(messenger);
-			}
+//		for (Session session2 : listUser) {
+		// Lần lượt lấy từng từng cuộc trò truyện của user và những người khác
+		// Sau đó lưu cuộc trò chuyện của user và guestName tương ứng vào DB
+		Session guest = (Session) session.getUserProperties().get("guest");
+		String guestName = (String) session.getUserProperties().get("guestName");
+		String messageUserGuest = getPreviousMessage(session, guest, name, guestName);
+		if (messageUserGuest != null) {
+			String[] userNameGuestName = { name, guestName };
+			Arrays.sort(userNameGuestName);
+			// Gọi hàm lưu tin nhắn
+			Messenger messenger = new Messenger(userNameGuestName[0] + userNameGuestName[1], messageUserGuest);
+			messengerDAO.add(messenger);
 		}
+//		}
 	}
 
 	public String getMessengerBetweenUserInDB(Session session, String name, String guestName) {
@@ -172,21 +177,19 @@ public class ServerWebSocket {
 		// Thì gọi hàm savingMessageBetweenUser để lưu tin nhắn trong phiên hiện tại
 		// Và gửi tin nhắn trong db cho user gửi yêu cầu
 		if (messenger != null) {
-			for (Session session2 : listUser) {
-				if (guestName.equals(session2.getUserProperties().get("username"))) {
-					String message = "";
-					String previousMessage = getPreviousMessage(session, session2, name, guestName);
-					if (previousMessage != null) {
-						System.out.println("Đã thực hiện");
-						savingMessageBetweenUser(session, session2, name, guestName, previousMessage);
-						return previousMessage;
-					} else {
-						// Lấy tin nhắn trong db
-						message = messenger.getMessage();
-						savingMessageBetweenUser(session, session2, name, guestName, message);
-						return message;
-					}
-				}
+			String message = "";
+			Session guest = (Session) session.getUserProperties().get("guest");
+			String previousMessage = getPreviousMessage(session, guest, name, guestName);
+			if (previousMessage != null) {
+				// Lấy tin nhắn trước đó
+				System.out.println("Đã thực hiện");
+				savingMessageBetweenUser(session, guest, name, guestName, previousMessage);
+				return previousMessage;
+			} else {
+				// Lấy tin nhắn trong db
+				message = messenger.getMessage();
+				savingMessageBetweenUser(session, guest, name, guestName, message);
+				return message;
 			}
 		}
 		return null;
@@ -200,20 +203,33 @@ public class ServerWebSocket {
 
 	public void savingMessageBetweenUser(Session session, Session session2, String user1, String user2,
 			String message) {
-		if (session2.getUserProperties().get("text" + user2 + user1) != null) {
-			session2.getUserProperties().put("text" + user2 + user1, message);
-		} else {
+		String[] userNameSorted = { user1, user2 };
+		Arrays.sort(userNameSorted);
+		if (session2.isOpen()
+				&& session2.getUserProperties().get("text" + userNameSorted[0] + userNameSorted[1]) != null) {
+			session2.getUserProperties().put("text" + userNameSorted[0] + userNameSorted[1], message);
+		}
+		// Khi user2 ngừng hoạt động thì toàn bộ tin nhắn sẽ đc lưu trong user hiện tại
+		// và ngược
+		// lại
+		else {
 			System.out.println("Đã thực hiện lưu trong phiên");
 			System.out.println(message);
-			session.getUserProperties().put("text" + user1 + user2, message);
+			session.getUserProperties().put("text" + userNameSorted[0] + userNameSorted[1], message);
 		}
 	}
 
 	public String getPreviousMessage(Session session, Session session2, String name, String name2) {
-		if (session2.getUserProperties().get("text" + name2 + name) != null) {
-			return (String) session2.getUserProperties().get("text" + name2 + name);
-		} else {
-			return (String) session.getUserProperties().get("text" + name + name2);
+		String[] userNameSorted = { name, name2 };
+		Arrays.sort(userNameSorted);
+		// Khi user2 hoạt động thì sẽ lấy toàn bộ tin nhắn từ user2
+		if (session2.isOpen()
+				&& session2.getUserProperties().get("text" + userNameSorted[0] + userNameSorted[1]) != null) {
+			return (String) session2.getUserProperties().get("text" + userNameSorted[0] + userNameSorted[1]);
+		}
+		// Khi user2 ngừng hoạt động thì sẽ lấy toàn bộ tin nhắn từ user hiện tại
+		else {
+			return (String) session.getUserProperties().get("text" + userNameSorted[0] + userNameSorted[1]);
 		}
 	}
 
@@ -237,6 +253,7 @@ public class ServerWebSocket {
 		}
 	}
 
+	// Cập nhật tin nhắn
 	public String getNewestMessage(String message) {
 		return message.substring(message.lastIndexOf(";") + 1, message.length());
 	}
