@@ -195,21 +195,18 @@
           </div>
         </div>
         <div class="post">
-          <div class="story">
-            <ul>
-              <li>
-                <img src="../img/story0.jpg" alt="" />
-              </li>
-              <li>
-                <img src="../img/story1.jpg" alt="" />
-              </li>
-              <li>
-                <img src="../img/story2.jpg" alt="" />
-              </li>
-              <li>
-                <img src="../img/story3.jpg" alt="" />
-              </li>
-            </ul>
+          <div class="post_list">
+            <div class="story">
+              <img src="../img/story0.jpg" alt="" />
+              <img src="../img/story1.jpg" alt="" />
+              <img src="../img/story2.jpg" alt="" />
+              <img src="../img/story3.jpg" alt="" />
+              <img src="../img/story0.jpg" alt="" />
+              <img src="../img/story1.jpg" alt="" />
+              <img src="../img/story2.jpg" alt="" />
+              <img src="../img/story3.jpg" alt="" />
+            </div>
+            <button id="moveLeftButton"> <i class="fa-solid fa-angle-right"></i> </button>
           </div>
           <div class="status">
             <div class="post-input">
@@ -450,6 +447,7 @@
       crossorigin="anonymous"
     ></script>
     <script>
+      // MỞ THÔNG TIN THÊM KHI NHẤN VÀO ẢNH AVT
       var open = document.getElementById("open-profile");
       var moreProfile = document.querySelector(".acc_more");
       open.onclick = function(e) {
@@ -460,6 +458,21 @@
           moreProfile.style.display = 'none';
         }
       }
+      // CHUYỂN ẢNH GIỮA CÁC STORY
+      document.addEventListener('DOMContentLoaded', function() {
+        const moveLeftButton = document.getElementById('moveLeftButton');
+        const imageList = document.querySelector('.story');
+        const images = document.querySelectorAll('.story img');
+        const imageWidth = images[0].offsetWidth + 10; // Kích thước ảnh + margin
+        let currentIndex = 0;
+    
+        moveLeftButton.addEventListener('click', function() {
+            if (currentIndex < images.length - 4) { // Số lượng ảnh hiển thị trong khung là 6
+                currentIndex++;
+                imageList.style.transform = `translateX(-${currentIndex * imageWidth}px)`;
+            }
+        });
+    });
     </script>
   </body>
 </html>
