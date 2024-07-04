@@ -14,12 +14,18 @@
 </form>
 
 <div>
-    <c:forEach var="post" items="${posts}">
-        <p>${post.content}</p>
-        <c:if test="${not empty post.image}">
-            <img src="${post.image}" alt="Post Image">
-        </c:if>
-    </c:forEach>
+    <% List<Post> posts = (List<Post>) request.getAttribute("posts"); %>
+    <% if (posts != null && !posts.isEmpty()) { %>
+        <% for (Post post : posts) { %>
+            <p><%= post.getContent() %></p>
+            <% if (post.getImage() != null && !post.getImage().isEmpty()) { %>
+                <img src="<%= post.getImage() %>" alt="Post Image">
+            <% } %>
+        <% } %>
+    <% } else { %>
+        <p>No posts available.</p>
+    <% } %>
 </div>
+
 </body>
 </html>
