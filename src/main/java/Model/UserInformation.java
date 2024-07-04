@@ -29,6 +29,14 @@ public class UserInformation {
 		super();
 	}
 
+	public UserInformation(String userId, String fullName, Boolean gender, Date dateOfBirth, String phoneNumber) {
+		this.userId = userId;
+		this.fullName = fullName;
+		this.gender = gender;
+		this.dateOfBirth = dateOfBirth;
+		this.phoneNumber = phoneNumber;
+	}
+
 	public UserInformation(String userId, User user, String fullName, Boolean gender, Date dateOfBirth,
 			String phoneNumber, String country, String homeTown, String workingPlace, String selfDescription) {
 		super();

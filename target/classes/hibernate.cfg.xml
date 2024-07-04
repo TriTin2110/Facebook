@@ -5,7 +5,7 @@
 <hibernate-configuration>
     <session-factory>
         <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
-        <property name="hibernate.connection.password">123456</property>
+        <property name="hibernate.connection.password">TheFacebook2024</property>
         <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/facebook</property>
         <property name="hibernate.connection.username">facebook</property>
         <property name="hibernate.dialect">org.hibernate.dialect.MySQL8Dialect</property>

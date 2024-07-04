@@ -28,8 +28,7 @@ String mOB = (request.getAttribute("mOB") == null) ? "1" : request.getAttribute(
 String yOB = (request.getAttribute("yOB") == null) ? "1960" : request.getAttribute("yOB") + "";
 String gender = (request.getAttribute("gender") == null) ? "" : request.getAttribute("gender") + "";
 %>
-<body onload="showingError()">
-	<!-- Kiểm tra lỗi khi load trang -->
+<body onload="showingError()"> <!-- Kiểm tra lỗi khi load trang -->
 	<section class="vh-100 d-flex justify-content-end align-items-center">
 		<div class="container">
 			<div class="row justify-content-center align-items-center">
@@ -45,7 +44,7 @@ String gender = (request.getAttribute("gender") == null) ? "" : request.getAttri
 						<div class="card shadow-2-strong">
 							<div class="card__body p-5 text-center">
 								<h3 class="form__title mb-5">Đăng nhập</h3>
-								<form class="form" action="<%=url%>/dang-nhap" method="post">
+								<form class="form" action="<%=url%>/Account?action=dang-nhap" method="post">
 									<div class="form__group form-outline mb-4">
 										<input type="email" name="typeEmail" id="typeEmail"
 											class="form__input form-control"
@@ -59,7 +58,7 @@ String gender = (request.getAttribute("gender") == null) ? "" : request.getAttri
 									<div
 										class="form__check form-check d-flex justify-content-start mb-4">
 										<input class="form__check-input form-check-input"
-											type="checkbox" value="" id="rememberMe" /> <label
+											type="checkbox" value="" id="rememberMe"/> <label
 											class="form__check-label form-check-label" for="rememberMe">
 											Lưu mật khẩu </label>
 									</div>
@@ -99,7 +98,7 @@ String gender = (request.getAttribute("gender") == null) ? "" : request.getAttri
 
 				<!-- Modal body -->
 				<div class="modal-body">
-					<form action="<%=url%>/dang-ky" method="post">
+					<form action="<%=url%>/Account?action=dang-ky" method="post">
 						<div class="form-group">
 							<input type="text" id="ho" class="name" name="ho" required
 								placeholder="Họ" value="<%=lastName%>" /> <input type="text"

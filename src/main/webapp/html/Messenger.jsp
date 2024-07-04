@@ -1,3 +1,4 @@
+<%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -39,9 +40,23 @@ function processOpen(message) {
 
 function processMessage(message) {
 	//Hiển thị danh sách người dùng
-	if(message.data.includes("<li class="))
+	if(message.data.includes("user-name: "))
 	{
-		document.getElementById("userAvaiable").innerHTML += message.data;
+		var username = message.data.split(": ")[1];
+		var otherUser = document.createElement("div");
+		otherUser.innerHTML = returnOtherUserTag(username);
+		otherUser.id = username;
+		document.getElementById("userAvaiable").appendChild(otherUser);
+	}
+	else if(message.data.includes("remove-user:"))
+	{
+		var nameUserRemove = message.data.split(":")[1];
+		var userRemove = document.getElementById(nameUserRemove);
+		userRemove.parentNode.removeChild(userRemove);
+	}
+	else if(message.data == "clear-text")
+	{
+		document.getElementById("outputChatting").innerHTML = "";
 	}
 	else if(message.data.includes("<div contenteditable="))
 	{
@@ -124,6 +139,10 @@ function processError(message) {
 </body>
 
 <script type="text/javascript">
+	function checkingUser() {
+		
+	}
+
   function sendMessage() {
       if(typeof websocket != 'undefined' && websocket.readyState == WebSocket.OPEN)
       {
@@ -143,6 +162,26 @@ function processError(message) {
 	document.getElementById("outputChatting").innerHTML = "";
 	//Gửi tên của user muốn kết nối
 	websocket.send(user);
+}
+  function returnOtherUserTag(userName) {
+	return "<li class=\"p-2 border-bottom\">\r\n"
+	+ "                            <button onclick=\"connectToUser('connectToUser=" + userName
+	+ "')\" class=\"d-flex justify-content-between\">\r\n"
+	+ "                              <div class=\"d-flex flex-row\">\r\n"
+	+ "                                <div>\r\n" + "                                  <img\r\n"
+	+ "                                    src=\"https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp\"\r\n"
+	+ "                                    alt=\"avatar\" class=\"d-flex align-self-center me-3\" width=\"60\">\r\n"
+	+ "                                  <span class=\"badge bg-success badge-dot\"></span>\r\n"
+	+ "                                </div>\r\n"
+	+ "                                <div class=\"pt-1\">\r\n"
+	+ "                                  <p class=\"fw-bold mb-0\">" + userName + "</p>\r\n"
+	+ "                                  <p class=\"small text-muted\">Hello, Are you there?</p>\r\n"
+	+ "                                </div>\r\n" + "                              </div>\r\n"
+	+ "                              <div class=\"pt-1\">\r\n"
+	+ "                                <p class=\"small text-muted mb-1\">Just now</p>\r\n"
+	+ "                                <span class=\"badge bg-danger rounded-pill float-end\">3</span>\r\n"
+	+ "                              </div>\r\n" + "                            </button>\r\n"
+	+ "                          </li>";
 }
   	
 </script>

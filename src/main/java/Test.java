@@ -17,7 +17,7 @@ public class Test {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		testCase();
+		testInput();
 	}
 
 	public static void testCase() {
@@ -32,7 +32,7 @@ public class Test {
 		UserInformation userInformation = new UserInformation("U1", null, "ViDu", true,
 				new Date(System.currentTimeMillis()), "12345678", "VN", "HCM", "HCM", "Nothing");
 		User user = new User("U1", "abc@gmail.com", userInformation, "123", 10, null, "image.png", null, null);
-
+//
 		List<Group> listGroups = new ArrayList<Group>();
 		List<Comment> listComment = new ArrayList<Comment>();
 		List<Post> listPosts = new ArrayList<Post>();
@@ -56,7 +56,7 @@ public class Test {
 		CommentDAO commentDAO = new CommentDAO();
 		UserInformationDAO userInformationDAO = new UserInformationDAO();
 		UserDAO userDAO = new UserDAO();
-
+//
 		userInformationDAO.add(userInformation);
 		userDAO.add(user);
 		groupDAO.add(group);
