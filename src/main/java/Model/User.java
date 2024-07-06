@@ -37,6 +37,11 @@ public class User {
 	public User() {
 	}
 
+	public User(String email) {
+		super();
+		this.email = email;
+	}
+
 	public User(String userId, String email, String password) {
 		this.userId = userId;
 		this.email = email;

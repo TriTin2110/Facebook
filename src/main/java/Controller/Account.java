@@ -5,7 +5,6 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -59,7 +58,7 @@ public class Account extends HttpServlet {
 			break;
 
 		case "dang-nhap":
-			singIn(request, response);
+			signIn(request, response);
 			break;
 
 		case "xac-thuc-email":
@@ -78,8 +77,7 @@ public class Account extends HttpServlet {
 		doGet(request, response);
 	}
 
-	private void gainValueForForm(HttpServletRequest request, String[] information) {
-		// setAttribute cho các thuộc tính để gán giá trị cho các ô input
+	private void gainValueForForm(HttpServletRequest request, String[] information) { // Trường hợp tạo tài khoản không
 		request.setAttribute("firstName", information[0]);
 		request.setAttribute("lastName", information[1]);
 		request.setAttribute("dOB", information[2]);
@@ -96,8 +94,8 @@ public class Account extends HttpServlet {
 		return result;
 	}
 
-	private boolean emailAlreadyExist(UserDAO userDAO, User user) {
-		return userDAO.selectByEmail(user) != null;
+	private User accountByInputEmail(UserDAO userDAO, User user) {
+		return userDAO.selectByEmail(user);
 	}
 
 	private boolean emailIsConfirmed(String email) {
@@ -108,6 +106,7 @@ public class Account extends HttpServlet {
 		return user.isIdentifyStatus();
 	}
 
+	@SuppressWarnings({ "removal", "deprecation" })
 	private void singUp(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		response.setContentType("text/html");
@@ -126,9 +125,6 @@ public class Account extends HttpServlet {
 		String[] information = { firstName, lastName, dOB, mOB, yOB, gender };
 		gainValueForForm(request, information);
 //				================================================================================================================
-		// Đã tồn tại email trong db
-		// Lưu userInformation
-		// Lưu user
 		UserDAO userDAO = new UserDAO();
 		String idUser = System.currentTimeMillis() + email;
 
@@ -140,43 +136,38 @@ public class Account extends HttpServlet {
 
 		User user = new User(idUserEncrypt, emailEncrypt, passwordEncrypt);
 
-		String url = "/html/LoginPage.jsp"; // Đặt url mặc định là trang đăng nhập (trường hợp đăng ký ko thành công)
+		String url = "/jsp/LoginPage.jsp"; // Đặt url mặc định là trang đăng nhập (trường hợp đăng ký ko thành công)
 
 //				================================================================================================================
-		// Trường hợp đã tồn tại user trong db
-		// Thông báo không thành công và quay về trang đăng nhập
-		if (emailAlreadyExist(userDAO, user)) {
+		if (accountByInputEmail(userDAO, user) != null) {
 			request.setAttribute("error", "Email đã tồn tại");
-		}
-		// Trường hợp ngược lại thực hiện việc thêm user mới
-		else {
+		} else {
 
 			UserInformation userInformation = new UserInformation(idUserEncrypt, user, lastName + " " + firstName,
 					new Boolean(gender),
 					new Date(Integer.parseInt(yOB) - 1900, Integer.parseInt(mOB) - 1, Integer.parseInt(dOB)), "", "",
 					"", "", "");
 			UserInformationDAO userInformationDAO = new UserInformationDAO();
-			
+
 			boolean addSuccess = (userDAO.add(user) <= 0) ? false : true;
 			if (addSuccess) {
 				addSuccess = (userInformationDAO.add(userInformation) <= 0) ? false : true;
 				if (addSuccess) {
+					// Cấu trúc email xác thực:
+					// http:/localhost:portNumber/Account?action=xac-thuc-email&iduser=
 					String urlEmailConfirm = request.getScheme() + "://" + request.getServerName() + ":"
 							+ request.getServerPort() + request.getContextPath();
 					System.out.println("Đã tạo tài khoản thành công");
-					Random random = new Random();
-					int ran = random.nextInt(100000, 999999);
-					SendingMail.sendMail(email, ran, firstName + " " + lastName, idUserEncrypt, urlEmailConfirm);
+					SendingMail.sendMail(email, firstName + " " + lastName, idUserEncrypt, urlEmailConfirm);
 				}
 				// Nếu thêm userInformationDAO không thành công thì loại bỏ trường user đã thêm
-				// trước
-				// đó ra khỏi danh sách
+				// trước đó ra khỏi danh sách
 				else {
 					request.setAttribute("error", "Tạo tài khoản không thành công");
 					userDAO.remove(user);
 				}
 			}
-			// Trường hợp ngược lại thì thông báo lỗi và quay về trang đăng nhập
+			// Trường hợp tạo user ko thành công thông báo lỗi và quay về trang đăng nhập
 			else {
 				request.setAttribute("error", "Tạo tài khoản không thành công");
 			}
@@ -185,40 +176,37 @@ public class Account extends HttpServlet {
 		requestDispatcher.forward(request, response);
 	}
 
-	private void singIn(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	private void signIn(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		response.setContentType("text/html");
 		request.setCharacterEncoding("UTF-8");
 		response.setCharacterEncoding("UTF-8");
-		// Kiểm tra tài khoản đã tồn tại hay chưa
 		List<String> infoEncrypted = encrypt(
 				Arrays.asList(request.getParameter("typeEmail"), request.getParameter("typePassword")));
-		String email = infoEncrypted.get(0);
-		String password = infoEncrypted.get(1);
-		String url = "/html/LoginPage.jsp";
+		String emailInput = infoEncrypted.get(0);
+		String passwordInput = infoEncrypted.get(1);
+		String url = "/jsp/LoginPage.jsp";
 
 		UserDAO userDAO = new UserDAO();
-		User user = new User(null, email, password);
-
-		if (!emailAlreadyExist(userDAO, user)) {
-			request.setAttribute("error", "Email không tồn tại");
+		User user = accountByInputEmail(userDAO, new User(emailInput));
+		HttpSession session = request.getSession();
+		if (user == null) {
+			session.setAttribute("error", "Email không tồn tại");
 		} else {
 			// Kiểm tra mật khẩu
-			if (password.equals(user.getPassword())) {
-				if (emailIsConfirmed(email)) {
-					url = "/html/MainPage.html";
-					HttpSession session = request.getSession();
-					session.setAttribute("userId", userDAO.selectByEmail(user).getUserId());
+			if (passwordInput.equals(user.getPassword())) {
+				if (emailIsConfirmed(emailInput)) {
+					url = "/jsp/MainPage.jsp";
+
+					session.setAttribute("userId", user.getUserId());
 				} else {
-					request.setAttribute("error", "Email chưa được xác thực!");
+					session.setAttribute("error", "Email chưa được xác thực!");
 				}
 			} else {
-				request.setAttribute("error", "Mật khẩu không chính xác");
+				session.setAttribute("error", "Mật khẩu không chính xác");
 			}
 		}
-
-		RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher(url);
-		requestDispatcher.forward(request, response);
+		response.sendRedirect(request.getContextPath() + url);
 	}
 
 	private void emailConfirm(HttpServletRequest request, HttpServletResponse response)

@@ -15,7 +15,7 @@ public class SendingMail {
 	static final String from = "minhtrietpro8@gmail.com";
 	static final String password = "itrjdkdydkllbdgr";
 
-	public static void sendMail(String email, int ran, String fullName, String userId, String url) {
+	public static void sendMail(String email, String fullName, String userId, String url) {
 		String css = "/css/emailAnnounce.css";
 
 		Properties properties = new Properties();
@@ -36,7 +36,7 @@ public class SendingMail {
 		Session session = Session.getInstance(properties, authenticator);
 
 		MimeMessage mimeMessage = new MimeMessage(session);
-		System.out.println(url + "/css/emailAnnounce.css");
+		System.out.println(url + css);
 		String html = "<!DOCTYPE html>\r\n" + "<html>\r\n" + "  <head>\r\n" + "    <meta charset=\"UTF-8\" />\r\n"
 				+ "    <title>Insert title here</title>\r\n" + "<style type=\"text/css\">\r\n" + "    body {\r\n"
 				+ "    font-family: Arial, sans-serif;\r\n" + "    background-color: #f0f2f5;\r\n" + "}\r\n" + "\r\n"

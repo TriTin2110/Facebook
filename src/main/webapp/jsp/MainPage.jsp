@@ -1,11 +1,14 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<% 
+String url = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath(); 
+%>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="../css/MainPage.css" />
-    <link rel="stylesheet" href="../css/responsive.css">
+    <link rel="stylesheet" href="<%=url%>/css/MainPage.css" />
+    <link rel="stylesheet" href="<%=url %>/css/responsive.css">
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"
@@ -21,6 +24,13 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
     />
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
     <title>BodyBook</title>
   </head>
   <body>
@@ -71,14 +81,14 @@
             </li>
             <li class="nm_item">
               <a href="#" class="nm_link">
-                <img src="../img/avt.jpg" alt="" id="open-profile"/>
+                <img src="<%=url%>/img/avt.jpg" alt="" id="open-profile"/>
                 <div class="acc_more">
                   <ul>
                     <li><a href="">
-                      <img src="../img/avt.jpg" alt="">
+                      <img src="<%=url%>/img/avt.jpg" alt="">
                       <h3>Chí Nguyên</h3>
                     </a></li>
-                    <li><a href="../html/infoChange.html">
+                    <li><a href="<%=url%>/html/infoChange.html">
                       <i class="fa-solid fa-gear"></i>
                       <h4>Cài đặt & quyền riêng tư</h4>
                     </a></li>
@@ -94,7 +104,7 @@
                       <i class="fa-solid fa-exclamation"></i>
                       <h4>Đóng góp ý kiến</h4>
                     </a></li>
-                    <li><a href="../html/LoginPage.jsp">
+                    <li><a href="<%=url%>/html/LoginPage.jsp">
                       <i class="fa-solid fa-right-from-bracket"></i>
                       <h4>Đăng xuất</h4>
                     </a></li>
@@ -111,7 +121,7 @@
             <ul>
               <li>
                 <a href="#"
-                  ><img src="../img/avt.jpg" alt="" />
+                  ><img src="<%=url%>/img/avt.jpg" alt="" />
                   <h5>Chí Nguyên</h5>
                 </a>
               </li>
@@ -158,31 +168,31 @@
             <ul>
               <li>
                 <a href="#">
-                  <img src="../img/group1.jpg" alt="" />
+                  <img src="<%=url%>/img/group1.jpg" alt="" />
                   <h5>Đảo mèo</h5>
                 </a>
               </li>
               <li>
                 <a href="#">
-                  <img src="../img/group2.jpg" alt="" />
+                  <img src="<%=url%>/img/group2.jpg" alt="" />
                   <h5>Đảo chó</h5>
                 </a>
               </li>
               <li>
                 <a href="#">
-                  <img src="../img/group3.jpg" alt="" />
+                  <img src="<%=url%>/img/group3.jpg" alt="" />
                   <h5>Cộng đồng lập trình</h5>
                 </a>
               </li>
               <li>
                 <a href="#">
-                  <img src="../img/group4.jpg" alt="" />
+                  <img src="<%=url%>/img/group4.jpg" alt="" />
                   <h5>Sinh viên 2k3</h5>
                 </a>
               </li>
               <li>
                 <a href="#">
-                  <img src="../img/group5.jpg" alt="" />
+                  <img src="<%=url%>/img/group5.jpg" alt="" />
                   <h5>Cộng đồng sinh viên IUH</h5>
                 </a>
               </li>
@@ -198,20 +208,20 @@
         <div class="post">
           <div class="post_list">
             <div class="story">
-              <img src="../img/story0.jpg" alt="" />
-              <img src="../img/story1.jpg" alt="" />
-              <img src="../img/story2.jpg" alt="" />
-              <img src="../img/story3.jpg" alt="" />
-              <img src="../img/story0.jpg" alt="" />
-              <img src="../img/story1.jpg" alt="" />
-              <img src="../img/story2.jpg" alt="" />
-              <img src="../img/story3.jpg" alt="" />
+              <img src="<%=url%>/img/story0.jpg" alt="" />
+              <img src="<%=url%>/img/story1.jpg" alt="" />
+              <img src="<%=url%>/img/story2.jpg" alt="" />
+              <img src="<%=url%>/img/story3.jpg" alt="" />
+              <img src="<%=url%>/img/story0.jpg" alt="" />
+              <img src="<%=url%>/img/story1.jpg" alt="" />
+              <img src="<%=url%>/img/story2.jpg" alt="" />
+              <img src="<%=url%>/img/story3.jpg" alt="" />
             </div>
             <button id="moveLeftButton"> <i class="fa-solid fa-angle-right"></i> </button>
           </div>
           <div class="status">
             <div class="post-input">
-              <img src="../img/avt.jpg" alt="" />
+              <img src="<%=url%>/img/avt.jpg" alt="" />
               <span
                 type="button"
                 class="btn btn-primary"
@@ -239,7 +249,7 @@
           </div>
           <div class="post_content">
             <div class="header_post">
-              <img src="../img/avt.jpg" alt="">
+              <img src="<%=url%>/img/avt.jpg" alt="">
               <div class="name-acc_post">
                 <h4>Chí Nguyên</h4>
                 <span>3 phút</span>
@@ -249,7 +259,7 @@
               <span>Hello World</span>
             </div>
             <div class="content_post">
-              <img src="../img/post.jpg" alt="">
+              <img src="<%=url%>/img/post.jpg" alt="">
             </div>
             <div class="interact_post">
               <div class="number_react">
@@ -289,7 +299,7 @@
           </div>
           <div class="post_content">
             <div class="header_post">
-              <img src="../img/avt.jpg" alt="">
+              <img src="<%=url%>/img/avt.jpg" alt="">
               <div class="name-acc_post">
                 <h4>Chí Nguyên</h4>
                 <span>2 giờ</span>
@@ -299,7 +309,7 @@
               <span>My Love</span>
             </div>
             <div class="content_post">
-              <img src="../img/post2.jpg" alt="">
+              <img src="<%=url%>/img/post2.jpg" alt="">
             </div>
             <div class="interact_post">
               <div class="number_react">
@@ -344,7 +354,7 @@
             <ul>
               <li>
                 <a href="#">
-                  <img src="../img/anhqc.jpg" alt="" />
+                  <img src="<%=url%>/img/anhqc.jpg" alt="" />
                   <div class="des">
                     <h5>Đặt Xe Ngay</h5>
                     <h6>xanhsm.com</h6>
@@ -353,7 +363,7 @@
               </li>
               <li>
                 <a href="#">
-                  <img src="../img/anhqc2.jpg" alt="" />
+                  <img src="<%=url%>/img/anhqc2.jpg" alt="" />
                   <div class="des">
                     <h5>Đăng ký nhận ưu đãi</h5>
                     <h6>king52.fun</h6>
@@ -368,7 +378,7 @@
               <a href="#">Xem tất cả</a>
             </div>
             <div class="newfriend">
-              <img src="../img/j97.jpg" alt="" class="nf-avt" />
+              <img src="<%=url%>/img/j97.jpg" alt="" class="nf-avt" />
               <div class="nf-information">
                 <div class="name-acpt">
                   <h5>Anh Dắc 97</h5>
@@ -385,15 +395,15 @@
             <h4>Người liên hệ</h4>
             <ul>
               <li>
-                <img src="../img/friend1.jpg" alt="" />
+                <img src="<%=url%>/img/friend1.jpg" alt="" />
                 <span class="name-friend">Đặng Thiện</span>
               </li>
               <li>
-                <img src="../img/friend2.jpg" alt="" />
+                <img src="<%=url%>/img/friend2.jpg" alt="" />
                 <span class="name-friend">Trí Tín</span>
               </li>
               <li>
-                <img src="../img/friend3.jpg" alt="" />
+                <img src="<%=url%>/img/friend3.jpg" alt="" />
                 <span class="name-friend">Minh Triết</span>
               </li>
             </ul>
@@ -419,7 +429,7 @@
           <!-- Modal body -->
           <div class="modal-body">
             <div class="acc__post">
-              <img src="../img/avt.jpg" alt="">
+              <img src="<%=url%>/img/avt.jpg" alt="">
               <div class="acc__name">
                 <h4>Chí Nguyên</h4>
                 <select name="aithay" id="user_seen">
@@ -441,12 +451,6 @@
       </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-      crossorigin="anonymous"
-    ></script>
     <script>
       // MỞ THÔNG TIN THÊM KHI NHẤN VÀO ẢNH AVT
       var open = document.getElementById("open-profile");
@@ -459,6 +463,7 @@
           moreProfile.style.display = 'none';
         }
       }
+      
       // CHUYỂN ẢNH GIỮA CÁC STORY
       document.addEventListener('DOMContentLoaded', function() {
         const moveLeftButton = document.getElementById('moveLeftButton');
@@ -470,7 +475,7 @@
         moveLeftButton.addEventListener('click', function() {
             if (currentIndex < images.length - 4) { // Số lượng ảnh hiển thị trong khung là 6
                 currentIndex++;
-                imageList.style.transform = `translateX(-${currentIndex * imageWidth}px)`;
+                imageList.style.transform = "translateX(-"+(currentIndex * imageWidth)+"px)";
             }
         });
     });

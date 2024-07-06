@@ -1,11 +1,16 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
+<%
+	String url = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath();
+%>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BodyBook Chat Interface</title>
-  <link rel="stylesheet" href="/css/messenger.css">
-  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="<%=url%>/css/messenger.css">
+  <link rel="stylesheet" href="<%=url%>/css/base.css">
   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
 </head>

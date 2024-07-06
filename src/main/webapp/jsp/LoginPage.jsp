@@ -230,24 +230,26 @@ String gender = (request.getAttribute("gender") == null) ? "" : request.getAttri
 			}
 		break;
 		}
-			document.getElementById("ngaysinh").length = 0;
+			document.getElementById("ngaysinh").length = 0;//Xóa bỏ khung ngày
 			for (var i = 1; i <= ngay; i++) {
 				var option = document.createElement('option');
-				option.value = i;
+				option.value = i; //Đặt giá trị cho option
 				option.innerHTML = i;
 				if(i == day)
 				{
 					if(day <= ngay)
 					{
-						option.selected = true;
+						option.selected = true; //Nếu ngày đã chọn == i thì "selected" option i đó
 					}
 				}
-				document.getElementById("ngaysinh").appendChild(option);
+				document.getElementById("ngaysinh").appendChild(option);//Thêm phần tử option vào khung ngày
 		}
 	}
 	function showingError() {
-		<%if (request.getAttribute("error") != null) {%>
-			alert("<%=request.getAttribute("error")%>");
+		<%
+		String error = session.getAttribute("error") +"";
+		if (!error.equals("null")) {%>
+			alert("<%=error%>");
 	<%}%>
 	}
 </script>
