@@ -104,8 +104,6 @@ function processError(message) {
                         <ul class="list-unstyled mb-0" id="userAvaiable">
                         
                         <!-- Hiển thị danh sách người dùng -->
-                          
-                          
                         </ul>
                       </div>
                     </div>

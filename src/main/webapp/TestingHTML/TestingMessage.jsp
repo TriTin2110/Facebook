@@ -7,7 +7,7 @@
 <title>Insert title here</title>	
 </head>
 <body>
-	<form id="myForm" action="../jsp/Messenger.jsp" method="get">
+	<form id="myForm" action="../jsp/BodyBookChatInterface.jsp" method="get">
 		<input id="myInput" type="text" name="username">
 	</form>	
 

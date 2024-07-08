@@ -14,9 +14,9 @@ public class Util {
 			for (String text : guestTextSplitString) {
 				String[] splitText = text.split(":"); // Chỉ lấy phần nội dung
 				if (splitText[0].equals(name)) {// Khi tin nhắn là của mình
-					session.getBasicRemote().sendText(showSelfMessage(splitText[1]));
-				} else {// Khi tin nhắn là của khách
-					session.getBasicRemote().sendText(splitText[1]);
+					session.getBasicRemote().sendText(showMessage(splitText[1], true));
+				} else {
+					session.getBasicRemote().sendText(showMessage(splitText[1], false));
 				}
 			}
 
@@ -26,15 +26,10 @@ public class Util {
 		}
 	}
 
-	public static void removeUserFromPageOfOther(Set<Session> listUser, Session currentUser, String guestName) {
+	public static void removeUserFromPageOfOther(Set<Session> listUser, Session currentUser, String userName) {
 		for (Session otherUser : listUser) { // Xóa thẻ user ra khỏi danh sách
 			try {
-				if (guestName.equals(otherUser.getUserProperties().get("username"))) {
-					// Gọi hàm clear text nếu user đang online đang chat vs user (đã tắt)
-					otherUser.getBasicRemote().sendText("clear-text");
-					otherUser.getUserProperties().put("guestName", "null");
-				}
-				otherUser.getBasicRemote().sendText("remove-user:" + currentUser.getUserProperties().get("username"));
+				otherUser.getBasicRemote().sendText("remove-user:" + userName);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -48,8 +43,15 @@ public class Util {
 	}
 
 	// Form hiển thị tin nhắn của bản thân
-	public static String showSelfMessage(String message) {
-		return "<div contenteditable=\"false\" class=\"d-flex flex-row justify-content-end\">"
-				+ "<p class=\"small p-2 me-3 mb-1 text-white rounded-3 bg-primary\">" + message + "</p></div><br>";
+	public static String showMessage(String message, boolean selfMessage) {
+		String chatAppMessage = (selfMessage) ? "chat-app__message chat-app__message--receiver"
+				: "chat-app__message chat-app__message--sender";
+
+		String chatAppMessageText = (selfMessage) ? "chat-app__message-text chat-app__message-text--receiver"
+				: "chat-app__message-text chat-app__message-text--sender";
+
+		return "<div class=\"" + chatAppMessage + "\">\r\n" + "					<div\r\n"
+				+ "						class=\"" + chatAppMessageText + "\">\r\n" + "						" + message
+				+ "</div>\r\n" + "				</div>";
 	}
 }

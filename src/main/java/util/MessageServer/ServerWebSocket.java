@@ -1,6 +1,9 @@
 package util.MessageServer;
 
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import javax.websocket.OnClose;
@@ -17,6 +20,7 @@ import javax.websocket.server.ServerEndpoint;
 public class ServerWebSocket {
 	// Set<Session> dùng để lưu trữ user phục vụ cho việc gửi tin nhắn
 	private static Set<Session> listUser = new HashSet<Session>();
+	private static Map<String, String> map = new HashMap<String, String>();
 
 	// Khi có kết nối gửi đến thì sẽ lưu user vào listUser
 	@OnOpen
@@ -42,7 +46,11 @@ public class ServerWebSocket {
 				}
 				// trường hợp user gửi tin nhắn
 				else {
-					UserInteract.sendMessageForAnother(currentUser, userName, message);
+					UserInteract.sendMessageForAnother(currentUser, userName, message, map);
+					String[] name = { userName, currentUser.getUserProperties().get("guestName").toString() };
+					Arrays.sort(name);
+					System.out.println(map.size());
+					System.out.println("Map content: " + map.get(name[0] + name[1]));
 				}
 			} catch (Exception e) {
 				// TODO: handle exception
@@ -55,18 +63,20 @@ public class ServerWebSocket {
 	// Nếu user thoát ra khỏi chtr thì danh sách sẽ xóa user đó ra khỏi danh sách
 	@OnClose
 	public void removeUser(Session currentUser) {
-		if (listUser.size() == 1)
-			listUser.remove(currentUser);
-		else {
+		if (currentUser.getUserProperties().get("guestName") != null) {
+			String userName = (String) currentUser.getUserProperties().get("username");
 			// Khi user đóng thì lưu lại tin nhắn trước đó của user với những user khác
 			String guestName = (String) currentUser.getUserProperties().get("guestName");
 			if (guestName != null) { // Khi guest name không tồn tại thì việc lưu vào database sẽ bị lỗi
-				InteractMessageInDB.savingMessageToDB(currentUser,
-						(String) currentUser.getUserProperties().get("username"));
+				String[] name = { userName, guestName };
+				Arrays.sort(name);
+				InteractMessageInDB.savingMessageToDB(name[0] + name[1], map.get(name[0] + name[1]));
 			}
-			listUser.remove(currentUser);
-			Util.removeUserFromPageOfOther(listUser, currentUser, guestName);
 		}
+		listUser.remove(currentUser);
+		if (!listUser.isEmpty())
+			Util.removeUserFromPageOfOther(listUser, currentUser, currentUser.getUserProperties().get("username") + "");
+
 	}
 
 	@OnError

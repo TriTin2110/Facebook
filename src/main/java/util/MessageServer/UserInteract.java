@@ -1,5 +1,7 @@
 package util.MessageServer;
 
+import java.util.Arrays;
+import java.util.Map;
 import java.util.Set;
 
 import javax.websocket.Session;
@@ -24,6 +26,9 @@ public class UserInteract {
 
 		// khi user yêu cầu đổi guest (guest yêu cầu đổi khác với guest trước đó)
 		else if (guestName != null) {
+			// Lưu toàn bộ tin nhắn trước đó của user hiện tại và user trước đó vào db
+//			InteractMessageInDB.savingMessageToDB(currentUser,
+//					currentUser.getUserProperties().get("username").toString());
 			// Phải lấy đc toàn bộ nội dung của bên guest gửi qua
 			guestName = message.split("=")[1];
 			currentUser.getUserProperties().put("guestName", guestName);
@@ -55,7 +60,8 @@ public class UserInteract {
 		}
 	}
 
-	public static void sendMessageForAnother(Session currentUser, String userName, String message) {
+	public static void sendMessageForAnother(Session currentUser, String userName, String message,
+			Map<String, String> map) {
 		try {
 			Session guest = (Session) currentUser.getUserProperties().get("guest");
 			String guestName = (String) currentUser.getUserProperties().get("guestName");
@@ -63,7 +69,9 @@ public class UserInteract {
 			String previousMessage = InteractMessageOnTime.getPreviousMessage(currentUser, guest, userName, guestName);
 
 			message = (previousMessage == null) ? userName + ":" + message : previousMessage + userName + ":" + message;
-			System.out.println(message);
+			String[] name = { userName, guestName };
+			Arrays.sort(name);
+			map.put(name[0] + name[1], message + ";");
 			// Thực hiện lưu tin nhắn của 2 user (kèm tin nhắn của 2 user trong db {nếu có})
 			InteractMessageOnTime.savingMessageBetweenUser(currentUser, guest, userName, guestName, message + ";");
 
@@ -78,7 +86,7 @@ public class UserInteract {
 				// 2 (2 user đã thông nhau)
 				else if (guestOfGuest.getUserProperties().get("username").equals(userName)) {
 					message = Util.getNewestMessage(message);
-					guest.getBasicRemote().sendText(message.split(":")[1]);
+					guest.getBasicRemote().sendText(Util.showMessage(message.split(":")[1], false));
 				}
 			}
 		} catch (Exception e) {

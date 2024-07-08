@@ -8,16 +8,11 @@ import DAO.MessengerDAO;
 import Model.Messenger;
 
 public class InteractMessageInDB {
-	public static void savingMessageToDB(Session currentUser, String name) {
+	public static void savingMessageToDB(String key, String map) {
 		MessengerDAO messengerDAO = new MessengerDAO();
-		Session guest = (Session) currentUser.getUserProperties().get("guest");
-		String guestName = (String) guest.getUserProperties().get("username");
-		String messageBetweenUserGuest = InteractMessageOnTime.getPreviousMessage(currentUser, guest, name, guestName);
-		if (messageBetweenUserGuest != null) {
-			String[] userNameGuestName = { name, guestName };
-			Arrays.sort(userNameGuestName);
+		if (map != null) {
 			// Gọi hàm lưu tin nhắn
-			Messenger messenger = new Messenger(userNameGuestName[0] + userNameGuestName[1], messageBetweenUserGuest);
+			Messenger messenger = new Messenger(key, map);
 			messengerDAO.add(messenger);
 		}
 //			}
