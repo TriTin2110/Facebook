@@ -4,16 +4,20 @@ body {
 }
 
 .color_like {
-    color: #0866ff;
+    color: #0866ff !important;
 }
 
 .color_heart {
-    color: #fd5155;
+    color: #fd5155 !important;
 }
 
 .color_cmt {
-    color: #86888b;
+    color: #86888b !important;
 }
+
+.color_face {
+    color: #fee281 !important;
+}   
 
 * {
     margin: 0;
@@ -503,6 +507,18 @@ body {
 
 #moveLeftButton {
     position: absolute;
+    left: 40px;
+    top: 190px;
+    width: 50px;
+    height: 50px;
+    color: #6e7074;
+    font-size: 24px;
+    border: none;
+    border-radius: 50%;
+}
+
+#moveRightButton {
+    position: absolute;
     right: 40px;
     top: 190px;
     width: 50px;
@@ -735,27 +751,69 @@ body {
     padding: 0 16px;
 }
 
+.interact_btn .button-react {
+    position: relative;
+}
+
 .interact_btn ul {
     display: flex;
+    justify-content: space-around;
     padding-left: 0;
     margin-bottom: 4px;
     list-style: none;
 }
 
-.interact_btn li {
-    width: 25%;
-    padding: 6px 0;
-    text-align: center;
-    color: #65676b;
+.interact_btn li button {
+    border: none;
     font-size: 15px;
+    color: #65676b;
+    text-align: center;
+    padding: 6px 0;
+    font-weight: 500;
+    background-color: #fff;
 }
 
-.interact_btn li:hover {
-    border-radius: 4px;
-    background-color: #f7ecec;
+.interact_btn li i {
+    font-size: 15px;
+    color: #65676b;
 }
 
-.interact_btn h4 {
-    margin-bottom: 0;
-    display: inline-block;
+.interact_btn li:hover button, .interact_btn li:hover i {
+    color: #86888b;
+}
+
+.interact_btn .like-button::before {
+    position: absolute;
+    content: "";
+    width: 100px;
+    height: 20px;
+    top: -13px;
+    left: -10px;
+}
+
+.interact_btn .emotions {
+    display: none;
+    position: absolute;
+    z-index: 1;
+    top: -60px;
+    left: -34px;
+    border-radius: 20px;
+    padding: 4px;
+    background-color: #fff;
+    white-space: nowrap;
+    box-shadow: 1px 0px 4px 0px #ccc;
+}
+
+.interact_btn .emotions i {
+    padding: 0 6px;
+    font-size: 40px;
+    cursor: pointer;
+}
+
+.interact_btn span i:hover {
+    transform: scale(1.2)
+}
+
+.interact_btn .button-react:hover .emotions{
+    display: block;
 }

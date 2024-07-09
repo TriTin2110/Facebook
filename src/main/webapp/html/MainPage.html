@@ -206,7 +206,8 @@
               <img src="../img/story2.jpg" alt="" />
               <img src="../img/story3.jpg" alt="" />
             </div>
-            <button id="moveLeftButton"> <i class="fa-solid fa-angle-right"></i> </button>
+            <button id="moveLeftButton"> <i class="fa-solid fa-angle-left"></i> </button>
+            <button id="moveRightButton"> <i class="fa-solid fa-angle-right"></i> </button>
           </div>
           <div class="status">
             <div class="post-input">
@@ -268,20 +269,45 @@
             <div class="interact_btn">
               <ul>
                 <li>
-                  <i class="fa-solid fa-thumbs-up"></i>
-                  <h4>Thích</h4>
+                  <div class="button-react">
+                    <i class="fa-solid fa-thumbs-up icon_like"></i>
+                    <button class="like-button">Thích</button>
+                    <div class="emotions">
+                      <span>
+                        <i class="fa-solid fa-heart-pulse color_heart emotion" data-emotion="Rung động"></i>
+                      </span>
+                      <span>
+                        <i class="fa-solid fa-face-flushed color_face emotion" data-emotion="Rìa lí man"></i>
+                      </span>
+                      <span  há">
+                        <i class="fa-solid fa-face-grin-tongue-squint color_face emotion" data-emotion="Há há"></i>
+                      </span>
+                      <span ">
+                        <i class="fa-solid fa-face-sad-cry color_face emotion" data-emotion="Suyyy"></i>
+                      </span>
+                      <span>
+                        <i class="fa-solid fa-face-angry color_heart emotion" data-emotion="Quạo á"></i>
+                      </span>
+                  </div>
+                  </div>
                 </li>
                 <li>
-                  <i class="fa-solid fa-comment"></i>
-                  <h4>Bình luận</h4>
+                  <div class="button-react">
+                    <i class="fa-solid fa-comment"></i>
+                    <button class="cmt-button">Bình luận</button>
+                  </div>
                 </li>
                 <li>
-                  <i class="fa-solid fa-paper-plane"></i>
-                  <h4>Gửi</h4>
+                  <div class="button-react">
+                    <i class="fa-solid fa-paper-plane"></i>
+                    <button class="send-button">Gửi</button>
+                  </div>
                 </li>
                 <li>
-                  <i class="fa-solid fa-share"></i>
-                  <h4>Chia sẻ</h4>
+                  <div class="button-react">
+                    <i class="fa-solid fa-share"></i>
+                    <button class="share-button">Chia sẻ</button>
+                  </div>
                 </li>
               </ul>
             </div>
@@ -318,20 +344,45 @@
             <div class="interact_btn">
               <ul>
                 <li>
-                  <i class="fa-solid fa-thumbs-up"></i>
-                  <h4>Thích</h4>
+                  <div class="button-react">
+                    <i class="fa-solid fa-thumbs-up icon_like"></i>
+                    <button class="like-button">Thích</button>
+                    <div class="emotions">
+                      <span>
+                        <i class="fa-solid fa-heart-pulse color_heart emotion emotion" data-emotion="Rung động"></i>
+                      </span>
+                      <span>
+                        <i class="fa-solid fa-face-flushed color_face emotion" data-emotion="Rìa lí man"></i>
+                      </span>
+                      <span>
+                        <i class="fa-solid fa-face-grin-tongue-squint color_face emotion" data-emotion="Há há"></i>
+                      </span>
+                      <span>
+                        <i class="fa-solid fa-face-sad-cry color_face emotion" data-emotion="Suyyy"></i>
+                      </span>
+                      <span>
+                        <i class="fa-solid fa-face-angry color_heart emotion" data-emotion="Quạo á"></i>
+                      </span>
+                  </div>
+                  </div>
                 </li>
                 <li>
-                  <i class="fa-solid fa-comment"></i>
-                  <h4>Bình luận</h4>
+                  <div class="button-react">
+                    <i class="fa-solid fa-comment"></i>
+                    <button class="cmt-button">Bình luận</button>
+                  </div>
                 </li>
                 <li>
-                  <i class="fa-solid fa-paper-plane"></i>
-                  <h4>Gửi</h4>
+                  <div class="button-react">
+                    <i class="fa-solid fa-paper-plane"></i>
+                    <button class="send-button">Gửi</button>
+                  </div>
                 </li>
                 <li>
-                  <i class="fa-solid fa-share"></i>
-                  <h4>Chia sẻ</h4>
+                  <div class="button-react">
+                    <i class="fa-solid fa-share"></i>
+                    <button class="share-button">Chia sẻ</button>
+                  </div>
                 </li>
               </ul>
             </div>
@@ -461,18 +512,44 @@
       // CHUYỂN ẢNH GIỮA CÁC STORY
       document.addEventListener('DOMContentLoaded', function() {
         const moveLeftButton = document.getElementById('moveLeftButton');
+        const moveRightButton = document.getElementById('moveRightButton');
         const imageList = document.querySelector('.story');
         const images = document.querySelectorAll('.story img');
         const imageWidth = images[0].offsetWidth + 10; // Kích thước ảnh + margin
         let currentIndex = 0;
-    
+
         moveLeftButton.addEventListener('click', function() {
-            if (currentIndex < images.length - 4) { // Số lượng ảnh hiển thị trong khung là 6
+          if (currentIndex > 0) {
+              currentIndex--;
+              imageList.style.transform = `translateX(-${currentIndex * imageWidth}px)`;
+          }
+      });
+    
+        moveRightButton.addEventListener('click', function() {
+            if (currentIndex < images.length - 4) { // Số lượng ảnh hiển thị trong khung là 4
                 currentIndex++;
                 imageList.style.transform = `translateX(-${currentIndex * imageWidth}px)`;
             }
         });
     });
+    // RÊ CHUỘT VÀO NÚT LIKE SẼ HIỂN THỊ THÊM CÁC CẢM XÚC KHÁC
+    document.addEventListener('DOMContentLoaded', function() {
+      const mainButton = document.querySelector('.like-button');
+      const iconLike = document.querySelector('.icon_like');
+      const emotions = document.querySelectorAll('.emotions');
+      const emotionIcons = document.querySelectorAll('.emotion');
+      emotionIcons.forEach(icon => {
+        icon.addEventListener('click', function() {
+          const emotion = this.getAttribute('data-emotion');
+          const emotionIcon = this.outerHTML;
+          // Thay đổi nội dung nút chính với biểu tượng cảm xúc và tên cảm xúc
+          mainButton.innerHTML = emotionIcon + ' ' + emotion;
+          // Ẩn danh sách cảm xúc
+          iconLike.style.display = 'none';
+          emotions.style.display = 'none';
+        });
+      });
+  });
     </script>
   </body>
 </html>
