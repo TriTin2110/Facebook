@@ -534,22 +534,37 @@
     });
     // RÊ CHUỘT VÀO NÚT LIKE SẼ HIỂN THỊ THÊM CÁC CẢM XÚC KHÁC
     document.addEventListener('DOMContentLoaded', function() {
-      const mainButton = document.querySelector('.like-button');
-      const iconLike = document.querySelector('.icon_like');
-      const emotions = document.querySelectorAll('.emotions');
-      const emotionIcons = document.querySelectorAll('.emotion');
-      emotionIcons.forEach(icon => {
-        icon.addEventListener('click', function() {
-          const emotion = this.getAttribute('data-emotion');
-          const emotionIcon = this.outerHTML;
-          // Thay đổi nội dung nút chính với biểu tượng cảm xúc và tên cảm xúc
-          mainButton.innerHTML = emotionIcon + ' ' + emotion;
-          // Ẩn danh sách cảm xúc
-          iconLike.style.display = 'none';
-          emotions.style.display = 'none';
+      const interactBtns = document.querySelectorAll('.interact_btn');
+      interactBtns.forEach(function(interactBtn) {
+        const likeButton = interactBtn.querySelector('.like-button');
+        const iconLike = interactBtn.querySelector('.icon_like');
+        let isBlue = false;
+        likeButton.addEventListener('click', function() {
+          if(isBlue) {
+            likeButton.style.color = '#65676b';
+            iconLike.style.color = '#65676b';
+          } else {
+            likeButton.style.color = '#0866ff';
+            iconLike.style.color = '#0866ff';
+          }
+          isBlue = !isBlue;
         });
+          likeButton.addEventListener('mouseenter', function() {
+          const emotion = interactBtn.querySelector('.emotions');
+          const emotionIcons = emotion.querySelectorAll('.emotion');
+              emotionIcons.forEach( emotionIcon => {
+                  emotionIcon.addEventListener('click', function() {
+                  const getData = this.getAttribute('data-emotion');
+                  const getEmotionIcon = this.outerHTML;
+                  // Thay đổi nội dung của nút like-button hiện tại
+                  likeButton.innerHTML = getEmotionIcon + ' ' + getData;
+                  // Ẩn danh sách cảm xúc
+                  iconLike.style.display = 'none';
+                });
+              });
+          });
       });
-  });
+    });
     </script>
   </body>
 </html>
