@@ -529,6 +529,10 @@ body {
     border-radius: 50%;
 }
 
+#moveLeftButton:active, #moveRightButton:active {
+    filter: brightness(0.7);
+}
+
 .story img {
     width: 140px;
     height: 250px;

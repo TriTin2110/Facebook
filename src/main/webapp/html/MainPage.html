@@ -538,31 +538,33 @@
       interactBtns.forEach(function(interactBtn) {
         const likeButton = interactBtn.querySelector('.like-button');
         const iconLike = interactBtn.querySelector('.icon_like');
+        const emotion = interactBtn.querySelector('.emotions');
+        const emotionIcons = emotion.querySelectorAll('.emotion');
         let isBlue = false;
         likeButton.addEventListener('click', function() {
           if(isBlue) {
+            likeButton.innerHTML = iconLike.innerHTML + ' Thích';
+            iconLike.style.display = 'inline-block';
             likeButton.style.color = '#65676b';
             iconLike.style.color = '#65676b';
           } else {
+            likeButton.innerHTML = iconLike.innerHTML + ' Thích';
+            iconLike.style.display = 'inline-block';
             likeButton.style.color = '#0866ff';
             iconLike.style.color = '#0866ff';
           }
           isBlue = !isBlue;
         });
-          likeButton.addEventListener('mouseenter', function() {
-          const emotion = interactBtn.querySelector('.emotions');
-          const emotionIcons = emotion.querySelectorAll('.emotion');
-              emotionIcons.forEach( emotionIcon => {
-                  emotionIcon.addEventListener('click', function() {
-                  const getData = this.getAttribute('data-emotion');
-                  const getEmotionIcon = this.outerHTML;
-                  // Thay đổi nội dung của nút like-button hiện tại
-                  likeButton.innerHTML = getEmotionIcon + ' ' + getData;
-                  // Ẩn danh sách cảm xúc
-                  iconLike.style.display = 'none';
-                });
-              });
+        emotionIcons.forEach( emotionIcon => {
+            emotionIcon.addEventListener('click', function() {
+            const getData = this.getAttribute('data-emotion');
+            const getEmotionIcon = this.outerHTML;
+            // Thay đổi nội dung của nút like-button hiện tại
+            likeButton.innerHTML = getEmotionIcon + ' ' + getData;
+            // Ẩn danh sách cảm xúc
+            iconLike.style.display = 'none';
           });
+        });
       });
     });
     </script>
