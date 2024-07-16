@@ -1,4 +1,4 @@
-I<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -9,16 +9,17 @@ I<!DOCTYPE html>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
-    <link rel="stylesheet" href="/CSS/infoChange.css">
+    <link rel="stylesheet" href="/CSS/infochange.css">
     <link rel="stylesheet" href="/CSS/base.css">
 </head>
+
 <body>
     <div class="container-fluid">
         <div class="row">
             <!-- Sidebar -->
-            <nav class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+            <nav class="col-md-3 col-lg-2 bg-light sidebar">
                 <div class="position-sticky">
-                    <h4 class="mt-1 mb-3">BodyBook</h4>
+                    <h4 class="m-1">BodyBook</h4>
                     <ul class="nav flex-column">
                         <li class="nav-item">
                             <a class="nav-link" href="#">
@@ -45,92 +46,53 @@ I<!DOCTYPE html>
             </nav>
 
             <!-- Main content -->
-            <main class="col-md-9 col-lg-9 px-md-3 justify-content-end align-items-center content">
+            <main class="col-md-9 col-lg-9 justify-content-end align-items-center content">
                 <h3 class="content__title">Thông tin cá nhân</h3>
-                <p class="content__description">Meta sử dụng thông tin này để xác minh danh tính của bạn và bảo vệ cộng đồng của chúng tôi. Bạn là
+                <p class="content__description">Meta sử dụng thông tin này để xác minh danh tính của bạn và bảo vệ cộng
+                    đồng của chúng tôi. Bạn là
                     người quyết định những thông tin cá nhân nào sẽ hiển thị với người khác.</p>
-                <ul class="list-group list-group-flush content__list">
-                    <li class="list-group-item content__item">
-                        <strong class="item__title">Thông tin liên hệ:</strong>
-                        <p class="item__info">ngminhtriet757@gmail.com</p>
-                        <p class="item__info">+84988739757</p>
+                <ul class="d-block list-group list-group-flush content__list">
+                    <li class="list-group-item content__item d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong class="item__title">Thông tin liên hệ:</strong>
+                            <p class="item__info mb-0">ngminhtriet757@gmail.com</p>
+                            <p class="item__info">+84988739757</p>
+                        </div>
+                        <button class="btn btn-sm">Sửa</button>
                     </li>
-                    <li class="list-group-item content__item">
-                        <strong class="item__title">Ngày sinh:</strong>
-                        <p class="item__info">22 tháng 9, 2003</p>
+                    <li class="list-group-item content__item d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong class="item__title">Ngày sinh:</strong>
+                            <p class="item__info">22 tháng 9, 2003</p>
+                        </div>
+                        <button class="btn btn-sm">Sửa</button>
                     </li>
-                    <li class="list-group-item content__item">
-                        <strong class="item__title">Xác nhận danh tính:</strong>
-                        <p class="item__info"><i class="fab fa-facebook"></i></p>
+                    <li class="list-group-item content__item d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong class="item__title">Xác nhận danh tính:</strong>
+                            <p class="item__info mb-0"><i class="fab fa-facebook"></i></p>
+                        </div>
+                        <button class="btn btn-sm">Sửa</button>
                     </li>
-                    <li class="list-group-item content__item">
-                        <strong class="item__title">Quyền sở hữu và kiểm soát tài khoản:</strong>
-                        <p class="item__info">Quản lý dữ liệu, sửa đổi người liên hệ thừa kế, vô hiệu hóa hoặc xóa tài khoản và trang cá
-                            nhân của bạn.</p>
+                    <li class="list-group-item content__item d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong class="item__title">Quyền sở hữu và kiểm soát tài khoản:</strong>
+                            <p class="item__info">Quản lý dữ liệu, sửa đổi người liên hệ thừa kế, vô hiệu hóa hoặc xóa
+                                tài
+                                khoản và trang cá
+                                nhân của bạn.</p>
+                        </div>
+                        <button class="btn btn-sm">Sửa</button>
                     </li>
                 </ul>
-                <div class="d-flex justify-content-end align-items-center content__button-wrapper" style="height: 100px;">
-                    <button type="button" class="btn btn-primary button--modal" data-bs-toggle="modal" data-bs-target="#myModal">Thay đổi thông
-                        tin</button>
-                </div>
             </main>
-
         </div>
     </div>
-    
-    <!-- Modal thay đổi thông tin -->
-    <div class="modal fade" id="myModal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <h3 class="modal__title">Thay đổi thông tin</h3>
-                    <form action="" class="form form--modal">
-                        <div class="form__group">
-                            <input type="text" id="ho" class="form__input input--name" name="ho" required placeholder="Họ" />
-                            <input type="text" id="ten" class="form__input input--name" name="ten" required placeholder="Tên" />
-                        </div>
-
-                        <div class="form__group">
-                            <input type="text" id="sdt" name="sdt" required placeholder="Nhập số di động" class="form__input" />
-                        </div>
-
-                        <div class="form__group">
-                            <input type="email" id="email" name="email" placeholder="Nhập email" class="form__input">
-                        </div>
-
-                        <div class="form__group">
-                            <input type="password" id="matkhau" name="matkhau" required placeholder="Mật khẩu" class="form__input" />
-                        </div>
-
-                        <div class="form__group">
-                            <label for="date" class="form__label">Ngày sinh:</label>
-                            <input type="date" id="date" name="date" class="form__input input--date">
-                        </div>
-
-                        <h6 for="gioitinh" class="form__label">Giới tính</h6>
-                        <div class="form__group">
-                            <div class="form__group-1">
-                                <label for="nu" class="form__label">Nam</label>
-                                <input type="radio" id="nam" name="gioitinh" value="nam" class="form__radio">
-                            </div>
-                            <div class="form__group-1">
-                                <label for="nam" class="form__label">Nữ</label>
-                                <input type="radio" id="nu" name="gioitinh" value="nu" class="form__radio">
-                            </div>
-                        </div>
-
-                        <button type="submit" class="btn btn-success button--submit">Lưu ♥</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Bootstrap JavaScript và các plugin cần thiết -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
-    <script src="https://kit.fontawesome.com/a076d05399.js"></script> <!-- For icons -->
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
 </body>
 
 </html>
