@@ -11,9 +11,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
-
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+
+import com.google.gson.Gson;
 
 import HibernateUtil.HibernateUtil;
 import Model.Post;
@@ -24,10 +25,13 @@ public class PostServlet extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		Session session = HibernateUtil.getSessionFactory().openSession();
-		List<Post> posts = session.createQuery("from Post", Post.class).list();
-		session.close();
-		req.setAttribute("posts", posts);
+		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+			List<Post> posts = session.createQuery("from Post", Post.class).list();
+			req.setAttribute("posts", posts);
+		} catch (Exception e) {
+			// Handle exceptions appropriately
+			e.printStackTrace();
+		}
 		req.getRequestDispatcher("index.jsp").forward(req, resp);
 	}
 
@@ -39,8 +43,9 @@ public class PostServlet extends HttpServlet {
 		String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
 		String uploadPath = getServletContext().getRealPath("") + File.separator + UPLOAD_DIRECTORY;
 		File uploadDir = new File(uploadPath);
-		if (!uploadDir.exists())
+		if (!uploadDir.exists()) {
 			uploadDir.mkdir();
+		}
 
 		filePart.write(uploadPath + File.separator + fileName);
 
@@ -48,12 +53,21 @@ public class PostServlet extends HttpServlet {
 		post.setPostContent(content);
 		post.setPostImage(UPLOAD_DIRECTORY + "/" + fileName);
 
-		Session session = HibernateUtil.getSessionFactory().openSession();
-		Transaction transaction = session.beginTransaction();
-		session.save(post);
-		transaction.commit();
-		session.close();
+		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+			Transaction transaction = session.beginTransaction();
+			session.save(post);
+			transaction.commit();
+		} catch (Exception e) {
+			// Handle exceptions appropriately
+			e.printStackTrace();
+			resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error saving post");
+			return;
+		}
 
-		resp.sendRedirect("post");
+		resp.setContentType("application/json");
+		resp.setCharacterEncoding("UTF-8");
+		Gson gson = new Gson();
+		String json = gson.toJson(post);
+		resp.getWriter().write(json);
 	}
 }
