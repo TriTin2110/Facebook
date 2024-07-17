@@ -468,25 +468,27 @@
 
           <!-- Modal body -->
           <div class="modal-body">
-            <div class="acc__post">
-              <img src="../img/avt.jpg" alt="">
-              <div class="acc__name">
-                <h4>Chí Nguyên</h4>
-                <select name="aithay" id="user_seen">
-                  <option value="congkhai">Công khai</option>
-                  <option value="banbe">Bạn bè</option>
-                  <option value="chiminhtoi">Chỉ mình tôi</option>
-                </select>
-              </div>
-            </div>
-            <div class="content__post">
-              <textarea name="noidungpost" id="content_area" placeholder="Nguyên ơi, bạn đang nghĩ gì thế?"></textarea>
-            </div>
-            <div class="upload__post">
-              <input type="file" id="fileInput" name="image">
-              <button type="button" id="postButton">Đăng</button>
-            </div>
-          </div>
+            <form action="http://localhost:8080/SummerProject/posting" method="post" enctype="multipart/form-data">
+                <div class="acc__post">
+                    <img src="../img/avt.jpg" alt="">
+                    <div class="acc__name">
+                        <h4>Chí Nguyên</h4>
+                        <select name="aithay" id="user_seen">
+                            <option value="congkhai">Công khai</option>
+                            <option value="banbe">Bạn bè</option>
+                            <option value="chiminhtoi">Chỉ mình tôi</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="content__post">
+                    <textarea name="content" id="content_area" placeholder="Nguyên ơi, bạn đang nghĩ gì thế?"></textarea>
+                </div>
+                <div class="upload__post">
+                    <input type="file" id="fileInput" name="image">
+                    <button type="submit" id="postButton">Đăng</button>
+                </div>
+            </form>
+        </div>
         
         <div id="postList">
             <!-- Danh sách bài viết sẽ được thêm vào đây -->
