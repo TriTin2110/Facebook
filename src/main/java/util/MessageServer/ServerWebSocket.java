@@ -32,21 +32,22 @@ public class ServerWebSocket {
 	// user trong danh sách
 	@OnMessage
 	public void sendMessage(String message, Session currentUser) {
+		UserInteract userInteract = new UserInteract();
 		String userName = (String) currentUser.getUserProperties().get("username");
 		// Kết nối với user khác khi có yêu cầu
 		if (message.contains("connectToUser")) {
-			UserInteract.connect(currentUser, message, userName, listUser);
+			userInteract.connect(currentUser, message, userName, listUser, map);
 		}
 		// khi user ko yêu cầu kết nối với user khác
 		else {
 			try {
 				if (userName == null) {// Tạo user nếu họ chưa có trong danh sách (phần này sẽ tự động thực hiện khi
 										// user đăng nhập vào web)
-					UserInteract.createUser(currentUser, message, listUser);
+					userInteract.createUser(currentUser, message, listUser);
 				}
 				// trường hợp user gửi tin nhắn
 				else {
-					UserInteract.sendMessageForAnother(currentUser, userName, message, map);
+					userInteract.sendMessageForAnother(currentUser, userName, message, map);
 					String[] name = { userName, currentUser.getUserProperties().get("guestName").toString() };
 					Arrays.sort(name);
 					System.out.println(map.size());

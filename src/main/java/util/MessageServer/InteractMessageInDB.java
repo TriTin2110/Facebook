@@ -1,6 +1,7 @@
 package util.MessageServer;
 
 import java.util.Arrays;
+import java.util.Map;
 
 import javax.websocket.Session;
 
@@ -8,6 +9,7 @@ import DAO.MessengerDAO;
 import Model.Messenger;
 
 public class InteractMessageInDB {
+
 	public static void savingMessageToDB(String key, String map) {
 		MessengerDAO messengerDAO = new MessengerDAO();
 		if (map != null) {
@@ -18,7 +20,8 @@ public class InteractMessageInDB {
 //			}
 	}
 
-	public static String getMessengerBetweenUserInDB(Session currentUser, String userName, String guestName) {
+	public static String getMessengerBetweenUserInDB(Session currentUser, String userName, String guestName,
+			Map<String, String> map) {
 		// Hiển thị tin nhắn của cả 2 từ db (nếu có)
 		String[] userNameGuestName = { userName, guestName };
 		Arrays.sort(userNameGuestName);
@@ -30,24 +33,18 @@ public class InteractMessageInDB {
 																// currentUser và
 		// guest (đã đc sắp xếp)
 		// Khi tin nhắn giữa 2 người đã tồn tại trong db
-		// Thì gọi hàm savingMessageBetweenUser để lưu tin nhắn trong phiên hiện tại
+		// Lưu tin nhắn DB vào map
 		// Và gửi tin nhắn trong db cho user gửi yêu cầu
 		Session guest = (Session) currentUser.getUserProperties().get("guest");
-		String previousMessage = InteractMessageOnTime.getPreviousMessage(currentUser, guest, userName, guestName);
+		String[] name = { userName, guest.getUserProperties().get("username").toString() };
+		Arrays.sort(name);
 		if (messengerInDB != null) {
 			String message = messengerInDB.getMessage();
 
-			if (previousMessage != null) {// Lưu tin nhắn của 2 user kể từ khi kết nối và đã có dữ liệu từ database
-				System.out.println("Đã thực hiện");
-				InteractMessageOnTime.savingMessageBetweenUser(currentUser, guest, userName, guestName,
-						previousMessage);
-				return previousMessage;
-			} else {
-				// Lấy tin nhắn trong db
-				InteractMessageOnTime.savingMessageBetweenUser(currentUser, guest, userName, guestName, message);
-				return message;
-			}
+			// Lấy tin nhắn trong db
+			map.put(name[0] + name[1], message);
+			return message;
 		}
-		return previousMessage;
+		return null;
 	}
 }

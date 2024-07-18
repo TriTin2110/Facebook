@@ -71,7 +71,11 @@ public class UserInformationDAO implements InterfaceDAO<UserInformation> {
 	@Override
 	public UserInformation selectById(UserInformation t) {
 		// TODO Auto-generated method stub
-		return null;
+		UserInformation userInformation = null;
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		userInformation = session.get(UserInformation.class, t.getUserId());
+		session.close();
+		return userInformation;
 	}
 
 	@Override

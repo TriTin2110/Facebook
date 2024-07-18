@@ -59,6 +59,7 @@ public class PostServlet extends HttpServlet {
 		filePart.write(uploadPath + File.separator + fileName);
 
 		Post post = new Post();
+		post.setPostId("P2");
 		post.setPostContent(content);
 		post.setPostImage(UPLOAD_DIRECTORY + "/" + fileName);
 

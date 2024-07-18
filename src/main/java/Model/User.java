@@ -38,7 +38,6 @@ public class User {
 	}
 
 	public User(String email) {
-		super();
 		this.email = email;
 	}
 
