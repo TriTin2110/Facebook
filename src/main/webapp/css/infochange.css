@@ -122,3 +122,11 @@ h4 {
     background-color: white;
     
 }
+#save{
+    background-color: var(--main-color);
+    color: white;
+}
+#save:hover{
+    background-color: white;
+    color: black;
+}
