@@ -251,12 +251,17 @@ body {
 .avt_info {
     display: flex;
     width: 940px;
-    padding: 0 35px;
+    padding: 0 30px;
+    border-bottom: 1px solid #ccc;
     justify-content: space-between;
 }
 
 .img_info {
     display: flex;
+}
+
+.avt_img {
+    height: 150px;
 }
 
 .avt_img img {
@@ -273,7 +278,7 @@ body {
 .info .name {
     font-size: 36px;
     font-weight: 700;
-    padding: 16px 0;
+    padding: 16px 0 10px 0;
 }
 
 .info .number_friend {
@@ -283,6 +288,56 @@ body {
     text-decoration: none;
 }
 
-.profile_settings a {
-    
+.profile_setting {
+    padding-top: 50px;
+}
+
+.profile_setting a {
+    font-size: 15px;
+    font-weight: 500;
+    padding: 8px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+}
+
+.setting_btn {
+    margin-bottom: 20px;
+}
+
+.setting_btn a:hover, .setting_more a:hover {
+    text-decoration: none;
+}
+
+.setting_btn .add_story {
+    color: #fff;
+    margin-right: 12px;
+    background-color: #0b64ff;
+}
+
+.setting_btn .add_story:hover {
+    background-color: #045efa;
+}
+
+.setting_btn .setting {
+    color: #050505;
+    background-color: #e5e6eb;
+}
+
+.setting_btn .setting:hover {
+    background-color: #d3d5dc;
+}
+
+.setting_more {
+    float: right;
+}
+
+.setting_more a {
+    color: #050505;
+    padding: 8px 16px;
+    background-color: #e5e6eb;
+}
+
+.setting_more a:hover {
+    color: #050505;
+    background-color: #d3d5dc;
 }
