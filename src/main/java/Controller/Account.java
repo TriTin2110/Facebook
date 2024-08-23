@@ -24,74 +24,49 @@ import HibernateUtil.HibernateUtil;
 import Model.User;
 import Model.UserInformation;
 import util.SendingMail;
-import util.Hash.HashUtil;
+import util.PasswordUtils;
 
-/**
- * Servlet implementation class Account
- */
 @WebServlet("/Account")
 public class Account extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
 	public Account() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		response.setContentType("text/html");
 		request.setCharacterEncoding("UTF-8");
 		response.setCharacterEncoding("UTF-8");
 		String action = request.getParameter("action");
 		switch (action) {
-		case "dang-ky":
-			singUp(request, response);
-			break;
+			case "dang-ky":
+				singUp(request, response);
+				break;
 
-		case "dang-nhap":
-			signIn(request, response);
-			break;
+			case "dang-nhap":
+				signIn(request, response);
+				break;
 
-		case "xac-thuc-email":
-			emailConfirm(request, response);
-			break;
+			case "xac-thuc-email":
+				emailConfirm(request, response);
+				break;
 		}
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
 
-	private void gainValueForForm(HttpServletRequest request, String[] information) { // Trường hợp tạo tài khoản không
+	private void gainValueForForm(HttpServletRequest request, String[] information) {
 		request.setAttribute("firstName", information[0]);
 		request.setAttribute("lastName", information[1]);
 		request.setAttribute("dOB", information[2]);
 		request.setAttribute("mOB", information[3]);
 		request.setAttribute("yOB", information[4]);
 		request.setAttribute("gender", information[5]);
-	}
-
-	private List<String> encrypt(List<String> accountInfos) {
-		List<String> result = new ArrayList<String>();
-		for (String info : accountInfos) {
-			result.add(HashUtil.hashWithSHA256(info));
-		}
-		return result;
 	}
 
 	private User accountByInputEmail(UserDAO userDAO, User user) {
@@ -108,7 +83,6 @@ public class Account extends HttpServlet {
 
 	@SuppressWarnings({ "removal", "deprecation" })
 	private void singUp(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		response.setContentType("text/html");
 		request.setCharacterEncoding("UTF-8");
 		response.setCharacterEncoding("UTF-8");
@@ -121,28 +95,24 @@ public class Account extends HttpServlet {
 		String yOB = request.getParameter("namsinh");
 		String gender = request.getParameter("gioitinh");
 
-//				================================================================================================================
 		String[] information = { firstName, lastName, dOB, mOB, yOB, gender };
 		gainValueForForm(request, information);
-//				================================================================================================================
+
 		UserDAO userDAO = new UserDAO();
 		String idUser = System.currentTimeMillis() + email;
 
-		// Mã hóa
-		List<String> infoEncrypted = encrypt(Arrays.asList(email, password, idUser));
-		String emailEncrypt = infoEncrypted.get(0);
-		String passwordEncrypt = infoEncrypted.get(1);
-		String idUserEncrypt = infoEncrypted.get(2); // ID = mã hóa (giờ hiện tại + email)
+		// Mã hóa mật khẩu
+		String passwordEncrypt = PasswordUtils.hashPassword(password);
+		String emailEncrypt = email; // Giữ email nguyên bản
+		String idUserEncrypt = idUser; // ID giữ nguyên
 
 		User user = new User(idUserEncrypt, emailEncrypt, passwordEncrypt);
 
-		String url = "/jsp/LoginPage.jsp"; // Đặt url mặc định là trang đăng nhập (trường hợp đăng ký ko thành công)
+		String url = "/jsp/LoginPage.jsp";
 
-//				================================================================================================================
 		if (accountByInputEmail(userDAO, user) != null) {
 			request.setAttribute("error", "Email đã tồn tại");
 		} else {
-
 			UserInformation userInformation = new UserInformation(idUserEncrypt, user, lastName + " " + firstName,
 					new Boolean(gender),
 					new Date(Integer.parseInt(yOB) - 1900, Integer.parseInt(mOB) - 1, Integer.parseInt(dOB)), "", "",
@@ -153,22 +123,15 @@ public class Account extends HttpServlet {
 			if (addSuccess) {
 				addSuccess = (userInformationDAO.add(userInformation) <= 0) ? false : true;
 				if (addSuccess) {
-					// Cấu trúc email xác thực:
-					// http:/localhost:portNumber/Account?action=xac-thuc-email&iduser=
 					String urlEmailConfirm = request.getScheme() + "://" + request.getServerName() + ":"
 							+ request.getServerPort() + request.getContextPath();
 					System.out.println("Đã tạo tài khoản thành công");
 					SendingMail.sendMail(email, firstName + " " + lastName, idUserEncrypt, urlEmailConfirm);
-				}
-				// Nếu thêm userInformationDAO không thành công thì loại bỏ trường user đã thêm
-				// trước đó ra khỏi danh sách
-				else {
+				} else {
 					request.setAttribute("error", "Tạo tài khoản không thành công");
 					userDAO.remove(user);
 				}
-			}
-			// Trường hợp tạo user ko thành công thông báo lỗi và quay về trang đăng nhập
-			else {
+			} else {
 				request.setAttribute("error", "Tạo tài khoản không thành công");
 			}
 		}
@@ -177,14 +140,11 @@ public class Account extends HttpServlet {
 	}
 
 	private void signIn(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		response.setContentType("text/html");
 		request.setCharacterEncoding("UTF-8");
 		response.setCharacterEncoding("UTF-8");
-		List<String> infoEncrypted = encrypt(
-				Arrays.asList(request.getParameter("typeEmail"), request.getParameter("typePassword")));
-		String emailInput = infoEncrypted.get(0);
-		String passwordInput = infoEncrypted.get(1);
+		String emailInput = request.getParameter("typeEmail");
+		String passwordInput = request.getParameter("typePassword");
 		String url = "/jsp/LoginPage.jsp";
 
 		UserDAO userDAO = new UserDAO();
@@ -194,10 +154,9 @@ public class Account extends HttpServlet {
 			session.setAttribute("error", "Email không tồn tại");
 		} else {
 			// Kiểm tra mật khẩu
-			if (passwordInput.equals(user.getPassword())) {
+			if (PasswordUtils.checkPassword(passwordInput, user.getPassword())) {
 				if (emailIsConfirmed(emailInput)) {
 					url = "/jsp/MainPage.jsp";
-
 					session.setAttribute("userId", user.getUserId());
 				} else {
 					session.setAttribute("error", "Email chưa được xác thực!");
@@ -211,26 +170,22 @@ public class Account extends HttpServlet {
 
 	private void emailConfirm(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		response.setContentType("text/html");
 		request.setCharacterEncoding("UTF-8");
 		response.setCharacterEncoding("UTF-8");
 
 		String idUser = request.getParameter("iduser");
 
-		// Lấy user ra và set trạng thái xác thực = true
 		SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
 		Session session = sessionFactory.openSession();
 		User user = session.get(User.class, idUser);
 		user.setIdentifyStatus(true);
 
-		// Cập nhật lại đối tượng user sau khi đã đặt trạng thái xác thực là true
 		Transaction transaction = session.beginTransaction();
 		session.update(user);
 		transaction.commit();
 		session.close();
 		sessionFactory.close();
 		getServletContext().getRequestDispatcher("/html/EmailConfirmSuccess.html").forward(request, response);
-
 	}
 }

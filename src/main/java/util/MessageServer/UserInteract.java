@@ -7,7 +7,9 @@ import java.util.Set;
 import javax.websocket.Session;
 
 public class UserInteract {
-	public static void connect(Session currentUser, String message, String userName, Set<Session> listUser) {
+
+	public void connect(Session currentUser, String message, String userName, Set<Session> listUser,
+			Map<String, String> map) {
 		String guestName = (String) currentUser.getUserProperties().get("guestName");
 		String messageInDB = "";
 		if (guestName == null) { // Tạo mới guestName cho user gửi yêu cầu (khi user chưa kết nối với ai trước
@@ -20,8 +22,11 @@ public class UserInteract {
 					currentUser.getUserProperties().put("guestName", guestName);
 				}
 			}
+			String[] name = { userName, guestName };
+			Arrays.sort(name);
+			map.put(name[0] + name[1], "");
 			System.out.println("Guest name của: " + userName + " là: " + guestName);
-			messageInDB = InteractMessageInDB.getMessengerBetweenUserInDB(currentUser, userName, guestName);
+			messageInDB = InteractMessageInDB.getMessengerBetweenUserInDB(currentUser, userName, guestName, map);
 		}
 
 		// khi user yêu cầu đổi guest (guest yêu cầu đổi khác với guest trước đó)
@@ -37,8 +42,12 @@ public class UserInteract {
 				if (guestName.equals(session2.getUserProperties().get("username"))) {
 					currentUser.getUserProperties().put("guest", session2);
 					currentUser.getUserProperties().put("guestName", guestName);
+					String[] name = { userName, guestName };
+					Arrays.sort(name);
+					map.put(name[0] + name[1], "");
 					// Tìm tin nhắn của 2 user trong db
-					messageInDB = InteractMessageInDB.getMessengerBetweenUserInDB(currentUser, userName, guestName);
+					messageInDB = InteractMessageInDB.getMessengerBetweenUserInDB(currentUser, userName, guestName,
+							map);
 				}
 			}
 		}
@@ -47,7 +56,7 @@ public class UserInteract {
 		}
 	}
 
-	public static void createUser(Session currentUser, String message, Set<Session> listUser) throws Exception {
+	public void createUser(Session currentUser, String message, Set<Session> listUser) throws Exception {
 		currentUser.getUserProperties().put("username", message);
 		// Hiển thị những người khác tại khung danh sách
 		for (Session otherUser : listUser) {
@@ -60,21 +69,17 @@ public class UserInteract {
 		}
 	}
 
-	public static void sendMessageForAnother(Session currentUser, String userName, String message,
-			Map<String, String> map) {
+	public void sendMessageForAnother(Session currentUser, String userName, String message, Map<String, String> map) {
 		try {
 			Session guest = (Session) currentUser.getUserProperties().get("guest");
 			String guestName = (String) currentUser.getUserProperties().get("guestName");
-			// Lấy tin nhắn trước đó giữa 2 người (nếu có)
-			String previousMessage = InteractMessageOnTime.getPreviousMessage(currentUser, guest, userName, guestName);
-
-			message = (previousMessage == null) ? userName + ":" + message : previousMessage + userName + ":" + message;
 			String[] name = { userName, guestName };
 			Arrays.sort(name);
+			// Lấy tin nhắn trước đó giữa 2 người (nếu có)
+			String previousMessage = map.get(name[0] + name[1]);
+			message = (previousMessage == null) ? userName + ":" + message : previousMessage + userName + ":" + message;
 			map.put(name[0] + name[1], message + ";");
 			// Thực hiện lưu tin nhắn của 2 user (kèm tin nhắn của 2 user trong db {nếu có})
-			InteractMessageOnTime.savingMessageBetweenUser(currentUser, guest, userName, guestName, message + ";");
-
 			if (guest.isOpen()) {
 				Session guestOfGuest = (Session) guest.getUserProperties().get("guest");
 				// Thực hiện đặt guestName cho user2 = user1 (nếu chưa có)

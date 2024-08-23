@@ -49,45 +49,148 @@
             <main class="col-md-9 col-lg-9 justify-content-end align-items-center content">
                 <h3 class="content__title">Thông tin cá nhân</h3>
                 <p class="content__description">Meta sử dụng thông tin này để xác minh danh tính của bạn và bảo vệ cộng
-                    đồng của chúng tôi. Bạn là
-                    người quyết định những thông tin cá nhân nào sẽ hiển thị với người khác.</p>
+                    đồng của chúng tôi. Bạn là người quyết định những thông tin cá nhân nào sẽ hiển thị với người khác.
+                </p>
                 <ul class="d-block list-group list-group-flush content__list">
                     <li class="list-group-item content__item d-flex justify-content-between align-items-center">
                         <div>
                             <strong class="item__title">Thông tin liên hệ:</strong>
-                            <p class="item__info mb-0">ngminhtriet757@gmail.com</p>
+                            <p class="item__info">ngminhtriet757@gmail.com</p>
+                            <p class="item__info">Nguyễn Minh Triết</p>
                             <p class="item__info">+84988739757</p>
                         </div>
-                        <button class="btn btn-sm">Sửa</button>
+                        <button class="btn btn-sm" data-bs-toggle="modal" data-bs-target="#contactModal">Sửa</button>
                     </li>
                     <li class="list-group-item content__item d-flex justify-content-between align-items-center">
                         <div>
                             <strong class="item__title">Ngày sinh:</strong>
                             <p class="item__info">22 tháng 9, 2003</p>
                         </div>
-                        <button class="btn btn-sm">Sửa</button>
+                        <button class="btn btn-sm" data-bs-toggle="modal" data-bs-target="#dobModal">Sửa</button>
                     </li>
                     <li class="list-group-item content__item d-flex justify-content-between align-items-center">
                         <div>
                             <strong class="item__title">Xác nhận danh tính:</strong>
                             <p class="item__info mb-0"><i class="fab fa-facebook"></i></p>
                         </div>
-                        <button class="btn btn-sm">Sửa</button>
+                        <button class="btn btn-sm" data-bs-toggle="modal" data-bs-target="#identityModal">Sửa</button>
                     </li>
                     <li class="list-group-item content__item d-flex justify-content-between align-items-center">
                         <div>
                             <strong class="item__title">Quyền sở hữu và kiểm soát tài khoản:</strong>
                             <p class="item__info">Quản lý dữ liệu, sửa đổi người liên hệ thừa kế, vô hiệu hóa hoặc xóa
-                                tài
-                                khoản và trang cá
-                                nhân của bạn.</p>
+                                tài khoản và trang cá nhân của bạn.</p>
                         </div>
-                        <button class="btn btn-sm">Sửa</button>
+                        <button class="btn btn-sm" data-bs-toggle="modal" data-bs-target="#controlModal">Sửa</button>
                     </li>
                 </ul>
             </main>
         </div>
     </div>
+
+    <!-- Modals -->
+    <!-- Contact Modal -->
+    <div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="contactModalLabel">Sửa thông tin liên hệ</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="newName" class="form-label">Họ và Tên mới:</label>
+                            <input type="text" class="form-control" id="newName">
+                        </div>
+                        <div class="mb-3">
+                            <label for="newName" class="form-label">Email cũ:</label>
+                            <input type="email" class="form-control" id="oldEmail" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="newName" class="form-label">Email:</label>
+                            <input type="email" class="form-control" id="newEmail">
+                        </div>
+                        <div class="mb-3">
+                            <label for="oldPhone" class="form-label">Số điện thoại cũ:</label>
+                            <input type="number" class="form-control" id="oldPhone" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="newPhone" class="form-label">Số điện thoại mới:</label>
+                            <input type="number" class="form-control" id="newPhone">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn" id="save">Lưu</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DOB Modal -->
+    <div class="modal fade" id="dobModal" tabindex="-1" aria-labelledby="dobModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="dobModalLabel">Sửa ngày sinh</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="newDob" class="form-label">Nhập ngày sinh mới:</label>
+                            <input type="date" class="form-control" id="newDob">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn" id="save">Lưu</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Identity Modal -->
+    <div class="modal fade" id="identityModal" tabindex="-1" aria-labelledby="identityModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="identityModalLabel">Sửa xác nhận danh tính</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Identity form content -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn" id="save">Lưu</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Control Modal -->
+    <div class="modal fade" id="controlModal" tabindex="-1" aria-labelledby="controlModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="controlModalLabel">Sửa quyền sở hữu và kiểm soát tài khoản</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Control form content -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn" id="save">Lưu</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"

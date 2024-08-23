@@ -468,24 +468,32 @@
 
           <!-- Modal body -->
           <div class="modal-body">
-            <div class="acc__post">
-              <img src="../img/avt.jpg" alt="">
-              <div class="acc__name">
-                <h4>Chí Nguyên</h4>
-                <select name="aithay" id="user_seen">
-                  <option value="congkhai">Công khai</option>
-                  <option value="banbe">Bạn bè</option>
-                  <option value="chiminhtoi">Chỉ mình tôi</option>
-                </select>
-              </div>
-            </div>
-            <div class="content__post">
-              <textarea name="noidungpost" id="content_area" placeholder="Nguyên ơi, bạn đang nghĩ gì thế?"></textarea>
-            </div>
-            <div class="upload__post">
-              <button type="submit">Đăng</button>
-            </div>
-          </div>
+            <form action="posting" method="POST" enctype="multipart/form-data">
+                <div class="acc__post">
+                    <img src="../img/avt.jpg" alt="">
+                    <div class="acc__name">
+                        <h4>Chí Nguyên</h4>
+                        <select name="aithay" id="user_seen">
+                            <option value="congkhai">Công khai</option>
+                            <option value="banbe">Bạn bè</option>
+                            <option value="chiminhtoi">Chỉ mình tôi</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="content__post">
+                    <textarea name="content" id="content_area" placeholder="Nguyên ơi, bạn đang nghĩ gì thế?"></textarea>
+                </div>
+                <div class="upload__post">
+                    <input type="file" id="fileInput" name="image">
+                    <button type="submit" id="postButton">Đăng</button>
+                </div>
+            </form>
+        </div>
+        
+        <div id="postList">
+            <!-- Danh sách bài viết sẽ được thêm vào đây -->
+        </div>
+        
           </div>
         </div>
       </div>
@@ -613,7 +621,93 @@
         });
       });
     });
+<<<<<<< HEAD
   });
+=======
+    // ĐĂNG BÀI VIẾT
+    document.getElementById("postButton").addEventListener("click", function() {
+      var content = document.getElementById("content_area").value;
+      var fileInput = document.querySelector('input[type="file"]');
+      var formData = new FormData();
+      formData.append("content", content);
+      formData.append("image", fileInput.files[0]);
+  
+      fetch("/SummerProject/post", { // Đường dẫn đầy đủ tới servlet
+          method: "POST",
+          body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+          if (data && data.postContent && data.postImage) {
+              var postHtml = `
+                  <div class="post_content">
+                      <div class="header_post">
+                          <img src="../img/avt.jpg" alt="">
+                          <div class="name-acc_post">
+                              <h4>Chí Nguyên</h4>
+                              <span>Just now</span>
+                          </div>
+                      </div>
+                      <div class="caption_post">
+                          <span>${data.postContent}</span>
+                      </div>
+                      <div class="content_post">
+                          <img src="${data.postImage}" alt="">
+                      </div>
+                      <div class="interact_post">
+                          <div class="number_react">
+                              <i class="fa-solid fa-thumbs-up color_like"></i>
+                              <i class="fa-solid fa-heart color_heart"></i>
+                              <a href="#"> <span>0</span> </a>
+                          </div>
+                          <div class="cmt-share">
+                              <a href="#">
+                                  <span>0</span>
+                                  <i class="fa-solid fa-comment color_cmt"></i>
+                                  <span>0</span>
+                                  <i class="fa-solid fa-share color_cmt"></i>
+                              </a>
+                          </div>
+                      </div>
+                      <div class="interact_btn">
+                          <ul>
+                              <li>
+                                  <i class="fa-solid fa-thumbs-up"></i>
+                                  <h4>Thích</h4>
+                              </li>
+                              <li>
+                                  <i class="fa-solid fa-comment"></i>
+                                  <h4>Bình luận</h4>
+                              </li>
+                              <li>
+                                  <i class="fa-solid fa-paper-plane"></i>
+                                  <h4>Gửi</h4>
+                              </li>
+                              <li>
+                                  <i class="fa-solid fa-share"></i>
+                                  <h4>Chia sẻ</h4>
+                              </li>
+                          </ul>
+                      </div>
+                  </div>
+              `;
+  
+              var postContainer = document.querySelector(".post");
+              postContainer.insertAdjacentHTML('afterbegin', postHtml);
+  
+              document.getElementById("content_area").value = '';
+              fileInput.value = '';
+              $('#myModal').modal('hide');
+          } else {
+              console.error("Invalid response data", data);
+          }
+      })
+      .catch(error => {
+          console.error("Error:", error);
+      });
+  });
+  
+>>>>>>> a58ba0fff87088cb80747e241cf3ca6e86ce6b8f
     </script>
   </body>
 </html>
