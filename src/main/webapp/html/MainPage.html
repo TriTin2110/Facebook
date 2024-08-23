@@ -73,7 +73,7 @@
                 <img src="../img/avt.jpg" alt="" id="open-profile"/>
                 <div class="acc_more">
                   <ul>
-                    <li><a href="">
+                    <li><a href="../html/Profile.html">
                       <img src="../img/avt.jpg" alt="">
                       <h3>Chí Nguyên</h3>
                     </a></li>
@@ -109,7 +109,7 @@
           <div class="left-top">
             <ul>
               <li>
-                <a href="#"
+                <a href="../html/"
                   ><img src="../img/avt.jpg" alt="" />
                   <h5>Chí Nguyên</h5>
                 </a>
@@ -255,13 +255,13 @@
               <div class="number_react">
                 <i class="fa-solid fa-thumbs-up color_like"></i>
                 <i class="fa-solid fa-heart color_heart"></i>
-                <a href="#"> <span>20.230</span> </a>
+                <a href="#"> <span>20</span> </a>
               </div>
               <div class="cmt-share">
                 <a href="#">
-                  <span>13.232</span>
+                  <span>13</span>
                   <i class="fa-solid fa-comment color_cmt"></i>
-                  <span>12.234</span>
+                  <span>12</span>
                   <i class="fa-solid fa-share color_cmt"></i>
                 </a>
               </div>
@@ -330,13 +330,13 @@
               <div class="number_react">
                 <i class="fa-solid fa-thumbs-up color_like"></i>
                 <i class="fa-solid fa-heart color_heart"></i>
-                <a href="#"> <span>12.232</span> </a>
+                <a href="#"> <span>12</span> </a>
               </div>
               <div class="cmt-share">
                 <a href="#">
-                  <span>2.232</span>
+                  <span>26</span>
                   <i class="fa-solid fa-comment color_cmt"></i>
-                  <span>3.234</span>
+                  <span>3</span>
                   <i class="fa-solid fa-share color_cmt"></i>
                 </a>
               </div>
@@ -533,40 +533,87 @@
         });
     });
     // RÊ CHUỘT VÀO NÚT LIKE SẼ HIỂN THỊ THÊM CÁC CẢM XÚC KHÁC
-    document.addEventListener('DOMContentLoaded', function() {
-      const interactBtns = document.querySelectorAll('.interact_btn');
-      interactBtns.forEach(function(interactBtn) {
-        const likeButton = interactBtn.querySelector('.like-button');
-        const iconLike = interactBtn.querySelector('.icon_like');
-        const emotion = interactBtn.querySelector('.emotions');
-        const emotionIcons = emotion.querySelectorAll('.emotion');
-        let isBlue = false;
-        likeButton.addEventListener('click', function() {
-          if(isBlue) {
-            likeButton.innerHTML = iconLike.innerHTML + ' Thích';
-            iconLike.style.display = 'inline-block';
-            likeButton.style.color = '#65676b';
-            iconLike.style.color = '#65676b';
-          } else {
-            likeButton.innerHTML = iconLike.innerHTML + ' Thích';
-            iconLike.style.display = 'inline-block';
-            likeButton.style.color = '#0866ff';
-            iconLike.style.color = '#0866ff';
+  document.addEventListener('DOMContentLoaded', function() {
+    const postContents = document.querySelectorAll('.post_content');
+    postContents.forEach(function(postContent) {
+      const likeButton = postContent.querySelector('.like-button');
+      const iconLike = postContent.querySelector('.icon_like');
+      const emotion = postContent.querySelector('.emotions');
+      const emotionIcons = emotion.querySelectorAll('.emotion');
+      const numberReact = postContent.querySelector('.number_react a span');
+      let isBlue = false;
+      let selectedEmotion = null;
+
+      likeButton.addEventListener('click', function() {
+        if (selectedEmotion) {
+          // Nếu đã chọn cảm xúc khác, hủy bỏ cảm xúc đó
+          selectedEmotion = null;
+          iconLike.style.display = 'inline-block';
+          likeButton.innerHTML = 'Thích';
+          likeButton.style.color = '#65676b';
+          iconLike.style.color = '#65676b';
+          numberReact.innerText = parseInt(numberReact.innerText) - 1;
+          isBlue = false;
+        } else if (isBlue) {
+          // Nếu đang thích, hủy thích
+          // likeButton.innerHTML = '<i class="fa-solid fa-thumbs-up"></i> Thích';
+          iconLike.style.display = 'inline-block';
+          likeButton.style.color = '#65676b';
+          iconLike.style.color = '#65676b';
+          numberReact.innerText = parseInt(numberReact.innerText) - 1;
+          isBlue = false;
+        } else {
+          // Thích
+          // likeButton.innerHTML = '<i class="fa-solid fa-thumbs-up"></i> Thích';
+          // iconLike.style.display = 'inline-block';
+          likeButton.style.color = '#0866ff';
+          iconLike.style.color = '#0866ff';
+          numberReact.innerText = parseInt(numberReact.innerText) + 1;
+          isBlue = true;
+        }
+      });
+
+      likeButton.addEventListener('mouseover', function() {
+        emotion.style.display = 'flex';
+      });
+
+      emotion.addEventListener('mouseover', function() {
+        emotion.style.display = 'flex';
+      });
+
+      likeButton.addEventListener('mouseout', function() {
+        emotion.style.display = 'none';
+      });
+
+      emotion.addEventListener('mouseout', function() {
+        emotion.style.display = 'none';
+      });
+
+      emotionIcons.forEach(emotionIcon => {
+        emotionIcon.addEventListener('click', function() {
+          const getData = this.getAttribute('data-emotion');
+          const getEmotionIcon = this.outerHTML;
+
+          if (selectedEmotion) {
+            // Nếu đã chọn cảm xúc khác, hủy bỏ cảm xúc đó
+            selectedEmotion = null;
+            numberReact.innerText = parseInt(numberReact.innerText) - 1;
+          } else if (isBlue) {
+            // Nếu đang thích, hủy thích
+            isBlue = false;
+            numberReact.innerText = parseInt(numberReact.innerText) - 1;
           }
-          isBlue = !isBlue;
-        });
-        emotionIcons.forEach( emotionIcon => {
-            emotionIcon.addEventListener('click', function() {
-            const getData = this.getAttribute('data-emotion');
-            const getEmotionIcon = this.outerHTML;
-            // Thay đổi nội dung của nút like-button hiện tại
-            likeButton.innerHTML = getEmotionIcon + ' ' + getData;
-            // Ẩn danh sách cảm xúc
-            iconLike.style.display = 'none';
-          });
+
+          // Chọn cảm xúc mới
+          likeButton.innerHTML = getEmotionIcon + ' ' + getData;
+          numberReact.innerText = parseInt(numberReact.innerText) + 1;
+          selectedEmotion = getData;
+          iconLike.style.display = 'none';
+          emotion.style.display = 'none';
         });
       });
     });
+  });
     </script>
   </body>
 </html>

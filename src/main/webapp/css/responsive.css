@@ -10,6 +10,10 @@
     .hide-on-tablet {
         display: none;
     }
+
+    .search input::placeholder {
+        display: none;
+    }
 }
 
 /* Tablet */
