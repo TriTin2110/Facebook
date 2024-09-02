@@ -8,17 +8,25 @@
 String url = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 		+ request.getContextPath();
 UserInformationDAO userInformationDAO = new UserInformationDAO();
-UserInformation userInformation = userInformationDAO
-		.selectById(new UserInformation(session.getAttribute("userId").toString()));
 
-UserDAO userDAO = new UserDAO();
-User user = new User();
-user.setUserId(session.getAttribute("userId").toString());
-user = userDAO.selectById(user);
+Object userId = session.getAttribute("userId");
+UserInformation userInformation = null;
 boolean gender = false;
-if (userInformation.isGender()!=null && userInformation.isGender())
-	gender = true;
-%>
+if(userId == null)
+{
+	response.sendRedirect(url+"/jsp/LoginPage.jsp");
+}
+else
+{
+	userInformation = userInformationDAO
+			.selectById(new UserInformation(userId.toString()));
+	UserDAO userDAO = new UserDAO();
+	User user = new User();
+	user.setUserId(userId.toString());
+	user = userDAO.selectById(user);
+	if (userInformation.isGender()!=null && userInformation.isGender())
+		gender = true;
+	%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -45,7 +53,7 @@ if (userInformation.isGender()!=null && userInformation.isGender())
 				<div class="position-sticky">
 					<h4 class="m-1">BodyBook</h4>
 					<ul class="nav flex-column">
-						<li class="nav-item"><a class="nav-link" href="#"> Trang
+						<li class="nav-item"><a class="nav-link" href="Profile.jsp"> Trang
 								cá nhân </a></li>
 						<li class="nav-item"><a class="nav-link" href="#"> Mật
 								khẩu và bảo mật </a></li>
@@ -253,3 +261,6 @@ if (userInformation.isGender()!=null && userInformation.isGender())
 </body>
 
 </html>
+	<%
+}
+%>
