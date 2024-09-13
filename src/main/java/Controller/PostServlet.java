@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -59,7 +60,7 @@ public class PostServlet extends HttpServlet {
 		filePart.write(uploadPath + File.separator + fileName);
 
 		Post post = new Post();
-		post.setPostId("P2");
+		post.setPostId(UUID.randomUUID().toString()); // Sử dụng UUID để tạo ID duy nhất
 		post.setPostContent(content);
 		post.setPostImage(UPLOAD_DIRECTORY + "/" + fileName);
 
