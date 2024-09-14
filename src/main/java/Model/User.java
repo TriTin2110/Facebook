@@ -3,6 +3,7 @@ package Model;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
@@ -15,12 +16,12 @@ public class User {
 	@Id
 	private String userId;
 	private String email;
-	@OneToOne(mappedBy = "user")
-	private UserInformation userInformation;
 	private String password;
 	private Integer friendQuantity;
 	private boolean identifyStatus;
 
+	@OneToOne(mappedBy = "user", fetch = FetchType.EAGER)
+	private UserInformation userInformation;
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User self;

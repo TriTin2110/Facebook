@@ -12,11 +12,13 @@ public class Util {
 			String[] guestTextSplitString = messageInDB.split(";");
 			// Hiển thị nội dung trước đó của 2 user
 			for (String text : guestTextSplitString) {
-				String[] splitText = text.split(":"); // Chỉ lấy phần nội dung
-				if (splitText[0].equals(name)) {// Khi tin nhắn là của mình
-					session.getBasicRemote().sendText(showMessage(splitText[1], true));
-				} else {
-					session.getBasicRemote().sendText(showMessage(splitText[1], false));
+				if (!text.isEmpty()) {
+					String[] splitText = text.split(":"); // Chỉ lấy phần nội dung
+					if (splitText[0].equals(name)) {// Khi tin nhắn là của mình
+						session.getBasicRemote().sendText(showMessage(splitText[1], true));
+					} else {
+						session.getBasicRemote().sendText(showMessage(splitText[1], false));
+					}
 				}
 			}
 

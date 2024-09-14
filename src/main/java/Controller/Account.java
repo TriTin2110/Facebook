@@ -79,7 +79,7 @@ public class Account extends HttpServlet {
 			UserInformation userInformation = createUserInformation(user, idUserEncrypted, request);
 			UserInformationDAO userInformationDAO = new UserInformationDAO();
 
-			if (addUserSuccess(userInformation, userInformationDAO)) {
+			if (addUserSuccess(user, userDAO)) {
 				if (addUserInformationSuccess(userInformation, userInformationDAO)) {
 					String urlEmailConfirm = request.getScheme() + "://" + request.getServerName() + ":"
 							+ request.getServerPort() + request.getContextPath();
@@ -120,8 +120,8 @@ public class Account extends HttpServlet {
 		return userInformation;
 	}
 
-	private boolean addUserSuccess(UserInformation userInformation, UserInformationDAO userInformationDAO) {
-		return (userInformationDAO.add(userInformation) <= 0) ? false : true;
+	private boolean addUserSuccess(User user, UserDAO userDAO) {
+		return (userDAO.add(user) <= 0) ? false : true;
 	}
 
 	private boolean addUserInformationSuccess(UserInformation userInformation, UserInformationDAO userInformationDAO) {

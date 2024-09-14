@@ -1,8 +1,11 @@
+<%@page import="DAO.UserDAO"%>
+<%@page import="Model.User"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%
 String url = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 		+ request.getContextPath();
+
 %>
 <html lang="en">
 <head>
@@ -60,7 +63,7 @@ String url = request.getScheme() + "://" + request.getServerName() + ":" + reque
 							src="<%=url%>/img/avt.jpg" alt="" id="open-profile" />
 							<div class="acc_more">
 								<ul>
-									<li><a href=""> <img src="<%=url%>/img/avt.jpg" alt="">
+									<li><a href="<%=url%>/jsp/Profile.jsp"> <img src="<%=url%>/img/avt.jpg" alt="">
 											<h3>Chí Nguyên</h3>
 									</a></li>
 									<li><a href="<%=url%>/jsp/InfoChange.jsp"> <i
