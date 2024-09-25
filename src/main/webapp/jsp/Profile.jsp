@@ -41,7 +41,7 @@ if (user == null) {
 			<div class="avt_info">
 				<div class="img_info">
 					<div class="avt_img">
-						<img src="../img/avt_profile.jpg" alt="" />
+						<img src="../img/<%=user.getAvatar()%>" alt="" />
 					</div>
 					<div class="info">
 						<h1 class="name"><%=profileInformation.getFullName() %></h1>
@@ -104,7 +104,7 @@ if (user == null) {
 			<div class="section_right">
 				<div class="status">
 					<div class="post-input">
-						<img src="../img/avt.jpg" alt="" /> <span type="button"
+						<img src="../img/<%=user.getAvatar()%>" alt="" /> <span type="button"
 							class="btn btn-primary" data-bs-toggle="modal"
 							data-bs-target="#myModal"><%=profileInformation.getFullName()%> ơi, bạn
 							đang nghĩ gì thế?</span>

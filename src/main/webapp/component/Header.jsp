@@ -55,10 +55,10 @@
 					<li class="nm_item"><a href="#" class="nm_link"><i
 							class="nm_icon fa-solid fa-bell"></i></a></li>
 					<li class="nm_item"><a href="#" class="nm_link"> <img
-							src="<%=url%>/img/avt.jpg" alt="" id="open-profile" />
+							src="<%=url%>/img/<%=user.getAvatar()%>" alt="" id="open-profile" />
 							<div class="acc_more">
 								<ul>
-									<li><a href="<%=url%>/jsp/Profile.jsp"> <img src="<%=url%>/img/avt.jpg" alt="">
+									<li><a href="<%=url%>/jsp/Profile.jsp"> <img src="<%=url%>/img/<%=user.getAvatar()%>" alt="">
 											<h3><%=user.getUserInformation().getFullName()%></h3>
 									</a></li>
 									<li><a href="<%=url%>/jsp/InfoChange.jsp"> <i

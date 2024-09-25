@@ -5,7 +5,6 @@
 <%
 String url = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 		+ request.getContextPath();
-
 %>
 <html lang="en">
 <head>
@@ -29,6 +28,12 @@ String url = request.getScheme() + "://" + request.getServerName() + ":" + reque
 	crossorigin="anonymous"></script>
 <title>BodyBook</title>
 </head>
+<%
+User user = (User) session.getAttribute("user");
+if (user == null) {
+	response.sendRedirect(url + "/jsp/LoginPage.jsp");
+} else {
+%>
 <body>
 	<div class="app">
 		<jsp:include page="/component/Header.jsp"></jsp:include>
@@ -36,26 +41,19 @@ String url = request.getScheme() + "://" + request.getServerName() + ":" + reque
 			<div class="section-left hide-on-mobile-tablet">
 				<div class="left-top">
 					<ul>
-						<li><a href="#"><img
-								src="<%=url%>/img/avt.jpg" alt="" />
-								<h5>Chí Nguyên</h5> </a></li>
-						<li><a href="#"><i
-								class="fa-solid fa-user-group"></i>
+						<li><a href="#"><img src="<%=url%>/img/<%=user.getAvatar()%>" alt="" />
+								<h5><%=user.getUserInformation().getFullName()%></h5> </a></li>
+						<li><a href="#"><i class="fa-solid fa-user-group"></i>
 								<h5>Bạn bè</h5> </a></li>
-						<li><a href="#"><i
-								class="fa-solid fa-heart"></i>
+						<li><a href="#"><i class="fa-solid fa-heart"></i>
 								<h5>Kỷ niệm</h5> </a></li>
-						<li><a href="#"><i
-								class="fa-solid fa-bookmark"></i>
+						<li><a href="#"><i class="fa-solid fa-bookmark"></i>
 								<h5>Đã lưu</h5> </a></li>
-						<li><a href="#"><i
-								class="fa-solid fa-people-group"></i>
+						<li><a href="#"><i class="fa-solid fa-people-group"></i>
 								<h5>Nhóm</h5> </a></li>
-						<li><a href="#"><i
-								class="fa-solid fa-video"></i>
+						<li><a href="#"><i class="fa-solid fa-video"></i>
 								<h5>Video</h5> </a></li>
-						<li><a href="#"><i
-								class="fa-solid fa-caret-down"></i>
+						<li><a href="#"><i class="fa-solid fa-caret-down"></i>
 								<h5>Xem thêm</h5> </a></li>
 					</ul>
 				</div>
@@ -82,8 +80,7 @@ String url = request.getScheme() + "://" + request.getServerName() + ":" + reque
 								alt="" />
 								<h5>Cộng đồng sinh viên IUH</h5>
 						</a></li>
-						<li><a href="#"><i
-								class="fa-solid fa-caret-down"></i>
+						<li><a href="#"><i class="fa-solid fa-caret-down"></i>
 								<h5>Xem thêm</h5> </a></li>
 					</ul>
 				</div>
@@ -91,7 +88,7 @@ String url = request.getScheme() + "://" + request.getServerName() + ":" + reque
 			<div class="post">
 				<div class="post_list">
 					<div class="story">
-						<img src="<%=url%>/img/story0.jpg" alt="" /> <img
+						<img src="<%=url%>/img/<%=user.getAvatar()%>" alt="" /> <img
 							src="<%=url%>/img/story1.jpg" alt="" /> <img
 							src="<%=url%>/img/story2.jpg" alt="" /> <img
 							src="<%=url%>/img/story3.jpg" alt="" /> <img
@@ -106,10 +103,9 @@ String url = request.getScheme() + "://" + request.getServerName() + ":" + reque
 				</div>
 				<div class="status">
 					<div class="post-input">
-						<img src="<%=url%>/img/avt.jpg" alt="" /> <span type="button"
+						<img src="<%=url%>/img/<%=user.getAvatar()%>" alt="" /> <span type="button"
 							class="btn btn-primary" data-bs-toggle="modal"
-							data-bs-target="#myModal">Nguyên ơi, bạn
-							đang nghĩ gì thế?</span>
+							data-bs-target="#myModal"><%=user.getUserInformation().getFullName() %> ơi, bạn đang nghĩ gì thế?</span>
 					</div>
 					<div class="post-btn">
 						<ul>
@@ -241,17 +237,9 @@ String url = request.getScheme() + "://" + request.getServerName() + ":" + reque
 						</div>
 					</div>
 				</div>
-				<div class="friend">
-					<h4>Người liên hệ</h4>
-					<ul>
-						<li><img src="<%=url%>/img/friend1.jpg" alt="" /> <span
-							class="name-friend">Đặng Thiện</span></li>
-						<li><img src="<%=url%>/img/friend2.jpg" alt="" /> <span
-							class="name-friend">Trí Tín</span></li>
-						<li><img src="<%=url%>/img/friend3.jpg" alt="" /> <span
-							class="name-friend">Minh Triết</span></li>
-					</ul>
-				</div>
+				
+				<jsp:include page="/component/ListFriend.jsp"></jsp:include>
+				
 			</div>
 		</div>
 	</div>
@@ -322,4 +310,8 @@ String url = request.getScheme() + "://" + request.getServerName() + ":" + reque
 		});
 	</script>
 </body>
+<%
+}
+%>
+
 </html>

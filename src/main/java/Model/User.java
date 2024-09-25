@@ -19,6 +19,7 @@ public class User {
 	private String password;
 	private Integer friendQuantity;
 	private boolean identifyStatus;
+	private String avatar;
 
 	@OneToOne(mappedBy = "user", fetch = FetchType.EAGER)
 	private UserInformation userInformation;
@@ -27,7 +28,6 @@ public class User {
 	private User self;
 	@OneToMany(mappedBy = "listFriend")
 	private List<User> listFriend;
-	private String avatar; // Hình ảnh
 
 	@ManyToMany(mappedBy = "listMember")
 	private List<Group> listGroup;

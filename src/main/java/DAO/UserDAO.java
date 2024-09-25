@@ -100,7 +100,7 @@ public class UserDAO implements InterfaceDAO<User> {
 		return null;
 	}
 
-	public boolean confirmEmail(String idUser) {
+	public User confirmEmail(String idUser) {
 		try {
 			Session session = HibernateUtil.getSessionFactory().openSession();
 			User user = session.get(User.class, idUser);
@@ -110,11 +110,11 @@ public class UserDAO implements InterfaceDAO<User> {
 			session.update(user);
 			transaction.commit();
 			session.close();
-			return true;
+			return user;
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
 		}
-		return false;
+		return null;
 	}
 }

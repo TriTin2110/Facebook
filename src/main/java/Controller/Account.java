@@ -72,7 +72,7 @@ public class Account extends HttpServlet {
 		String idUserEncrypted = HashUtil.hashWithSHA256(System.currentTimeMillis() + email);
 
 		User user = new User(idUserEncrypted, emailEncrypted, passwordEncrypted);
-
+		user.setAvatar("friend2.jpg");
 		if (getAccountByInputedEmail(userDAO, user) != null) {
 			request.setAttribute("error", "Tài khoản đã tồn tại");
 		} else {
@@ -83,7 +83,7 @@ public class Account extends HttpServlet {
 				if (addUserInformationSuccess(userInformation, userInformationDAO)) {
 					String urlEmailConfirm = request.getScheme() + "://" + request.getServerName() + ":"
 							+ request.getServerPort() + request.getContextPath();
-					System.out.println("Đã tạo tài khoản thành công");
+					request.setAttribute("error", "Tạo tài khoản thành công! Vui lòng kiểm tra email đã đăng ký");
 					SendingMail.sendMail(email, userInformation.getFullName(), idUserEncrypted, urlEmailConfirm);
 				} else {
 					request.setAttribute("error", "Tạo tài khoản không thành công");
@@ -188,7 +188,12 @@ public class Account extends HttpServlet {
 
 		String idUser = request.getParameter("iduser");
 		UserDAO userDAO = new UserDAO();
-		userDAO.confirmEmail(idUser);
-		getServletContext().getRequestDispatcher("/jsp/EmailConfirmSuccess.jsp").forward(request, response);
+		User user = userDAO.confirmEmail(idUser);
+		if (user != null) {
+			request.getSession().setAttribute("user", user);
+			request.getRequestDispatcher("/jsp/EmailConfirmSuccess.jsp").forward(request, response);
+		} else {
+			request.getRequestDispatcher("/jsp/LoginPage.jsp").forward(request, response);
+		}
 	}
 }

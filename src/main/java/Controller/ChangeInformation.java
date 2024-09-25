@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import DAO.UserInformationDAO;
+import Model.User;
 import Model.UserInformation;
 
 /**
@@ -69,11 +70,13 @@ public class ChangeInformation extends HttpServlet {
 		// TODO Auto-generated method stub
 		HttpSession session = request.getSession();
 		Date dob = Date.valueOf(request.getParameter("dob"));
-		UserInformation userInformation = new UserInformation();
+
+		User user = (User) session.getAttribute("user");
+		UserInformation userInformation = user.getUserInformation();
 		UserInformationDAO userInformationDAO = new UserInformationDAO();
-		userInformation.setUserId((String) session.getAttribute("userId"));
-		userInformation = userInformationDAO.selectById(userInformation);
+
 		userInformation.setDateOfBirth(dob);
+
 		if (userInformationDAO.update(userInformation) == 1) {
 			return true;
 		} else {
@@ -88,14 +91,16 @@ public class ChangeInformation extends HttpServlet {
 		boolean gender = request.getParameter("gender").equals("Nam");
 		String phoneNumber = request.getParameter("phone");
 		String homeTown = request.getParameter("home-town");
-		String userId = (String) session.getAttribute("userId");
-		UserInformation userInformation = new UserInformation(userId);
+
+		User user = (User) session.getAttribute("user");
+		UserInformation userInformation = user.getUserInformation();
 		UserInformationDAO userInformationDAO = new UserInformationDAO();
-		userInformation = userInformationDAO.selectById(userInformation);
+
 		userInformation.setFullName(name);
 		userInformation.setGender(gender);
 		userInformation.setPhoneNumber(phoneNumber);
 		userInformation.setHomeTown(homeTown);
+
 		if (userInformationDAO.update(userInformation) == 1) {
 			return true;
 		} else {
