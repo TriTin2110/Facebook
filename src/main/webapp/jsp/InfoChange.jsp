@@ -7,23 +7,17 @@
 <%
 String url = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 		+ request.getContextPath();
-UserInformationDAO userInformationDAO = new UserInformationDAO();
 
-Object userId = session.getAttribute("userId");
+User user = (User) session.getAttribute("user");
 UserInformation userInformation = null;
 boolean gender = false;
-if(userId == null)
+if(user == null)
 {
 	response.sendRedirect(url+"/jsp/LoginPage.jsp");
 }
 else
 {
-	userInformation = userInformationDAO
-			.selectById(new UserInformation(userId.toString()));
-	UserDAO userDAO = new UserDAO();
-	User user = new User();
-	user.setUserId(userId.toString());
-	user = userDAO.selectById(user);
+	userInformation = user.getUserInformation();
 	if (userInformation.isGender()!=null && userInformation.isGender())
 		gender = true;
 	%>
@@ -44,7 +38,6 @@ else
 <link rel="stylesheet" href="<%=url%>/css/infochange.css">
 <link rel="stylesheet" href="<%=url%>/css/base.css">
 </head>
-
 <body>
 	<div class="container-fluid">
 		<div class="row">
@@ -53,7 +46,7 @@ else
 				<div class="position-sticky">
 					<h4 class="m-1">BodyBook</h4>
 					<ul class="nav flex-column">
-						<li class="nav-item"><a class="nav-link" href="Profile.jsp"> Trang
+						<li class="nav-item"><a class="nav-link" href="<%=url%>/jsp/Profile.jsp"> Trang
 								cá nhân </a></li>
 						<li class="nav-item"><a class="nav-link" href="#"> Mật
 								khẩu và bảo mật </a></li>
@@ -259,7 +252,17 @@ else
 		crossorigin="anonymous"></script>
 	<script src="https://kit.fontawesome.com/a076d05399.js"></script>
 </body>
-
+<%
+	String notice = (String) request.getAttribute("notice");
+	if(notice != null)
+	{
+		%>
+			<script type="text/javascript">
+				alert("<%=notice%>");
+			</script>
+		<%
+	}
+%>
 </html>
 	<%
 }

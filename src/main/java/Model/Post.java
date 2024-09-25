@@ -11,8 +11,8 @@ import javax.persistence.OneToMany;
 @Entity
 public class Post {
 	@ManyToOne
-	@JoinColumn(name = "listPost")
-	private User userIdPost;
+	@JoinColumn(name = "by_user")
+	private User user;
 	@Id
 	private String postId;
 	private String postImage; // Hình ảnh
@@ -29,7 +29,7 @@ public class Post {
 	public Post(User user, String postId, String postImage, String postContent, Integer postInteract, Integer postShare,
 			List<Comment> postCommentList) {
 		super();
-		this.userIdPost = user;
+		this.user = user;
 		this.postId = postId;
 		this.postImage = postImage;
 		this.postContent = postContent;
@@ -39,11 +39,11 @@ public class Post {
 	}
 
 	public User getUser() {
-		return userIdPost;
+		return user;
 	}
 
 	public void setUser(User user) {
-		this.userIdPost = user;
+		this.user = user;
 	}
 
 	public String getPostId() {

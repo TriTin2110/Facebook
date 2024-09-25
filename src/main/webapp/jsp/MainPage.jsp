@@ -31,65 +31,7 @@ String url = request.getScheme() + "://" + request.getServerName() + ":" + reque
 </head>
 <body>
 	<div class="app">
-		<div class="nav">
-			<div class="logo-search">
-				<div class="logo">
-					<a href="">B</a>
-				</div>
-				<div class="search">
-					<input type="text" name="search"
-						placeholder="Tìm kiếm trên BodyBook" /> <i
-						class="fa-solid fa-magnifying-glass"></i>
-				</div>
-			</div>
-			<div class="nav-list">
-				<ul>
-					<li><a href=""><i class="fa-solid fa-house"></i></a></li>
-					<li><a href=""><i class="fa-solid fa-user-group"></i></a></li>
-					<li><a href=""><i class="fa-solid fa-tv"></i></a></li>
-					<li><a href=""><i class="fa-solid fa-shop"></i></a></li>
-					<li><a href=""><i class="fa-solid fa-gamepad"></i></a></li>
-				</ul>
-			</div>
-			<div class="notify-mess">
-				<ul class="nm_list">
-					<li class="nm_item"><a href="#" class="nm_link"><i
-							class="nm_icon fa-solid fa-ellipsis"></i></a></li>
-					<li class="nm_item"><a href="Messenger.jsp" class="nm_link"><i
-							class="nm_icon fa-solid fa-comments"></i></a></li>
-					<li class="nm_item"><a href="#" class="nm_link"><i
-							class="nm_icon fa-solid fa-bell"></i></a></li>
-					<li class="nm_item"><a href="#" class="nm_link"> <img
-							src="<%=url%>/img/avt.jpg" alt="" id="open-profile" />
-							<div class="acc_more">
-								<ul>
-									<li><a href="<%=url%>/jsp/Profile.jsp"> <img src="<%=url%>/img/avt.jpg" alt="">
-											<h3>Chí Nguyên</h3>
-									</a></li>
-									<li><a href="<%=url%>/jsp/InfoChange.jsp"> <i
-											class="fa-solid fa-gear"></i>
-											<h4>Cài đặt & quyền riêng tư</h4>
-									</a></li>
-									<li><a href="#"> <i
-											class="fa-solid fa-circle-question"></i>
-											<h4>Trợ giúp & hỗ trợ</h4>
-									</a></li>
-									<li><a href="#"> <i class="fa-solid fa-moon"></i>
-											<h4>Màn hình & trợ năng</h4>
-									</a></li>
-									<li><a href="#"> <i class="fa-solid fa-exclamation"></i>
-											<h4>Đóng góp ý kiến</h4>
-									</a></li>
-									<li><a href="<%=url%>/html/LoginPage.jsp"> <i
-											class="fa-solid fa-right-from-bracket"></i>
-											<h4>Đăng xuất</h4>
-									</a></li>
-								</ul>
-							</div>
-					</a></li>
-				</ul>
-			</div>
-		</div>
+		<jsp:include page="/component/Header.jsp"></jsp:include>
 		<div class="body">
 			<div class="section-left hide-on-mobile-tablet">
 				<div class="left-top">

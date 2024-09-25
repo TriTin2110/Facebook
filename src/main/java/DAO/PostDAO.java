@@ -78,4 +78,5 @@ public class PostDAO implements InterfaceDAO<Post> {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 }

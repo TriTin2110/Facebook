@@ -22,82 +22,15 @@
 <%
 String url = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 		+ request.getContextPath();
-Object userId = session.getAttribute("userId");
-Object profileID = request.getParameter("profileId");
-if (userId == null) {
+User user = (User) session.getAttribute("user");
+if (user == null) {
 	response.sendRedirect(url+"/jsp/LoginPage.jsp");
 } else {
-	UserDAO userDAO = new UserDAO();
-	User profile = new User();
-	profile.setUserId(userId.toString());
-	profile = userDAO.selectById(profile);
-	if (profile == null) {
-		response.sendRedirect(url+"/jsp/LoginPage.jsp");
-	} else {
-		UserInformation profileInformation = profile.getUserInformation();
+	UserInformation profileInformation = user.getUserInformation();
 %>
 <body>
 	<div class="app">
-		<div class="nav">
-			<div class="logo-search">
-				<div class="logo">
-					<a href="../html/MainPage.html">B</a>
-				</div>
-				<div class="search">
-					<input type="text" name="search"
-						placeholder="Tìm kiếm trên BodyBook" /> <i
-						class="fa-solid fa-magnifying-glass"></i>
-				</div>
-			</div>
-			<div class="nav-list">
-				<ul>
-					<li><a href=""><i class="fa-solid fa-house"></i></a></li>
-					<li><a href=""><i class="fa-solid fa-user-group"></i></a></li>
-					<li><a href=""><i class="fa-solid fa-tv"></i></a></li>
-					<li><a href=""><i class="fa-solid fa-shop"></i></a></li>
-					<li><a href=""><i class="fa-solid fa-gamepad"></i></a></li>
-				</ul>
-			</div>
-			<div class="notify-mess">
-				<ul class="nm_list">
-					<li class="nm_item"><a href="#" class="nm_link"><i
-							class="nm_icon fa-solid fa-ellipsis"></i></a></li>
-					<li class="nm_item"><a href="Messenger.jsp" class="nm_link"><i
-							class="nm_icon fa-solid fa-comments"></i></a></li>
-					<li class="nm_item"><a href="#" class="nm_link"><i
-							class="nm_icon fa-solid fa-bell"></i></a></li>
-					<li class="nm_item"><a href="#" class="nm_link"> <img
-							src="../img/avt.jpg" alt="" id="open-profile" />
-							<div class="acc_more">
-								<ul>
-									<li><a href="<%=url%>/jsp/Profile.jsp"> <img
-											src="../img/avt.jpg" alt="" />
-											<h3><%=profileInformation.getFullName()%></h3>
-									</a></li>
-									<li><a href="../html/infoChange.html"> <i
-											class="fa-solid fa-gear"></i>
-											<h4>Cài đặt & quyền riêng tư</h4>
-									</a></li>
-									<li><a href="#"> <i
-											class="fa-solid fa-circle-question"></i>
-											<h4>Trợ giúp & hỗ trợ</h4>
-									</a></li>
-									<li><a href="#"> <i class="fa-solid fa-moon"></i>
-											<h4>Màn hình & trợ năng</h4>
-									</a></li>
-									<li><a href="#"> <i class="fa-solid fa-exclamation"></i>
-											<h4>Đóng góp ý kiến</h4>
-									</a></li>
-									<li><a href="../html/LoginPage.jsp"> <i
-											class="fa-solid fa-right-from-bracket"></i>
-											<h4>Đăng xuất</h4>
-									</a></li>
-								</ul>
-							</div>
-					</a></li>
-				</ul>
-			</div>
-		</div>
+		<jsp:include page="/component/Header.jsp"></jsp:include>
 		<div class="header">
 			<div class="cover_photo">
 				<img src="../img/anhbia.jpg" alt="" /> <a href="#"
@@ -187,153 +120,7 @@ if (userId == null) {
 						</ul>
 					</div>
 				</div>
-				<div class="post_content">
-					<div class="header_post">
-						<img src="../img/avt.jpg" alt="">
-						<div class="name-acc_post">
-							<h4><%=profileInformation.getFullName() %></h4>
-							<span>3 phút</span>
-						</div>
-					</div>
-					<div class="caption_post">
-						<span>Hello World</span>
-					</div>
-					<div class="content_post">
-						<img src="../img/post.jpg" alt="">
-					</div>
-					<div class="interact_post">
-						<div class="number_react">
-							<i class="fa-solid fa-thumbs-up color_like"></i> <i
-								class="fa-solid fa-heart color_heart"></i> <a href="#"> <span>20</span>
-							</a>
-						</div>
-						<div class="cmt-share">
-							<a href="#"> <span>13</span> <i
-								class="fa-solid fa-comment color_cmt"></i> <span>12</span> <i
-								class="fa-solid fa-share color_cmt"></i>
-							</a>
-						</div>
-					</div>
-					<div class="interact_btn">
-						<ul>
-							<li>
-								<div class="button-react">
-									<i class="fa-solid fa-thumbs-up icon_like"></i>
-									<button class="like-button">Thích</button>
-									<div class="emotions">
-										<span> <i
-											class="fa-solid fa-heart-pulse color_heart emotion"
-											data-emotion="Rung động"></i>
-										</span> <span> <i
-											class="fa-solid fa-face-flushed color_face emotion"
-											data-emotion="Rìa lí man"></i>
-										</span> <spanhá">
-                        <i class="fa-solid fa-face-grin-tongue-squint color_face emotion" data-emotion="Há há"></i>
-                      </span>
-                      <span ">
-                        <i class="fa-solid fa-face-sad-cry color_face emotion" data-emotion="Suyyy"></i>
-                      </span>
-                      <span>
-                        <i class="fa-solid fa-face-angry color_heart emotion" data-emotion="Quạo á"></i>
-                      </span>
-                  </div>
-								</div>
-							</li>
-							<li>
-								<div class="button-react">
-									<i class="fa-solid fa-comment"></i>
-									<button class="cmt-button">Bình luận</button>
-								</div>
-							</li>
-							<li>
-								<div class="button-react">
-									<i class="fa-solid fa-paper-plane"></i>
-									<button class="send-button">Gửi</button>
-								</div>
-							</li>
-							<li>
-								<div class="button-react">
-									<i class="fa-solid fa-share"></i>
-									<button class="share-button">Chia sẻ</button>
-								</div>
-							</li>
-						</ul>
-					</div>
-				</div>
-				<div class="post_content">
-					<div class="header_post">
-						<img src="../img/avt.jpg" alt="">
-						<div class="name-acc_post">
-							<h4><%=profileInformation.getFullName() %></h4>
-							<span>2 giờ</span>
-						</div>
-					</div>
-					<div class="caption_post">
-						<span>My Love</span>
-					</div>
-					<div class="content_post">
-						<img src="../img/post2.jpg" alt="">
-					</div>
-					<div class="interact_post">
-						<div class="number_react">
-							<i class="fa-solid fa-thumbs-up color_like"></i> <i
-								class="fa-solid fa-heart color_heart"></i> <a href="#"> <span>12</span>
-							</a>
-						</div>
-						<div class="cmt-share">
-							<a href="#"> <span>26</span> <i
-								class="fa-solid fa-comment color_cmt"></i> <span>3</span> <i
-								class="fa-solid fa-share color_cmt"></i>
-							</a>
-						</div>
-					</div>
-					<div class="interact_btn">
-						<ul>
-							<li>
-								<div class="button-react">
-									<i class="fa-solid fa-thumbs-up icon_like"></i>
-									<button class="like-button">Thích</button>
-									<div class="emotions">
-										<span> <i
-											class="fa-solid fa-heart-pulse color_heart emotion emotion"
-											data-emotion="Rung động"></i>
-										</span> <span> <i
-											class="fa-solid fa-face-flushed color_face emotion"
-											data-emotion="Rìa lí man"></i>
-										</span> <span> <i
-											class="fa-solid fa-face-grin-tongue-squint color_face emotion"
-											data-emotion="Há há"></i>
-										</span> <span> <i
-											class="fa-solid fa-face-sad-cry color_face emotion"
-											data-emotion="Suyyy"></i>
-										</span> <span> <i
-											class="fa-solid fa-face-angry color_heart emotion"
-											data-emotion="Quạo á"></i>
-										</span>
-									</div>
-								</div>
-							</li>
-							<li>
-								<div class="button-react">
-									<i class="fa-solid fa-comment"></i>
-									<button class="cmt-button">Bình luận</button>
-								</div>
-							</li>
-							<li>
-								<div class="button-react">
-									<i class="fa-solid fa-paper-plane"></i>
-									<button class="send-button">Gửi</button>
-								</div>
-							</li>
-							<li>
-								<div class="button-react">
-									<i class="fa-solid fa-share"></i>
-									<button class="share-button">Chia sẻ</button>
-								</div>
-							</li>
-						</ul>
-					</div>
-				</div>
+				<jsp:include page="/component/PostContent.jsp"></jsp:include>
 			</div>
 		</div>
 	</div>
@@ -383,8 +170,6 @@ if (userId == null) {
 	</div>
 </body>
 <%
-}
-
 }
 %>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
