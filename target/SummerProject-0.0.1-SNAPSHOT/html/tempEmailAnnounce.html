@@ -1,0 +1,82 @@
+<!-- <%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%> -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Insert title here</title>
+    <style type="text/css">
+    body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f2f5;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.c-email {
+    width: 600px;
+    text-align: center;
+    border-radius: 50px;
+    box-shadow: 0px 1px 3px 1px #ccc;
+}
+
+.header__title {
+    border-top-left-radius: 50px;
+    border-top-right-radius: 50px;
+    color: #fff;
+    padding: 12px 8px;
+    background-color: #0fd59f;
+}
+
+.content__text-code {
+    font-size: 30px;
+    margin: 20px 0 40px 0;
+}
+
+.code__text {
+    font-size: 30px;
+    border-radius: 30px;
+    padding: 8px 20px;
+    text-decoration: none;
+    background-color: #ccc;
+}
+
+.content__text {
+    color: #ccc;
+    font-size: 20px;
+    font-style: italic;
+    margin: 30px 0 60px 0;
+}
+</style>
+  </head>
+  <body style="display: flex; justify-content: center;">
+    <div class="container">
+      <div class="c-email">
+        <div class="c-email__header">
+          <h2 class="header__title">
+            Xin chào Trí Tín! Cảm ơn bạn đã sử dụng BodyBook của chúng tôi
+          </h2>
+        </div>
+        <div class="content">
+          <p class="content__text-code">Để xác minh tài khoản, bạn hãy truy cập vào đường link dưới đây:</p>
+          <div class="code">
+            <a class="code__text" href="#">Nhấn vào đây để lấy mã xác thực</a>
+          </div>
+          <p class="content__text">Mã xác thực này chỉ tồn tại trong 10 phút</p>
+        </div>
+        <div class="footer"></div>
+      </div>
+    </div>
+  </body>
+</html>

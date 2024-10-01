@@ -64,15 +64,13 @@ public class ServerWebSocket {
 	// Nếu user thoát ra khỏi chtr thì danh sách sẽ xóa user đó ra khỏi danh sách
 	@OnClose
 	public void removeUser(Session currentUser) {
-		if (currentUser.getUserProperties().get("guestName") != null) {
-			String userName = (String) currentUser.getUserProperties().get("username");
-			// Khi user đóng thì lưu lại tin nhắn trước đó của user với những user khác
-			String guestName = (String) currentUser.getUserProperties().get("guestName");
-			if (guestName != null) { // Khi guest name không tồn tại thì việc lưu vào database sẽ bị lỗi
-				String[] name = { userName, guestName };
-				Arrays.sort(name);
-				InteractMessageInDB.savingMessageToDB(name[0] + name[1], map.get(name[0] + name[1]));
-			}
+		String userName = (String) currentUser.getUserProperties().get("username");
+		// Khi user đóng thì lưu lại tin nhắn trước đó của user với những user khác
+		String guestName = (String) currentUser.getUserProperties().get("guestName");
+		if (guestName != null) { // Khi guest name không tồn tại thì việc lưu vào database sẽ bị lỗi
+			String[] name = { userName, guestName };
+			Arrays.sort(name);
+			InteractMessageInDB.savingMessageToDB(name[0] + name[1], map.get(name[0] + name[1]));
 		}
 		listUser.remove(currentUser);
 		if (!listUser.isEmpty())

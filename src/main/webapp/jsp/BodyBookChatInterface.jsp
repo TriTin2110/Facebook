@@ -47,6 +47,7 @@ function processMessage(message) {
 		var otherUser = document.createElement("div");
 		otherUser.innerHTML = returnOtherUserTag(username);
 		otherUser.id = username;
+		otherUser.class = 
 		document.getElementById("userAvaiable").appendChild(otherUser);
 	}
 	else if(message.data.includes("remove-user:"))
@@ -105,6 +106,12 @@ function processError(message) {
 	</div>
 </body>
 <script type="text/javascript">
+document.getElementById("userInput").addEventListener("keypress", (event) => {
+	if(event.key == "Enter")
+	{
+		sendMessage();
+	}
+	})
 function sendMessage() {
     if(typeof websocket != 'undefined' && websocket.readyState == WebSocket.OPEN)
     {

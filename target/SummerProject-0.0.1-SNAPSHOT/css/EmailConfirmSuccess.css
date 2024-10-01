@@ -1,0 +1,37 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f2f5;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.container {
+    text-align: center;
+    background-color: white;
+    padding: 20px 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.message-box {
+    margin: 20px;
+}
+
+.success-message {
+    font-size: 24px;
+    color: #4caf50;
+    margin-bottom: 30px;
+}
+
+.redirect-message {
+    font-size: 18px;
+    color: #333;
+}
+
+#countdown {
+    font-weight: bold;
+}

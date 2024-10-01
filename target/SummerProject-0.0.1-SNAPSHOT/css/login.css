@@ -1,0 +1,25 @@
+body {
+    background-color: #508bfc;
+}
+.card {
+    border-radius: 1rem;
+}
+.form__forgot-password {
+    display: block;
+    margin-top: 1rem;
+}
+.logo{
+    color:var(--main-color);
+    text-align: left;
+}
+.description{
+    text-align: left;
+}
+.container-right{
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
+    border-radius: 17px;
+}
+footer{
+    background-color: rgb(227, 218, 218);
+    text-align: center;
+}
