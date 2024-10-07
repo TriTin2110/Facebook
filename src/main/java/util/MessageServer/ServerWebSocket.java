@@ -46,11 +46,10 @@ public class ServerWebSocket {
 					userInteract.createUser(currentUser, message, listUser);
 				}
 				// trường hợp user gửi tin nhắn
-				else {
+				else if (!message.isBlank()) {
 					userInteract.sendMessageForAnother(currentUser, userName, message, map);
 					String[] name = { userName, currentUser.getUserProperties().get("guestName").toString() };
 					Arrays.sort(name);
-					System.out.println(map.size());
 					System.out.println("Map content: " + map.get(name[0] + name[1]));
 				}
 			} catch (Exception e) {

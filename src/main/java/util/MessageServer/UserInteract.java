@@ -87,6 +87,8 @@ public class UserInteract {
 
 			String previousMessage = getPreviousMessage(name, map);
 
+			message = proccessMessage(message);
+
 			message = (previousMessage == null) ? userName + ":" + message : previousMessage + userName + ":" + message;
 			System.out.println(message + ";");
 			map.put(name[0] + name[1], message + ";");
@@ -102,6 +104,11 @@ public class UserInteract {
 			// TODO: handle exception
 			e.printStackTrace();
 		}
+	}
+
+	private String proccessMessage(String message) {
+		message = message.replaceAll(";", " ");
+		return message.trim();
 	}
 
 	public String getPreviousMessage(String[] name, Map<String, String> map) {

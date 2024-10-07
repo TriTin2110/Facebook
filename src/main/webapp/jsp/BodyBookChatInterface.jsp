@@ -123,8 +123,10 @@ function sendMessage() {
 }
 
 function showSelfMessage() {
-	
-	  document.getElementById("outputChatting").innerHTML += "<div class=\"chat-app__message chat-app__message--receiver\">	<div class=\"chat-app__message-text chat-app__message-text--receiver\">"+document.getElementById("userInput").value+"</div></div>";
+	var message = document.getElementById("userInput").value;
+	message = message.replaceAll(";", " ");
+	if(message.trim().length !==0)
+		document.getElementById("outputChatting").innerHTML += "<div class=\"chat-app__message chat-app__message--receiver\">	<div class=\"chat-app__message-text chat-app__message-text--receiver\">"+message+"</div></div>";
 }
 
 function connectToUser(user) {

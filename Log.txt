@@ -1,0 +1,4 @@
+Lỗi khi refresh trang messenger
+	Mô tả: 
+		- Khi refesh trang thì user refesh sẽ bị xóa đi và kết nối lại
+		- Khi đó mỗi khi tin nhắn đến từ user khác được gửi đến user refesh này phải chọn vào user gửi tin đó thì mới có thể xem được tin nhắn gửi đến
