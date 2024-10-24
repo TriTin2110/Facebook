@@ -1,6 +1,7 @@
 package Model;
 
 import java.util.List;
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -21,6 +22,7 @@ public class Post {
 	private Integer postShare;
 	@OneToMany(mappedBy = "post")
 	private List<Comment> postCommentList;
+	private Date createdAt; // Add this field
 
 	public Post() {
 		super();
@@ -94,4 +96,11 @@ public class Post {
 		this.postCommentList = postCommentList;
 	}
 
+	public Date getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(Date createdAt) {
+		this.createdAt = createdAt;
+	}
 }
