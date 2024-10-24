@@ -16,12 +16,34 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `post`
+--
+
+DROP TABLE IF EXISTS `post`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `post` (
+  `post_id` varchar(36) NOT NULL,
+  `post_content` text,
+  `post_image` varchar(255),
+  `created_at` datetime NOT NULL,
+  `user_id` varchar(36) NOT NULL,
+  PRIMARY KEY (`post_id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `post_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Dumping data for table `post`
 --
 
 LOCK TABLES `post` WRITE;
 /*!40000 ALTER TABLE `post` DISABLE KEYS */;
-INSERT INTO `post` VALUES ('P1','nothing','image.png',2,3,'U1'),('P2','asdasd','uploads/sreenshot.jpg',NULL,NULL,NULL);
+INSERT INTO `post` VALUES 
+('P1','This is my first post!','uploads/image1.jpg','2024-03-15 10:00:00','U1'),
+('P2','Having a great day!','uploads/image2.jpg','2024-03-15 11:30:00','U2'),
+('P3','Check out this amazing view!','uploads/image3.jpg','2024-03-15 14:15:00','U1');
 /*!40000 ALTER TABLE `post` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
