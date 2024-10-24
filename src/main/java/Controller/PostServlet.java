@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
+import java.util.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -21,6 +22,8 @@ import com.google.gson.Gson;
 
 import HibernateUtil.HibernateUtil;
 import Model.Post;
+import Model.User;
+import DAO.PostDAO;
 
 @WebServlet("/posting")
 @MultipartConfig
@@ -30,44 +33,56 @@ public class PostServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-			List<Post> posts = session.createQuery("from Post", Post.class).list();
-			req.setAttribute("posts", posts);
+			List<Post> posts = session.createQuery("from Post order by createdAt desc", Post.class).list();
+			resp.setContentType("application/json");
+			resp.setCharacterEncoding("UTF-8");
+			Gson gson = new Gson();
+			String json = gson.toJson(posts);
+			resp.getWriter().write(json);
 		} catch (Exception e) {
 			e.printStackTrace();
 			resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error retrieving posts");
-			return;
 		}
-		req.getRequestDispatcher("index.jsp").forward(req, resp);
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String content = req.getParameter("content");
 		Part filePart = req.getPart("image");
+		User currentUser = (User) req.getSession().getAttribute("user");
 
-		if (filePart == null || filePart.getSubmittedFileName().isEmpty()) {
-			resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "File part is missing or file name is empty");
+		if (currentUser == null) {
+			resp.sendError(HttpServletResponse.SC_UNAUTHORIZED, "User not logged in");
 			return;
 		}
 
-		String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
-		String uploadPath = getServletContext().getRealPath("") + File.separator + UPLOAD_DIRECTORY;
-		File uploadDir = new File(uploadPath);
-		if (!uploadDir.exists()) {
-			uploadDir.mkdir();
-		}
-
-		filePart.write(uploadPath + File.separator + fileName);
-
 		Post post = new Post();
-		post.setPostId(UUID.randomUUID().toString()); // Sử dụng UUID để tạo ID duy nhất
+		post.setPostId(UUID.randomUUID().toString());
 		post.setPostContent(content);
-		post.setPostImage(UPLOAD_DIRECTORY + "/" + fileName);
+		post.setUser(currentUser);
+		post.setCreatedAt(new Date());
+
+		if (filePart != null && filePart.getSize() > 0) {
+			String fileName = UUID.randomUUID().toString() + "_" + Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
+			String uploadPath = getServletContext().getRealPath("") + File.separator + UPLOAD_DIRECTORY;
+			File uploadDir = new File(uploadPath);
+			if (!uploadDir.exists()) {
+				uploadDir.mkdir();
+			}
+
+			filePart.write(uploadPath + File.separator + fileName);
+			post.setPostImage(req.getContextPath() + "/" + UPLOAD_DIRECTORY + "/" + fileName);
+		}
 
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			Transaction transaction = session.beginTransaction();
 			session.save(post);
 			transaction.commit();
+
+			// Export posts to SQL file
+			PostDAO postDAO = new PostDAO();
+			String sqlFilePath = getServletContext().getRealPath("/WEB-INF/facebook_post.sql");
+			postDAO.exportPostsToSQL(sqlFilePath);
 		} catch (Exception e) {
 			e.printStackTrace();
 			resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error saving post");
