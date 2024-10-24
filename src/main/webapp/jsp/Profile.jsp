@@ -103,22 +103,14 @@ if (user == null) {
 			</div>
 			<div class="section_right">
 				<div class="status">
-					<div class="post-input">
-						<img src="../img/<%=user.getAvatar()%>" alt="" /> <span type="button"
-							class="btn btn-primary" data-bs-toggle="modal"
-							data-bs-target="#myModal"><%=profileInformation.getFullName()%> ơi, bạn
-							đang nghĩ gì thế?</span>
-					</div>
-					<div class="post-btn">
-						<ul>
-							<li><i class="fa-solid fa-video"></i> <span>Video
-									trực tiếp</span></li>
-							<li><i class="fa-solid fa-photo-film"></i> <span>Ảnh/video</span>
-							</li>
-							<li><i class="fa-regular fa-face-smile"></i> <span>Cảm
-									xúc/hoạt động</span></li>
-						</ul>
-					</div>
+					<form action="<%=url%>/posting" method="POST" enctype="multipart/form-data">
+						<textarea name="content" placeholder="Bạn đang nghĩ gì?"></textarea>
+						<input type="file" name="image">
+						<button type="submit">Đăng bài</button>
+					</form>
+				</div>
+				<div id="postList">
+					<!-- Danh sách bài viết sẽ được thêm vào đây -->
 				</div>
 				<jsp:include page="/component/PostContent.jsp"></jsp:include>
 			</div>
@@ -160,10 +152,6 @@ if (user == null) {
 					</form>
 				</div>
 
-				<div id="postList">
-					<!-- Danh sách bài viết sẽ được thêm vào đây -->
-				</div>
-
 			</div>
 		</div>
 	</div>
@@ -178,6 +166,52 @@ if (user == null) {
 	integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
 	crossorigin="anonymous"></script>
 
- </script>
- <script src="<%=url%>/js/Profile.js" type="text/javascript"></script>
+ <script>
+$(document).ready(function() {
+    $('form').on('submit', function(e) {
+        e.preventDefault();
+        var formData = new FormData(this);
+
+        $.ajax({
+            url: '<%=url%>/posting',
+            type: 'POST',
+            data: formData,
+            success: function(response) {
+                alert('Bài viết đã được đăng thành công!');
+                loadPosts();
+            },
+            error: function(xhr, status, error) {
+                alert('Có lỗi xảy ra: ' + error);
+            },
+            cache: false,
+            contentType: false,
+            processData: false
+        });
+    });
+
+    function loadPosts() {
+        $.ajax({
+            url: '<%=url%>/posting',
+            type: 'GET',
+            success: function(posts) {
+                var postList = $('#postList');
+                postList.empty();
+                posts.forEach(function(post) {
+                    var postHtml = '<div class="post">' +
+                        '<p>' + post.postContent + '</p>';
+                    if (post.postImage) {
+                        postHtml += '<img src="' + post.postImage + '" alt="Post image">';
+                    }
+                    postHtml += '<p>Posted on: ' + new Date(post.createdAt).toLocaleString() + '</p>' +
+                        '</div>';
+                    postList.append(postHtml);
+                });
+            }
+        });
+    }
+
+    loadPosts(); // Load posts when page loads
+});
+</script>
+<script src="<%=url%>/js/Profile.js" type="text/javascript"></script>
 </html>
