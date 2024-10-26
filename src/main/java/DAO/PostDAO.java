@@ -1,9 +1,9 @@
 package DAO;
 
-import java.util.List;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -76,8 +76,7 @@ public class PostDAO implements InterfaceDAO<Post> {
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			Transaction transaction = session.beginTransaction();
 			posts = session.createQuery("from Post where user = :user order by createdAt desc", Post.class)
-					.setParameter("user", user)
-					.list();
+					.setParameter("user", user).list();
 			transaction.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -108,12 +107,8 @@ public class PostDAO implements InterfaceDAO<Post> {
 
 			for (int i = 0; i < posts.size(); i++) {
 				Post post = posts.get(i);
-				writer.printf("('%s','%s','%s','%s','%s')",
-					post.getPostId(),
-					post.getPostContent().replace("'", "\\'"),
-					post.getPostImage(),
-					sdf.format(post.getCreatedAt()),
-					post.getUser().getUserId());
+				writer.printf("('%s','%s','%s','%s','%s')", post.getPostId(), post.getPostContent().replace("'", "\\'"),
+						post.getPostImage(), sdf.format(post.getCreatedAt()), post.getUser().getUserId());
 
 				if (i < posts.size() - 1) {
 					writer.println(",");
@@ -127,5 +122,17 @@ public class PostDAO implements InterfaceDAO<Post> {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public List<Post> getPostByDateDesc() {
+		try {
+			Session session = HibernateUtil.getSessionFactory().openSession();
+			List<Post> posts = session.createQuery("from Post order by createdAt desc", Post.class).list();
+			return posts;
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return null;
 	}
 }
