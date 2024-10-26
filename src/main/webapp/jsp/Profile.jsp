@@ -1,4 +1,5 @@
 <%@page import="DAO.UserDAO"%>
+<%@page import="Model.UserDAO"%>
 <%@page import="Model.UserInformation"%>
 <%@page import="Model.User"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -179,6 +180,8 @@ $(document).ready(function() {
             success: function(response) {
                 alert('Bài viết đã được đăng thành công!');
                 loadPosts();
+                // Reset form sau khi đăng bài thành công
+                $('form')[0].reset();
             },
             error: function(xhr, status, error) {
                 alert('Có lỗi xảy ra: ' + error);
@@ -193,21 +196,35 @@ $(document).ready(function() {
         $.ajax({
             url: '<%=url%>/posting',
             type: 'GET',
+            dataType: 'json',
             success: function(posts) {
                 var postList = $('#postList');
                 postList.empty();
                 posts.forEach(function(post) {
                     var postHtml = '<div class="post">' +
-                        '<p>' + post.postContent + '</p>';
+                        '<p>' + escapeHtml(post.postContent) + '</p>';
                     if (post.postImage) {
-                        postHtml += '<img src="' + post.postImage + '" alt="Post image">';
+                        postHtml += '<img src="' + escapeHtml(post.postImage) + '" alt="Post image">';
                     }
                     postHtml += '<p>Posted on: ' + new Date(post.createdAt).toLocaleString() + '</p>' +
                         '</div>';
                     postList.append(postHtml);
                 });
+            },
+            error: function(xhr, status, error) {
+                console.error('Error loading posts:', error);
             }
         });
+    }
+
+    // Hàm để escape HTML để ngăn chặn XSS
+    function escapeHtml(unsafe) {
+        return unsafe
+             .replace(/&/g, "&amp;")
+             .replace(/</g, "&lt;")
+             .replace(/>/g, "&gt;")
+             .replace(/"/g, "&quot;")
+             .replace(/'/g, "&#039;");
     }
 
     loadPosts(); // Load posts when page loads
