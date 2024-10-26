@@ -3,9 +3,9 @@ package Controller;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-import java.util.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -18,15 +18,15 @@ import javax.servlet.http.Part;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
+import DAO.PostDAO;
 import HibernateUtil.HibernateUtil;
 import Model.Post;
 import Model.User;
-import DAO.PostDAO;
 
 @WebServlet("/posting")
 @MultipartConfig
@@ -35,24 +35,23 @@ public class PostServlet extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-			List<Post> posts = session.createQuery("from Post order by createdAt desc", Post.class).list();
+		try {
+			PostDAO postDAO = new PostDAO();
+			List<Post> posts = postDAO.getPostByDateDesc();
 			resp.setContentType("application/json");
 			resp.setCharacterEncoding("UTF-8");
 
-			Gson gson = new GsonBuilder()
-					.setExclusionStrategies(new ExclusionStrategy() {
-						@Override
-						public boolean shouldSkipField(FieldAttributes f) {
-							return f.getDeclaringClass().equals(User.class) && !f.getName().equals("userId");
-						}
+			Gson gson = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
+				@Override
+				public boolean shouldSkipField(FieldAttributes f) {
+					return f.getDeclaringClass().equals(User.class) && !f.getName().equals("userId");
+				}
 
-						@Override
-						public boolean shouldSkipClass(Class<?> clazz) {
-							return false;
-						}
-					})
-					.create();
+				@Override
+				public boolean shouldSkipClass(Class<?> clazz) {
+					return false;
+				}
+			}).create();
 
 			String json = gson.toJson(posts);
 			resp.getWriter().write(json);

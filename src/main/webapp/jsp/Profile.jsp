@@ -1,5 +1,4 @@
 <%@page import="DAO.UserDAO"%>
-<%@page import="Model.UserDAO"%>
 <%@page import="Model.UserInformation"%>
 <%@page import="Model.User"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
