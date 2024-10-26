@@ -160,8 +160,10 @@ public class Account extends HttpServlet {
 			// Kiểm tra mật khẩu
 			if (PasswordUtils.checkPassword(passwordInput, user.getPassword())) {
 				if (emailIsConfirmed(userEmailInputEncrypted)) {
-					url = "/jsp/MainPage.jsp";
+					url = request.getContextPath();
 					session.setAttribute("user", user);
+					response.sendRedirect(url);
+					return;
 				} else {
 					request.setAttribute("error", "Email chưa được xác thực!");
 				}
