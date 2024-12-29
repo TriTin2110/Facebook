@@ -20,7 +20,7 @@ public class InteractMessageInDB {
 //			}
 	}
 
-	public static String getMessengerBetweenUserInDB(Session currentUser, String userName, String guestName,
+	public static void getMessengerBetweenUserInDB(Session currentUser, String userName, String guestName,
 			Map<String, String> map) {
 		// Hiển thị tin nhắn của cả 2 từ db (nếu có)
 		String[] userNameGuestName = { userName, guestName };
@@ -40,11 +40,14 @@ public class InteractMessageInDB {
 		Arrays.sort(name);
 		if (messengerInDB != null) {
 			String message = messengerInDB.getMessage();
+			// Lấy tin nhắn trong db khi tin nhắn của 2 user chưa tồn tại trong session
+			if (map.get(name[0] + name[1]) == null)
+				map.put(name[0] + name[1], message);
 
-			// Lấy tin nhắn trong db
-			map.put(name[0] + name[1], message);
-			return message;
+		} else {
+			if (map.get(name[0] + name[1]) == null)
+				map.put(name[0] + name[1], "");
 		}
-		return null;
+
 	}
 }

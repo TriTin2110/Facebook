@@ -2,6 +2,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%
+if(session.getAttribute("user")!=null)
+	response.sendRedirect(request.getContextPath());
+else{
 String url = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 		+ request.getContextPath();
 %>
@@ -108,7 +111,7 @@ String gender = (request.getAttribute("gender") == null) ? "" : request.getAttri
 
 						<div class="form-group">
 							<input type="text" id="email" name="email" required
-								placeholder="Số di động hoặc email" />
+								placeholder="Email" />
 						</div>
 
 						<div class="form-group">
@@ -247,10 +250,11 @@ String gender = (request.getAttribute("gender") == null) ? "" : request.getAttri
 	}
 	function showingError() {
 		<%
-		String error = session.getAttribute("error") +"";
+		String error = request.getAttribute("error") +"";
 		if (!error.equals("null")) {%>
 			alert("<%=error%>");
 	<%}%>
 	}
 </script>
 </html>
+<%}%>

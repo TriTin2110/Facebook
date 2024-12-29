@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import DAO.UserInformationDAO;
+import Model.User;
 import Model.UserInformation;
 
 /**
@@ -38,52 +39,72 @@ public class ChangeInformation extends HttpServlet {
 		response.setContentType("text/html");
 		response.setCharacterEncoding("UTF-8");
 		request.setCharacterEncoding("UTF-8");
+
 		String action = request.getParameter("update");
+		boolean updateSuccess = false;
+
 		switch (action) {
 		case "GeneralInformation":
-			updateGeneralInformation(request);
+			updateSuccess = updateGeneralInformation(request);
 			break;
 		case "DOB":
-			updateDOB(request);
+			updateSuccess = updateDOB(request);
 			break;
+		}
+
+		if (updateSuccess)
+			request.setAttribute("notice", "Cập nhật thành công");
+		else {
+			request.setAttribute("notice", "Cập nhật thất bại");
+		}
+
+		try {
+			request.getRequestDispatcher("/jsp/InfoChange.jsp").forward(request, response);
+		} catch (ServletException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
-	private void updateDOB(HttpServletRequest request) {
+	private boolean updateDOB(HttpServletRequest request) {
 		// TODO Auto-generated method stub
 		HttpSession session = request.getSession();
 		Date dob = Date.valueOf(request.getParameter("dob"));
-		UserInformation userInformation = new UserInformation();
+
+		User user = (User) session.getAttribute("user");
+		UserInformation userInformation = user.getUserInformation();
 		UserInformationDAO userInformationDAO = new UserInformationDAO();
-		userInformation.setUserId((String) session.getAttribute("userId"));
-		userInformation = userInformationDAO.selectById(userInformation);
+
 		userInformation.setDateOfBirth(dob);
-		if (userInformationDAO.update(userInformation) == 1)
-			System.out.println("Update thành công");
-		else {
-			System.out.println("Update không thành công");
+
+		if (userInformationDAO.update(userInformation) == 1) {
+			return true;
+		} else {
+			return false;
 		}
 	}
 
-	private void updateGeneralInformation(HttpServletRequest request) {
+	private boolean updateGeneralInformation(HttpServletRequest request) {
 		// TODO Auto-generated method stub
 		HttpSession session = request.getSession();
 		String name = request.getParameter("name");
 		boolean gender = request.getParameter("gender").equals("Nam");
 		String phoneNumber = request.getParameter("phone");
 		String homeTown = request.getParameter("home-town");
-		String userId = (String) session.getAttribute("userId");
-		UserInformation userInformation = new UserInformation(userId);
+
+		User user = (User) session.getAttribute("user");
+		UserInformation userInformation = user.getUserInformation();
 		UserInformationDAO userInformationDAO = new UserInformationDAO();
-		userInformation = userInformationDAO.selectById(userInformation);
+
 		userInformation.setFullName(name);
 		userInformation.setGender(gender);
 		userInformation.setPhoneNumber(phoneNumber);
 		userInformation.setHomeTown(homeTown);
-		if (userInformationDAO.update(userInformation) == 1)
-			System.out.println("Đã cập nhật thành công");
-		else {
-			System.out.println("Cập nhật thất bại");
+
+		if (userInformationDAO.update(userInformation) == 1) {
+			return true;
+		} else {
+			return false;
 		}
 	}
 

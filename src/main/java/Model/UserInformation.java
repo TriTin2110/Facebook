@@ -136,4 +136,8 @@ public class UserInformation {
 		this.user = user;
 	}
 
+	public Boolean getGender() {
+		return gender;
+	}
+
 }

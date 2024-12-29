@@ -99,4 +99,22 @@ public class UserDAO implements InterfaceDAO<User> {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	public User confirmEmail(String idUser) {
+		try {
+			Session session = HibernateUtil.getSessionFactory().openSession();
+			User user = session.get(User.class, idUser);
+			user.setIdentifyStatus(true);
+
+			Transaction transaction = session.beginTransaction();
+			session.update(user);
+			transaction.commit();
+			session.close();
+			return user;
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return null;
+	}
 }

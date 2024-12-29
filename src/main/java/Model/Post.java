@@ -1,8 +1,10 @@
 package Model;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -11,16 +13,17 @@ import javax.persistence.OneToMany;
 @Entity
 public class Post {
 	@ManyToOne
-	@JoinColumn(name = "listPost")
-	private User userIdPost;
+	@JoinColumn(name = "by_user")
+	private User user;
 	@Id
 	private String postId;
 	private String postImage; // Hình ảnh
 	private String postContent;
 	private Integer postInteract;
 	private Integer postShare;
-	@OneToMany(mappedBy = "post")
+	@OneToMany(mappedBy = "post", fetch = FetchType.EAGER) // Về sau sẽ thay EAGER bằng cách khác (vd: sql)
 	private List<Comment> postCommentList;
+	private Date createdAt; // Add this field
 
 	public Post() {
 		super();
@@ -29,7 +32,7 @@ public class Post {
 	public Post(User user, String postId, String postImage, String postContent, Integer postInteract, Integer postShare,
 			List<Comment> postCommentList) {
 		super();
-		this.userIdPost = user;
+		this.user = user;
 		this.postId = postId;
 		this.postImage = postImage;
 		this.postContent = postContent;
@@ -39,11 +42,11 @@ public class Post {
 	}
 
 	public User getUser() {
-		return userIdPost;
+		return user;
 	}
 
 	public void setUser(User user) {
-		this.userIdPost = user;
+		this.user = user;
 	}
 
 	public String getPostId() {
@@ -94,4 +97,11 @@ public class Post {
 		this.postCommentList = postCommentList;
 	}
 
+	public Date getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(Date createdAt) {
+		this.createdAt = createdAt;
+	}
 }
