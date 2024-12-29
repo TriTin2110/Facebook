@@ -29,7 +29,7 @@
 <div class="nav">
 			<div class="logo-search">
 				<div class="logo">
-					<a href="">B</a>
+					<a href="<%=url%>">B</a>
 				</div>
 				<div class="search">
 					<input type="text" name="search"
@@ -39,7 +39,7 @@
 			</div>
 			<div class="nav-list">
 				<ul>
-					<li><a href="<%=url%>/jsp/MainPage.jsp"><i class="fa-solid fa-house"></i></a></li>
+					<li><a href="<%=url%>"><i class="fa-solid fa-house"></i></a></li>
 					<li><a href=""><i class="fa-solid fa-user-group"></i></a></li>
 					<li><a href=""><i class="fa-solid fa-tv"></i></a></li>
 					<li><a href=""><i class="fa-solid fa-shop"></i></a></li>

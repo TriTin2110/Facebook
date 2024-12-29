@@ -27,7 +27,7 @@
     var count = 4;
     setInterval(() => {
     	if (count == -1) {
-            window.location.href="<%=url%>/jsp/MainPage.jsp";
+            window.location.href="<%=url%>";
           }
     	else {
     		 document.getElementById("count").innerHTML = count;

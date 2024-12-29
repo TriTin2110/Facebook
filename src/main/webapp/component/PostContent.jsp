@@ -1,3 +1,6 @@
+<%@page import="java.util.Locale"%>
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.sql.Date"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
 <%@page import="Model.User"%>
@@ -11,7 +14,11 @@
 <title>Insert title here</title>
 </head>
 <%
+String url = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+":"+request.getContextPath();
 User user = (User) session.getAttribute("user");
+String pattern = "EEE, dd MMMM yyyy";
+Locale locale = new Locale("vi", "vn");
+SimpleDateFormat df = new SimpleDateFormat(pattern, locale);
 List<Post> posts = new ArrayList<>();
 if (user != null) {
 	posts = user.getListPost();
@@ -31,15 +38,23 @@ if (user != null) {
 			<img src="../img/avt.jpg" alt="">
 			<div class="name-acc_post">
 				<h4><%=user.getUserInformation().getFullName()%></h4>
-				<span>3 phút</span>
+				<span><%=df.format(post.getCreatedAt())%></span>
 			</div>
 		</div>
 		<div class="caption_post">
 			<span><%=post.getPostContent()%></span>
 		</div>
-		<div class="content_post">
-			<img src="../img/post/<%=post.getPostImage()%>" alt="">
-		</div>
+		<%
+			if(post.getPostImage() != null)
+			{
+				%>
+					<div class="content_post">
+						<img src="<%=post.getPostImage()%>" alt="">
+					</div>
+				<%
+			}
+		%>
+		
 		<div class="interact_post">
 			<div class="number_react">
 				<i class="fa-solid fa-thumbs-up color_like"></i> <i

@@ -191,31 +191,7 @@ $(document).ready(function() {
         });
     });
 
-    function loadPosts() {
-        $.ajax({
-            url: '<%=url%>/posting',
-            type: 'GET',
-            dataType: 'json',
-            success: function(posts) {
-                var postList = $('#postList');
-                postList.empty();
-                posts.forEach(function(post) {
-                    var postHtml = '<div class="post">' +
-                        '<p>' + escapeHtml(post.postContent) + '</p>';
-                    if (post.postImage) {
-                        postHtml += '<img src="' + escapeHtml(post.postImage) + '" alt="Post image">';
-                    }
-                    postHtml += '<p>Posted on: ' + new Date(post.createdAt).toLocaleString() + '</p>' +
-                        '</div>';
-                    postList.append(postHtml);
-                });
-            },
-            error: function(xhr, status, error) {
-                console.error('Error loading posts:', error);
-            }
-        });
-    }
-
+   
     // Hàm để escape HTML để ngăn chặn XSS
     function escapeHtml(unsafe) {
         return unsafe

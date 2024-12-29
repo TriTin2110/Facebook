@@ -55,10 +55,6 @@ public class Account extends HttpServlet {
 
 	@SuppressWarnings({ "removal", "deprecation" })
 	private void singUp(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.setContentType("text/html");
-		request.setCharacterEncoding("UTF-8");
-		response.setCharacterEncoding("UTF-8");
-
 		String email = request.getParameter("email");
 		String password = request.getParameter("matkhau");
 		String lastName = request.getParameter("ho");
@@ -66,7 +62,7 @@ public class Account extends HttpServlet {
 
 		UserDAO userDAO = new UserDAO();
 
-		// Mã thông tin đăng nhập
+		// Mã hóa thông tin đăng nhập
 		String passwordEncrypted = BcryptUtil.hashPassword(password);
 		String emailEncrypted = HashUtil.hashWithSHA256(email);
 		String idUserEncrypted = HashUtil.hashWithSHA256(System.currentTimeMillis() + email);

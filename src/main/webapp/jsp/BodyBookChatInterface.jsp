@@ -47,7 +47,6 @@ function processMessage(message) {
 		var otherUser = document.createElement("div");
 		otherUser.innerHTML = returnOtherUserTag(username);
 		otherUser.id = username;
-		otherUser.class = 
 		document.getElementById("userAvaiable").appendChild(otherUser);
 	}
 	else if(message.data.includes("remove-user:"))
@@ -95,7 +94,7 @@ function processError(message) {
 			</div>
 			
 			<div class="chat-app__input">
-				<img src="https://via.placeholder.com/40" alt="User Profile">
+				<img src="<%=url%>/img/friend2.jpg" alt="User Profile">
 				<input type="text" class="form-control"
 					placeholder="Type a message..." id="userInput">
 				<button onclick="sendMessage()" type="submit" class="btn m-2">
@@ -136,7 +135,7 @@ function connectToUser(user) {
 	websocket.send(user);
 }
 function returnOtherUserTag(userName) {
-	return "<div onclick=\"connectToUser('connectToUser=" + userName + "')\" class=\"chat-app__list-item chat-app__list-item--active\"> <img src=\"https://via.placeholder.com/40\" alt=\"Profile Picture\"><div><strong>"+userName+"</strong><br><small>Last messagepreview...</small></div></div>";
+	return "<div onclick=\"connectToUser('connectToUser=" + userName + "')\" class=\"chat-app__list-item chat-app__list-item--active\"> <img src=\"<%=url%>/img/friend2.jpg\" alt=\"Profile Picture\"><div><strong>"+userName+"</strong><br><small>Last messagepreview...</small></div></div>";
 }
 </script>
 </html>

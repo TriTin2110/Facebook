@@ -105,6 +105,10 @@ if (user == null) {
 						<i class="fa-solid fa-angle-right"></i>
 					</button>
 				</div>
+				<jsp:include page="<%=url%>/component/Status.jsp">
+					<jsp:param value="<%=user.getAvatar()%>" name="avatar"/>
+					<jsp:param value="<%=user.getAvatar()%>" name="avatar"/>
+				</jsp:include>
 				<div class="status">
 					<div class="post-input">
 						<img src="<%=url%>/img/<%=user.getAvatar()%>" alt="" /> <span
