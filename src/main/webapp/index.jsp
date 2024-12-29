@@ -30,6 +30,7 @@ String url = request.getScheme() + "://" + request.getServerName() + ":" + reque
 </head>
 <%
 User user = (User) session.getAttribute("user");
+request.setCharacterEncoding("UTF-8");
 if (user == null) {
 	response.sendRedirect(url + "/jsp/LoginPage.jsp");
 } else {
@@ -105,28 +106,10 @@ if (user == null) {
 						<i class="fa-solid fa-angle-right"></i>
 					</button>
 				</div>
-				<jsp:include page="<%=url%>/component/Status.jsp">
+				<jsp:include page="/component/Status.jsp">
 					<jsp:param value="<%=user.getAvatar()%>" name="avatar"/>
-					<jsp:param value="<%=user.getAvatar()%>" name="avatar"/>
+					<jsp:param value="<%=user.getUserInformation().getFullName()%>" name="fullname"/>
 				</jsp:include>
-				<div class="status">
-					<div class="post-input">
-						<img src="<%=url%>/img/<%=user.getAvatar()%>" alt="" /> <span
-							type="button" class="btn btn-primary" data-bs-toggle="modal"
-							data-bs-target="#myModal"><%=user.getUserInformation().getFullName()%>
-							ơi, bạn đang nghĩ gì thế?</span>
-					</div>
-					<div class="post-btn">
-						<ul>
-							<li><i class="fa-solid fa-video"></i> <span>Video
-									trực tiếp</span></li>
-							<li><i class="fa-solid fa-photo-film"></i> <span>Ảnh/video</span>
-							</li>
-							<li><i class="fa-regular fa-face-smile"></i> <span>Cảm
-									xúc/hoạt động</span></li>
-						</ul>
-					</div>
-				</div>
 				<div class="post_content">
 					<div class="header_post">
 						<img src="<%=url%>/img/avt.jpg" alt="">
