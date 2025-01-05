@@ -19,13 +19,10 @@
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
 <title>Trang cá nhân</title>
 </head>
+<%@include file="../component/AuthenticateUser.jsp" %>
 <%
 String url = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 		+ request.getContextPath();
-User user = (User) session.getAttribute("user");
-if (user == null) {
-	response.sendRedirect(url+"/jsp/LoginPage.jsp");
-} else {
 	UserInformation profileInformation = user.getUserInformation();
 %>
 <body>
@@ -157,9 +154,6 @@ if (user == null) {
 	</div>
 	</div>
 </body>
-<%
-}
-%>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script
 	src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
