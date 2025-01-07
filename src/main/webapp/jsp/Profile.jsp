@@ -19,11 +19,13 @@
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
 <title>Trang cá nhân</title>
 </head>
-<%@include file="../component/AuthenticateUser.jsp" %>
+<%@include file="../component/AuthenticateUser.jsp"%>
 <%
 String url = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 		+ request.getContextPath();
-	UserInformation profileInformation = user.getUserInformation();
+UserInformation profileInformation = user.getUserInformation();
+User currentUser = (User) request.getSession().getAttribute("user");
+String idUrl = request.getParameter("userId") + "";
 %>
 <body>
 	<div class="app">
@@ -41,10 +43,14 @@ String url = request.getScheme() + "://" + request.getServerName() + ":" + reque
 						<img src="../img/<%=user.getAvatar()%>" alt="" />
 					</div>
 					<div class="info">
-						<h1 class="name"><%=profileInformation.getFullName() %></h1>
+						<h1 class="name"><%=profileInformation.getFullName()%></h1>
 						<a href="#" class="number_friend">102 người bạn</a>
 					</div>
 				</div>
+
+				<%
+				if (currentUser.getUserId().equals(idUrl)) {
+				%>
 				<div class="profile_setting">
 					<div class="setting_btn">
 						<a href="#" class="add_story"> <i class="fa-solid fa-plus"></i>
@@ -57,6 +63,25 @@ String url = request.getScheme() + "://" + request.getServerName() + ":" + reque
 						<a href="#"><i class="fa-solid fa-chevron-down"></i></a>
 					</div>
 				</div>
+
+				<%
+				} else {
+				%>
+				<div class="profile_setting">
+					<div class="setting_btn">
+						<a href="#" class="add_story"> <i class="fas fa-user-friends"></i>
+							Thêm bạn bè
+						</a> <a href="<%=url%>/jsp/InfoChange.jsp" class="setting"> <i
+							class="fab fa-facebook-messenger"></i> Nhắn tin
+						</a>
+					</div>
+					<div class="setting_more">
+						<a href="#"><i class="fa-solid fa-chevron-down"></i></a>
+					</div>
+				</div>
+				<%
+				}
+				%>
 			</div>
 			<div class="avt_list_btn">
 				<ul class="avt_list">
@@ -84,7 +109,7 @@ String url = request.getScheme() + "://" + request.getServerName() + ":" + reque
 					<a href="#" class="intro_btn">Thêm tiểu sử</a>
 					<ul>
 						<li><i class="fa-solid fa-house-chimney"></i> <span>Sống
-								tại <b><%=profileInformation.getHomeTown() %></b>
+								tại <b><%=profileInformation.getHomeTown()%></b>
 						</span></li>
 						<li><i class="fa-solid fa-heart"></i> <span>Đang hẹn
 								hò với <b>Lisa</b>
@@ -100,7 +125,8 @@ String url = request.getScheme() + "://" + request.getServerName() + ":" + reque
 			</div>
 			<div class="section_right">
 				<div class="status">
-					<form action="<%=url%>/posting" method="POST" enctype="multipart/form-data">
+					<form action="<%=url%>/posting" method="POST"
+						enctype="multipart/form-data">
 						<textarea name="content" placeholder="Bạn đang nghĩ gì?"></textarea>
 						<input type="file" name="image">
 						<button type="submit">Đăng bài</button>
@@ -130,7 +156,7 @@ String url = request.getScheme() + "://" + request.getServerName() + ":" + reque
 						<div class="acc__post">
 							<img src="../img/avt.jpg" alt="">
 							<div class="acc__name">
-								<h4><%=profileInformation.getFullName() %></h4>
+								<h4><%=profileInformation.getFullName()%></h4>
 								<select name="aithay" id="user_seen">
 									<option value="congkhai">Công khai</option>
 									<option value="banbe">Bạn bè</option>
@@ -160,44 +186,41 @@ String url = request.getScheme() + "://" + request.getServerName() + ":" + reque
 	integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
 	crossorigin="anonymous"></script>
 
- <script>
+<script>
 $(document).ready(function() {
     $('form').on('submit', function(e) {
         e.preventDefault();
         var formData = new FormData(this);
 
         $.ajax({
-            url: '<%=url%>/posting',
-            type: 'POST',
-            data: formData,
-            success: function(response) {
-                alert('Bài viết đã được đăng thành công!');
-                loadPosts();
-                // Reset form sau khi đăng bài thành công
-                $('form')[0].reset();
-            },
-            error: function(xhr, status, error) {
-                alert('Có lỗi xảy ra: ' + error);
-            },
-            cache: false,
-            contentType: false,
-            processData: false
-        });
-    });
+            url: '<%=url%>
+	/posting',
+						type : 'POST',
+						data : formData,
+						success : function(response) {
+							alert('Bài viết đã được đăng thành công!');
+							loadPosts();
+							// Reset form sau khi đăng bài thành công
+							$('form')[0].reset();
+						},
+						error : function(xhr, status, error) {
+							alert('Có lỗi xảy ra: ' + error);
+						},
+						cache : false,
+						contentType : false,
+						processData : false
+					});
+				});
 
-   
-    // Hàm để escape HTML để ngăn chặn XSS
-    function escapeHtml(unsafe) {
-        return unsafe
-             .replace(/&/g, "&amp;")
-             .replace(/</g, "&lt;")
-             .replace(/>/g, "&gt;")
-             .replace(/"/g, "&quot;")
-             .replace(/'/g, "&#039;");
-    }
+				// Hàm để escape HTML để ngăn chặn XSS
+				function escapeHtml(unsafe) {
+					return unsafe.replace(/&/g, "&amp;").replace(/</g, "&lt;")
+							.replace(/>/g, "&gt;").replace(/"/g, "&quot;")
+							.replace(/'/g, "&#039;");
+				}
 
-    loadPosts(); // Load posts when page loads
-});
+				loadPosts(); // Load posts when page loads
+			});
 </script>
 <script src="<%=url%>/js/Profile.js" type="text/javascript"></script>
 </html>

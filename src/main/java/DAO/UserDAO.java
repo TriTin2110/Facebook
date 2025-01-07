@@ -79,6 +79,7 @@ public class UserDAO implements InterfaceDAO<User> {
 		Session session = sessionFactory.openSession();
 		user = session.find(User.class, t.getUserId());
 		sessionFactory.close();
+		System.out.println(user.getUserInformation().getFullName());
 		return user;
 	}
 

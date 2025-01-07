@@ -5,7 +5,6 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -24,9 +23,8 @@ public class User {
 	@OneToOne(mappedBy = "user", fetch = FetchType.EAGER)
 	private UserInformation userInformation;
 	@ManyToOne
-	@JoinColumn(name = "friend_id")
 	private User self;
-	@OneToMany(mappedBy = "listFriend")
+	@OneToMany(mappedBy = "self")
 	private List<User> listFriend;
 
 	@ManyToMany(mappedBy = "listMember")

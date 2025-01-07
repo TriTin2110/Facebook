@@ -11,18 +11,20 @@
 </head>
 <%
 UserDAO dao = new UserDAO();
-User user = null;
-String id = request.getParameter("userID");
+User user = new User();
+String id = request.getParameter("userId");
+//Kiểm tra là bạn hay là bản thân
 if(id!=null)
 {
 	user.setUserId(id);
 	user = dao.selectById(user);
+	
 }
 else
 {
-	user = (User) request.getSession().getAttribute("user");
+	user = (User) request.getSession().getAttribute("user"); //Lưu phiên của người dùng hiện tại
 }
-	
+request.setAttribute("postContent", user);
 request.setCharacterEncoding("UTF-8");
 if (user == null) {
 		%>
