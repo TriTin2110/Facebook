@@ -5,7 +5,7 @@
 	pageEncoding="UTF-8"%>
 <%
 String url = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath();
-List<SearchFriend> users = (List<SearchFriend>) request.getAttribute("listSearched");
+List<SearchFriend> users = (List<SearchFriend>) request.getSession().getAttribute("listSearched");
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -52,7 +52,7 @@ List<SearchFriend> users = (List<SearchFriend>) request.getAttribute("listSearch
 					<li>
 						<div class="avt_name">
 							<img src="<%=url%>/img/<%=userInSearchedList.getAvatar()%>" alt="" />
-							<h3><%=userInSearchedList.getFullName() %></h3>
+							<h3><a style="text-decoration: none; color: black;" href="<%=url%>/jsp/Profile.jsp?userId=<%=userInSearchedList.getId()%>"> <%=userInSearchedList.getFullName() %></a></h3>
 						</div>
 						<div class="addfr_btn">
 							<a href="#">Thêm bạn bè</a>

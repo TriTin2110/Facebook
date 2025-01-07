@@ -1,6 +1,8 @@
 package Controller;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -38,8 +40,14 @@ public class SearchFriend extends HttpServlet {
 
 		String data = request.getParameter("search");
 		SearchFriendService search = new SearchFriendService();
-		request.setAttribute("listSearched", search.getListUser(data));
-		request.getRequestDispatcher("/jsp/SearchFriend.jsp").forward(request, response);
+		List<String> searched = (List<String>) request.getSession().getAttribute("dataSearched");
+		if (!searched.contains(data)) {
+			searched.add(data);
+			Collections.sort(searched, Collections.reverseOrder());
+		}
+		request.getSession().setAttribute("dataSearched", searched);
+		request.getSession().setAttribute("listSearched", search.getListUser(data));
+		response.sendRedirect(request.getContextPath() + "/jsp/SearchFriend.jsp");
 	}
 
 	/**

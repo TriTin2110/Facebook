@@ -1,3 +1,4 @@
+<%@page import="DAO.UserDAO"%>
 <%@page import="Model.User"%>
 <%@page import="util.CheckingLogin"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -9,7 +10,19 @@
 <title>Insert title here</title>
 </head>
 <%
-User user = (User) request.getSession().getAttribute("user");
+UserDAO dao = new UserDAO();
+User user = null;
+String id = request.getParameter("userID");
+if(id!=null)
+{
+	user.setUserId(id);
+	user = dao.selectById(user);
+}
+else
+{
+	user = (User) request.getSession().getAttribute("user");
+}
+	
 request.setCharacterEncoding("UTF-8");
 if (user == null) {
 		%>

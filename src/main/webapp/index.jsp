@@ -1,3 +1,6 @@
+<%@page import="java.util.HashSet"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
 <%@page import="util.CheckingLogin"%>
 <%@page import="DAO.UserDAO"%>
 <%@page import="Model.User"%>
@@ -6,6 +9,10 @@
 <%
 String url = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 		+ request.getContextPath();
+if(request.getSession().getAttribute("dataSearched") == null)
+{
+		request.getSession().setAttribute("dataSearched", new ArrayList<String>());
+}
 %>
 <html lang="en">
 <head>

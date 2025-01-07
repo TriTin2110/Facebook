@@ -1,3 +1,5 @@
+<%@page import="java.util.Set"%>
+<%@page import="java.util.List"%>
 <%@page import="Model.User"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
@@ -22,6 +24,7 @@ String url = request.getScheme() + "://" + request.getServerName() + ":" + reque
 	crossorigin="anonymous" />
 </head>
 <%
+List<String> searched = (List<String>) request.getSession().getAttribute("dataSearched");
 User user = (User) session.getAttribute("user");
 request.setCharacterEncoding("UTF-8");
 %>
@@ -33,15 +36,30 @@ request.setCharacterEncoding("UTF-8");
 			</div>
 
 			<div class="search">
-				<form action="<%=url%>/SearchFriend" method="get" id="searching-form">
+				<form action="<%=url%>/SearchFriend" method="get"
+					id="searching-form">
 					<input type="text" id="search" name="search"
 						placeholder="Tìm kiếm trên BodyBook" autocomplete="off" />
+					<%
+					if (!searched.isEmpty()) {
+					%>
 					<div class="dropdown">
+
 						<ul>
-							<li><a href="<%=url%>/jsp/SearchFriend.jsp" class="dropdown-item">Dữ
-									liệu 1</a></li>
+							<%
+							for (String item : searched) {
+							%>
+
+							<li><a href="<%=url%>/jsp/SearchFriend.jsp"
+								class="dropdown-item"><%=item%></a></li>
+							<%
+							}
+							%>
 						</ul>
 					</div>
+					<%
+					}
+					%>
 					<i class="fa-solid fa-arrow-left icon_left"></i> <i
 						class="fa-solid fa-magnifying-glass icon_search"></i>
 				</form>
