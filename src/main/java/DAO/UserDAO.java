@@ -1,5 +1,6 @@
 package DAO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Query;
@@ -9,6 +10,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
 import HibernateUtil.HibernateUtil;
+import Model.SearchFriend;
 import Model.User;
 
 public class UserDAO implements InterfaceDAO<User> {
@@ -116,5 +118,24 @@ public class UserDAO implements InterfaceDAO<User> {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<SearchFriend> selectByFullName(String fullName) {
+		List<SearchFriend> users = new ArrayList<SearchFriend>();
+		try {
+			String queryStatement = "select new Model.SearchFriend(u.userId, ui.fullName, u.avatar)  from User u "
+					+ "join UserInformation ui on u.userId = ui.userId " + "where ui.fullName like :fullName";
+
+			Session session = HibernateUtil.getSessionFactory().openSession();
+			Query query = session.createQuery(queryStatement, SearchFriend.class);
+			query.setParameter("fullName", "%" + fullName + "%");
+			users = query.getResultList();
+			session.close();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return users;
 	}
 }

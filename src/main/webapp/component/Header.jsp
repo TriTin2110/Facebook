@@ -33,16 +33,18 @@ request.setCharacterEncoding("UTF-8");
 			</div>
 
 			<div class="search">
-				<input type="text" name="search"
-					placeholder="Tìm kiếm trên BodyBook" autocomplete="off" />
-				<div class="dropdown">
-					<ul>
-						<li><a href="<%=url%>/jsp/SearchFriend.jsp" class="dropdown-item">Dữ
-								liệu 1</a></li>
-					</ul>
-				</div>
-				<i class="fa-solid fa-arrow-left icon_left"></i> <i
-					class="fa-solid fa-magnifying-glass icon_search"></i>
+				<form action="<%=url%>/SearchFriend" method="get" id="searching-form">
+					<input type="text" id="search" name="search"
+						placeholder="Tìm kiếm trên BodyBook" autocomplete="off" />
+					<div class="dropdown">
+						<ul>
+							<li><a href="<%=url%>/jsp/SearchFriend.jsp" class="dropdown-item">Dữ
+									liệu 1</a></li>
+						</ul>
+					</div>
+					<i class="fa-solid fa-arrow-left icon_left"></i> <i
+						class="fa-solid fa-magnifying-glass icon_search"></i>
+				</form>
 			</div>
 		</div>
 

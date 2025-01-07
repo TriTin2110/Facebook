@@ -24,7 +24,7 @@ public class User {
 	@OneToOne(mappedBy = "user", fetch = FetchType.EAGER)
 	private UserInformation userInformation;
 	@ManyToOne
-	@JoinColumn(name = "user_id")
+	@JoinColumn(name = "friend_id")
 	private User self;
 	@OneToMany(mappedBy = "listFriend")
 	private List<User> listFriend;
@@ -46,6 +46,12 @@ public class User {
 		this.userId = userId;
 		this.email = email;
 		this.password = password;
+	}
+
+	public User(String userId, String avatar, UserInformation userInformation) {
+		this.userId = userId;
+		this.avatar = avatar;
+		this.userInformation = userInformation;
 	}
 
 	public User(String userId, String email, UserInformation userInformation, String password, Integer friendQuantity,
@@ -169,6 +175,12 @@ public class User {
 
 	public void setListPost(List<Post> listPost) {
 		this.listPost = listPost;
+	}
+
+	@Override
+	public String toString() {
+		return "User [userId=" + userId + ", email=" + email + ", password=" + password + ", friendQuantity="
+				+ friendQuantity + ", identifyStatus=" + identifyStatus + ", avatar=" + avatar + "]";
 	}
 
 }
