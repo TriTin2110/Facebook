@@ -28,6 +28,8 @@ UserInformation profileInformation = user.getUserInformation();
 User currentUser = (User) request.getSession().getAttribute("user");
 String idUrl = request.getParameter("userId") + "";
 String currenUserId = currentUser.getUserId();
+String currentUserName = currentUser.getUserInformation().getFullName();
+String currentUserAvatar = currentUser.getAvatar();
 %>
 <body>
 	<div class="app">
@@ -54,6 +56,8 @@ String currenUserId = currentUser.getUserId();
 					<jsp:param value="<%=url%>" name="url" />
 					<jsp:param value="<%=idUrl%>" name="idUrl" />
 					<jsp:param value="<%=currenUserId%>" name="currenUserId" />
+					<jsp:param value="<%=currentUserName%>" name="currentUserName"/>
+					<jsp:param value="<%= currentUserAvatar%>" name="currentUserAvatar"/>
 				</jsp:include>
 			</div>
 			<div class="avt_list_btn">

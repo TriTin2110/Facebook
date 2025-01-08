@@ -85,6 +85,7 @@ public class UserDAO implements InterfaceDAO<User> {
 		User user = new User();
 		user = session.find(User.class, t.getUserId());
 		Hibernate.initialize(user.getListFriendId());
+		Hibernate.initialize(user.getAnnounces());
 		session.close();
 		fac.close();
 		return user;
@@ -100,8 +101,10 @@ public class UserDAO implements InterfaceDAO<User> {
 		query.setParameter("email", t.getEmail());
 		result = query.getResultList();
 		User user = (result.isEmpty()) ? null : result.get(0);
-		if (user != null)
+		if (user != null) {
 			Hibernate.initialize(user.getListFriendId());
+			Hibernate.initialize(user.getAnnounces());
+		}
 		session.close();
 		fac.close();
 		return user;
@@ -120,7 +123,6 @@ public class UserDAO implements InterfaceDAO<User> {
 		try {
 			User user = session.get(User.class, idUser);
 			user.setIdentifyStatus(true);
-
 			Transaction transaction = session.beginTransaction();
 			session.update(user);
 			transaction.commit();

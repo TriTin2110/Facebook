@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import DAO.AnnounceDAO;
 import DAO.UserDAO;
 import Model.User;
 import services.SearchFriendService;
@@ -45,6 +46,9 @@ public class Friend extends HttpServlet {
 			case "search":
 				searchFriend(request, response);
 				break;
+			case "proccess-adding-friend":
+				proccessAddingFriend(request, response);
+				break;
 			case "add":
 				addFriend(request, response);
 				break;
@@ -67,7 +71,8 @@ public class Friend extends HttpServlet {
 		doGet(request, response);
 	}
 
-	public void searchFriend(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	@SuppressWarnings("unchecked")
+	private void searchFriend(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String data = request.getParameter("searchedData");
 		SearchFriendService search = new SearchFriendService();
 		List<String> searched = (List<String>) request.getSession().getAttribute("dataSearched");
@@ -78,6 +83,22 @@ public class Friend extends HttpServlet {
 		request.getSession().setAttribute("dataSearched", searched);
 		request.getSession().setAttribute("listSearched", search.getListUser(data));
 		response.sendRedirect(request.getContextPath() + "/jsp/SearchFriend.jsp");
+	}
+
+	private void proccessAddingFriend(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		// TODO Auto-generated method stub
+		String idFriend = request.getParameter("userId");
+		String fullName = request.getParameter("fullName");
+		String avatar = request.getParameter("avatar");
+		sendAddFriendRequest(idFriend, fullName, avatar);
+		request.getRequestDispatcher("/jsp/Profile.jsp?userId=" + idFriend).forward(request, response);
+	}
+
+	private void sendAddFriendRequest(String idFriend, String fullName, String avatar) {
+		// TODO Auto-generated method stub
+		// Tạo thông báo mới
+		AnnounceDAO dao = new AnnounceDAO();
+		dao.setUpAnnounce(idFriend, fullName, avatar);
 	}
 
 	private void addFriend(HttpServletRequest request, HttpServletResponse response) throws Exception {

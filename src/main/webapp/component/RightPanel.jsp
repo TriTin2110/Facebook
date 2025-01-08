@@ -36,19 +36,7 @@ String url = request.getScheme() + "://" + request.getServerName() + ":" + reque
 				<h4>Lời mời kết bạn</h4>
 				<a href="#">Xem tất cả</a>
 			</div>
-			<div class="newfriend">
-				<img src="<%=url%>/img/j97.jpg" alt="" class="nf-avt" />
-				<div class="nf-information">
-					<div class="name-acpt">
-						<h5>Anh Dắc 97</h5>
-						<a href="#">Xác nhận</a>
-					</div>
-					<div class="time-refuse">
-						<h6>32 phút</h6>
-						<a href="#">Xóa</a>
-					</div>
-				</div>
-			</div>
+			<jsp:include page="/component/friend/FriendRequests.jsp"></jsp:include>
 		</div>
 		<jsp:include page="/component/ListFriend.jsp"></jsp:include>
 	</div>

@@ -1,3 +1,4 @@
+<%@page import="Model.Announce"%>
 <%@page import="java.util.HashSet"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
@@ -36,6 +37,9 @@ if(request.getSession().getAttribute("dataSearched") == null)
 <title>BodyBook</title>
 </head>
 <%@include file="../component/AuthenticateUser.jsp" %>
+<%
+	request.setAttribute("announces", user.getAnnounces());
+%>
 <body>
 	<div class="app">
 		<jsp:include page="/component/Header.jsp"></jsp:include>
