@@ -92,7 +92,6 @@ public class Account extends HttpServlet {
 			String[] name = { firstName, lastName };
 			gainValueForSignUpForm(request, name, userInformation);
 		}
-
 		getServletContext().getRequestDispatcher("/jsp/LoginPage.jsp").forward(request, response);
 	}
 
@@ -193,5 +192,6 @@ public class Account extends HttpServlet {
 		} else {
 			request.getRequestDispatcher("/jsp/LoginPage.jsp").forward(request, response);
 		}
+
 	}
 }

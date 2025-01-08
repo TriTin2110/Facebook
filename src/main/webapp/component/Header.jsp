@@ -36,9 +36,10 @@ request.setCharacterEncoding("UTF-8");
 			</div>
 
 			<div class="search">
-				<form action="<%=url%>/SearchFriend" method="get"
+				<form action="<%=url%>/Friend" method="get"
 					id="searching-form">
-					<input type="text" id="search" name="search"
+					<input type="hidden" name="method" value="search">
+					<input type="text" id="search" name="searchedData"
 						placeholder="Tìm kiếm trên BodyBook" autocomplete="off" />
 					<%
 					if (!searched.isEmpty()) {

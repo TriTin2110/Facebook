@@ -2,11 +2,12 @@ package Model;
 
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
@@ -22,10 +23,9 @@ public class User {
 
 	@OneToOne(mappedBy = "user", fetch = FetchType.EAGER)
 	private UserInformation userInformation;
-	@ManyToOne
-	private User self;
-	@OneToMany(mappedBy = "self")
-	private List<User> listFriend;
+	@Lob
+	@Column(length = Integer.MAX_VALUE)
+	private String listFriendId;
 
 	@ManyToMany(mappedBy = "listMember")
 	private List<Group> listGroup;
@@ -44,6 +44,7 @@ public class User {
 		this.userId = userId;
 		this.email = email;
 		this.password = password;
+		this.listFriendId = "";
 	}
 
 	public User(String userId, String avatar, UserInformation userInformation) {
@@ -53,27 +54,13 @@ public class User {
 	}
 
 	public User(String userId, String email, UserInformation userInformation, String password, Integer friendQuantity,
-			List<User> listFriend, String avatar, List<Group> listGroup, List<Post> postList) {
+			String listFriendId, String avatar, List<Group> listGroup, List<Post> listPost) {
 		this.userId = userId;
 		this.email = email;
 		this.userInformation = userInformation;
 		this.password = password;
 		this.friendQuantity = friendQuantity;
-		this.listFriend = listFriend;
-		this.avatar = avatar;
-		this.listGroup = listGroup;
-		this.listPost = postList;
-	}
-
-	public User(String userId, String email, UserInformation userInformation, String password, Integer friendQuantity,
-			User self, List<User> listFriend, String avatar, List<Group> listGroup, List<Post> listPost) {
-		this.userId = userId;
-		this.email = email;
-		this.userInformation = userInformation;
-		this.password = password;
-		this.friendQuantity = friendQuantity;
-		this.self = self;
-		this.listFriend = listFriend;
+		this.listFriendId = listFriendId;
 		this.avatar = avatar;
 		this.listGroup = listGroup;
 		this.listPost = listPost;
@@ -119,12 +106,12 @@ public class User {
 		this.friendQuantity = friendQuantity;
 	}
 
-	public List<User> getListFriend() {
-		return listFriend;
+	public String getListFriendId() {
+		return listFriendId;
 	}
 
-	public void setListFriend(List<User> listFriend) {
-		this.listFriend = listFriend;
+	public void setListFriend(String listFriendId) {
+		this.listFriendId = listFriendId;
 	}
 
 	public String getAvatar() {
@@ -157,14 +144,6 @@ public class User {
 
 	public void setIdentifyStatus(boolean identifyStatus) {
 		this.identifyStatus = identifyStatus;
-	}
-
-	public User getSelf() {
-		return self;
-	}
-
-	public void setSelf(User self) {
-		this.self = self;
 	}
 
 	public List<Post> getListPost() {

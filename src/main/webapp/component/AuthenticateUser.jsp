@@ -18,7 +18,6 @@ if(id!=null)
 {
 	user.setUserId(id);
 	user = dao.selectById(user);
-	
 }
 else
 {

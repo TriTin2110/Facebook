@@ -1,14 +1,17 @@
-<%@page import="DAO.UserDAO"%>
 <%@page import="Model.UserInformation"%>
 <%@page import="Model.User"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%
+String url = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+		+ request.getContextPath();
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<link rel="stylesheet" href="../css/Profile.css" />
+<link rel="stylesheet" href="<%=url%>/css/Profile.css" />
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" />
 <link rel="stylesheet" type="text/css"
@@ -21,18 +24,17 @@
 </head>
 <%@include file="../component/AuthenticateUser.jsp"%>
 <%
-String url = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
-		+ request.getContextPath();
 UserInformation profileInformation = user.getUserInformation();
 User currentUser = (User) request.getSession().getAttribute("user");
 String idUrl = request.getParameter("userId") + "";
+String currenUserId = currentUser.getUserId();
 %>
 <body>
 	<div class="app">
 		<jsp:include page="/component/Header.jsp"></jsp:include>
 		<div class="header">
 			<div class="cover_photo">
-				<img src="../img/anhbia.jpg" alt="" /> <a href="#"
+				<img src="<%=url%>/img/anhbia.jpg" alt="" /> <a href="#"
 					class="update_cover_photo"> <i class="fa-solid fa-camera"></i>
 					Chỉnh sửa ảnh bìa
 				</a>
@@ -40,7 +42,7 @@ String idUrl = request.getParameter("userId") + "";
 			<div class="avt_info">
 				<div class="img_info">
 					<div class="avt_img">
-						<img src="../img/<%=user.getAvatar()%>" alt="" />
+						<img src="<%=url%>/img/<%=user.getAvatar()%>" alt="" />
 					</div>
 					<div class="info">
 						<h1 class="name"><%=profileInformation.getFullName()%></h1>
@@ -48,40 +50,11 @@ String idUrl = request.getParameter("userId") + "";
 					</div>
 				</div>
 
-				<%
-				if (currentUser.getUserId().equals(idUrl)) {
-				%>
-				<div class="profile_setting">
-					<div class="setting_btn">
-						<a href="#" class="add_story"> <i class="fa-solid fa-plus"></i>
-							Thêm vào tin
-						</a> <a href="<%=url%>/jsp/InfoChange.jsp" class="setting"> <i
-							class="fa-solid fa-pen"></i> Chỉnh sửa trang cá nhân
-						</a>
-					</div>
-					<div class="setting_more">
-						<a href="#"><i class="fa-solid fa-chevron-down"></i></a>
-					</div>
-				</div>
-
-				<%
-				} else {
-				%>
-				<div class="profile_setting">
-					<div class="setting_btn">
-						<a href="#" class="add_story"> <i class="fas fa-user-friends"></i>
-							Thêm bạn bè
-						</a> <a href="<%=url%>/jsp/InfoChange.jsp" class="setting"> <i
-							class="fab fa-facebook-messenger"></i> Nhắn tin
-						</a>
-					</div>
-					<div class="setting_more">
-						<a href="#"><i class="fa-solid fa-chevron-down"></i></a>
-					</div>
-				</div>
-				<%
-				}
-				%>
+				<jsp:include page="../component/profile/FriendAndSelfOption.jsp">
+					<jsp:param value="<%=url%>" name="url" />
+					<jsp:param value="<%=idUrl%>" name="idUrl" />
+					<jsp:param value="<%=currenUserId%>" name="currenUserId" />
+				</jsp:include>
 			</div>
 			<div class="avt_list_btn">
 				<ul class="avt_list">
@@ -154,7 +127,7 @@ String idUrl = request.getParameter("userId") + "";
 				<div class="modal-body">
 					<form action="posting" method="POST" enctype="multipart/form-data">
 						<div class="acc__post">
-							<img src="../img/avt.jpg" alt="">
+							<img src="<%=url%>/img/avt.jpg" alt="">
 							<div class="acc__name">
 								<h4><%=profileInformation.getFullName()%></h4>
 								<select name="aithay" id="user_seen">
