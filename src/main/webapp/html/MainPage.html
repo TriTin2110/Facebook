@@ -83,7 +83,29 @@
               <a href="Messenger.jsp" class="nm_link"><i class="nm_icon fa-solid fa-comments"></i></a>
             </li>
             <li class="nm_item">
-              <a href="#" class="nm_link"><i class="nm_icon fa-solid fa-bell"></i></a>
+              <a href="#" class="nm_link" id="open-notify">
+                <i class="nm_icon fa-solid fa-bell"></i>
+                <div class="notify_more">
+                  <ul>
+                    <li><a href="#">
+                      <img src="../img/friend1.jpg" alt="">
+                      <p> <b>Tín</b> đã nhắc đến bạn trong 1 bình luận </p>
+                    </a></li>
+                    <li><a href="#">
+                      <img src="../img/friend1.jpg" alt="">
+                      <p> <b>Tín</b> đã nhắc đến bạn trong 1 bình luận </p>
+                    </a></li>
+                    <li><a href="#">
+                      <img src="../img/friend1.jpg" alt="">
+                      <p> <b>Tín</b> đã nhắc đến bạn trong 1 bình luận </p>
+                    </a></li>
+                    <li><a href="#">
+                      <img src="../img/friend1.jpg" alt="">
+                      <p> <b>Tín</b> đã nhắc đến bạn trong 1 bình luận </p>
+                    </a></li>
+                  </ul>
+                </div>
+              </a>
             </li>
             <li class="nm_item">
               <a href="#" class="nm_link">
@@ -212,7 +234,7 @@
           </div>
         </div>
         <div class="post">
-          <div class="post_list">
+          <div.notify_more class="post_list">
             <div class="story">
               <img src="../img/story0.jpg" alt="" />
               <img src="../img/story1.jpg" alt="" />
@@ -225,7 +247,6 @@
             </div>
             <button id="moveLeftButton"> <i class="fa-solid fa-angle-left"></i> </button>
             <button id="moveRightButton"> <i class="fa-solid fa-angle-right"></i> </button>
-          </div>
           <div class="status">
             <div class="post-input">
               <img src="../img/avt.jpg" alt="" />
@@ -524,16 +545,31 @@
     ></script>
     <script>
       // MỞ THÔNG TIN THÊM KHI NHẤN VÀO ẢNH AVT
-      var open = document.getElementById("open-profile");
+      var openAvt = document.getElementById("open-profile");
       var moreProfile = document.querySelector(".acc_more");
-      open.onclick = function(e) {
+      openAvt.addEventListener("click", function(e) {
         e.preventDefault();
         if (moreProfile.style.display == 'none') {
           moreProfile.style.display = 'block';
+          moreNotify.style.display = 'none';
         } else {
           moreProfile.style.display = 'none';
+          moreNotify.style.display = 'none';
         }
-      }
+      });
+      // MỞ THÔNG BÁO
+      var openNotify = document.getElementById("open-notify");
+      var moreNotify = document.querySelector(".notify_more");
+      openNotify.addEventListener("click", function(e) {
+        e.preventDefault();
+        if (moreNotify.style.display == 'none') {
+          moreNotify.style.display = 'block';
+          moreProfile.style.display = 'none';
+        } else {
+          moreProfile.style.display = 'none';
+          moreNotify.style.display = 'none';
+        }
+      });
       // CHUYỂN ẢNH GIỮA CÁC STORY
       document.addEventListener('DOMContentLoaded', function() {
         const moveLeftButton = document.getElementById('moveLeftButton');

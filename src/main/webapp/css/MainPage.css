@@ -212,7 +212,7 @@ display: block; /* Hiển thị khi input được focus */
     position: relative;
 }
 
-.acc_more {
+.acc_more, .notify_more {
     display: none;
     position: absolute;
     right: 25px;
@@ -224,29 +224,33 @@ display: block; /* Hiển thị khi input được focus */
     box-shadow: 0px 1px 4px 2px #ccc;
 }
 
-.acc_more ul {
+.notify_more {
+    max-height: 450px;
+}
+
+.acc_more ul, .notify_more ul {
     display: flex;
     padding-left: 0;
     flex-direction: column;
 }
 
-.acc_more li {
-    padding: 12px 4px;
+.acc_more li, .notify_more li {
+    padding: 8px 4px;
 }
 
-.acc_more li:hover {
+.acc_more li:hover, .notify_more li:hover {
     border-radius: 12px;
     background-color: #e9ebf1;
 }
 
-.acc_more a {
+.acc_more a, .notify_more a {
     display: flex;
     color: #050505;
     align-items: center;
     text-decoration: none;
 }
 
-.acc_more a:hover {
+.acc_more a:hover, .notify_more a:hover {
     color: #050505;
     text-decoration: none;
 }
@@ -256,6 +260,22 @@ display: block; /* Hiển thị khi input được focus */
     height: 40px;
     border-radius: 50%;
     margin-right: 12px;
+}
+
+.notify_more img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 8px;
+}
+
+.notify_more li p {
+    font-size: 15px;
+    margin: 0;
+}
+
+.notify_more li b {
+    font-size: 16px;
 }
 
 .acc_more i {
