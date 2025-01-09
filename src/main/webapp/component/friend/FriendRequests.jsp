@@ -27,7 +27,7 @@ SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
 		<div class="nf-information">
 			<div class="name-acpt">
 				<h5><%=announce.getUserNameRequested()%></h5>
-				<a href="#">Xác nhận</a>
+				<a href="<%=url%>/Friend?method=add&friendId=<%=announce.getId()%>">Xác nhận</a>
 			</div>
 			<div class="time-refuse">
 				<h6><%=df.format(new Date(announce.getDate()))%></h6>

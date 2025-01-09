@@ -176,28 +176,9 @@ if(request.getSession().getAttribute("dataSearched") == null)
 					<div class="interact_btn">
 						<ul>
 							<li>
-								<div class="button-react">
-									<i class="fa-solid fa-thumbs-up icon_like"></i>
-									<button class="like-button">Thích</button>
-									<div class="emotions">
-										<span> <i
-											class="fa-solid fa-heart-pulse color_heart emotion"
-											data-emotion="Rung động"></i>
-										</span> <span> <i
-											class="fa-solid fa-face-flushed color_face emotion"
-											data-emotion="Rìa lí man"></i>
-										</span>
-										<spanhá"> <i
-											class="fa-solid fa-face-grin-tongue-squint color_face emotion"
-											data-emotion="Há há"></i> </span> <span"> <i
-											class="fa-solid fa-face-sad-cry color_face emotion"
-											data-emotion="Suyyy"></i>
-										</span> <span> <i
-											class="fa-solid fa-face-angry color_heart emotion"
-											data-emotion="Quạo á"></i>
-										</span>
-									</div>
-								</div>
+								<jsp:include page="/component/index/Emotion.jsp">
+									<jsp:param value="<%=url%>" name="url"/>
+								</jsp:include>
 							</li>
 							<li>
 								<div class="button-react">

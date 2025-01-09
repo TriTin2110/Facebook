@@ -11,9 +11,6 @@ public class SearchFriendService {
 		List<SearchFriend> users = new ArrayList<SearchFriend>();
 		UserDAO dao = new UserDAO();
 		users = dao.selectByFullName(dataSearching);
-		for (SearchFriend sf : users) {
-			System.out.println(sf);
-		}
 		return users;
 	}
 }

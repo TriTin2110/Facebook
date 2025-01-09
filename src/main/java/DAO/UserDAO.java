@@ -11,6 +11,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
 import HibernateUtil.HibernateUtil;
+import Model.Announce;
 import Model.SearchFriend;
 import Model.User;
 
@@ -121,7 +122,9 @@ public class UserDAO implements InterfaceDAO<User> {
 		SessionFactory fac = HibernateUtil.getSessionFactory();
 		Session session = fac.openSession();
 		try {
-			User user = session.get(User.class, idUser);
+			User user = new User();
+			user.setUserId(idUser);
+			user = selectById(user);
 			user.setIdentifyStatus(true);
 			Transaction transaction = session.beginTransaction();
 			session.update(user);
@@ -161,13 +164,40 @@ public class UserDAO implements InterfaceDAO<User> {
 		return users;
 	}
 
-	public void addFriend(String friendId, User user) {
+	public void processAddingFriend(String friendId, User user) {
 		// TODO Auto-generated method stub
+		User friend = new User();
+		String announceId = friendId;
+		friendId = friendId.substring(0, 64);
+
+		friend.setUserId(friendId);
+		friend = selectById(friend);
+		updateFriend(user.getUserId(), friend);
+		updateUser(friendId, user);
+		removeAnnounce(announceId);
+	}
+
+	public void updateFriend(String userId, User friend) {
+		addingFriend(userId, friend);
+	}
+
+	public void updateUser(String friendId, User user) {
+		addingFriend(friendId, user);
+	}
+
+	public void removeAnnounce(String announceId) {
+		AnnounceDAO announceDAO = new AnnounceDAO();
+		System.out.println(announceId);
+		Announce announce = announceDAO.selectById(new Announce(announceId));
+		announceDAO.remove(announce);
+	}
+
+	public void addingFriend(String id, User user) {
 		String listFriend = user.getListFriendId();
-		listFriend += friendId + ";";
+		listFriend += id + ";";
 		user.setListFriend(listFriend);
+		user.setFriendQuantity((user.getFriendQuantity() == null) ? 1 : user.getFriendQuantity() + 1);
 		update(user);
 		user = selectById(user);
 	}
-
 }

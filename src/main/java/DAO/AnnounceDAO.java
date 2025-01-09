@@ -38,7 +38,22 @@ public class AnnounceDAO implements InterfaceDAO<Announce> {
 	@Override
 	public int remove(Announce t) {
 		// TODO Auto-generated method stub
-		return 0;
+		int result = 1;
+		SessionFactory fac = HibernateUtil.getSessionFactory();
+		Session session = fac.openSession();
+		Transaction transaction = session.beginTransaction();
+		try {
+			session.remove(t);
+			transaction.commit();
+		} catch (Exception e) {
+			// TODO: handle exception
+			transaction.rollback();
+			e.printStackTrace();
+		} finally {
+			session.close();
+			fac.close();
+		}
+		return result;
 	}
 
 	@Override
@@ -50,7 +65,19 @@ public class AnnounceDAO implements InterfaceDAO<Announce> {
 	@Override
 	public Announce selectById(Announce t) {
 		// TODO Auto-generated method stub
-		return null;
+		Announce announce = new Announce();
+		SessionFactory fac = HibernateUtil.getSessionFactory();
+		Session session = fac.openSession();
+		try {
+			announce = session.find(Announce.class, t.getId());
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		} finally {
+			session.close();
+			fac.close();
+		}
+		return announce;
 	}
 
 	@Override
@@ -65,7 +92,8 @@ public class AnnounceDAO implements InterfaceDAO<Announce> {
 		return announces;
 	}
 
-	public void setUpAnnounce(String idFriend, String userSendRequestFullName, String userSendRequestAvatar) {
+	public void setUpAnnounce(String idFriend, String idUserSendRequest, String userSendRequestFullName,
+			String userSendRequestAvatar) {
 		User toUser = new User();
 		UserDAO userDAO = new UserDAO();
 		toUser.setUserId(idFriend);
@@ -73,7 +101,7 @@ public class AnnounceDAO implements InterfaceDAO<Announce> {
 		List<Announce> announces = toUser.getAnnounces();
 		long dateReceiveRequest = System.currentTimeMillis();
 
-		Announce announce = new Announce(idFriend + dateReceiveRequest,
+		Announce announce = new Announce(idUserSendRequest + dateReceiveRequest,
 				userSendRequestFullName + " đã gửi lời mời kết bạn dành cho bạn!", userSendRequestFullName,
 				userSendRequestAvatar, toUser, false, dateReceiveRequest);
 		announces.add(announce);

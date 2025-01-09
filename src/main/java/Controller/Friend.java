@@ -88,25 +88,28 @@ public class Friend extends HttpServlet {
 	private void proccessAddingFriend(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		// TODO Auto-generated method stub
 		String idFriend = request.getParameter("userId");
+		String idUserSendRequest = request.getParameter("userSentRequestId");
 		String fullName = request.getParameter("fullName");
 		String avatar = request.getParameter("avatar");
-		sendAddFriendRequest(idFriend, fullName, avatar);
+		sendAddFriendRequest(idFriend, idUserSendRequest, fullName, avatar);
 		request.getRequestDispatcher("/jsp/Profile.jsp?userId=" + idFriend).forward(request, response);
 	}
 
-	private void sendAddFriendRequest(String idFriend, String fullName, String avatar) {
+	private void sendAddFriendRequest(String idFriend, String idUserSendRequest, String fullName, String avatar) {
 		// TODO Auto-generated method stub
 		// Tạo thông báo mới
 		AnnounceDAO dao = new AnnounceDAO();
-		dao.setUpAnnounce(idFriend, fullName, avatar);
+		dao.setUpAnnounce(idFriend, idUserSendRequest, fullName, avatar);
 	}
 
 	private void addFriend(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		// TODO Auto-generated method stub
-		String idFriend = request.getParameter("userId");
+		String idFriend = request.getParameter("friendId");
 		User user = (User) request.getSession().getAttribute("user");
 		UserDAO userDAO = new UserDAO();
-		userDAO.addFriend(idFriend, user);
-		request.getRequestDispatcher("/jsp/Profile.jsp?userId=" + idFriend).forward(request, response);
+		userDAO.processAddingFriend(idFriend, user);
+		user = userDAO.selectById(user);
+		request.getSession().setAttribute("user", user);
+		response.sendRedirect(request.getContextPath());
 	}
 }

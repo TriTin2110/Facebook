@@ -23,6 +23,11 @@ public class Announce {
 	public Announce() {
 	}
 
+	public Announce(String id) {
+		super();
+		this.id = id;
+	}
+
 	public Announce(String id, String data, boolean checked, long date) {
 		this.id = id;
 		this.data = data;

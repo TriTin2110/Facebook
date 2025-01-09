@@ -48,7 +48,7 @@ String currentUserAvatar = currentUser.getAvatar();
 					</div>
 					<div class="info">
 						<h1 class="name"><%=profileInformation.getFullName()%></h1>
-						<a href="#" class="number_friend">102 người bạn</a>
+						<a href="#" class="number_friend">Số lương bạn: <%=user.getFriendQuantity()%></a>
 					</div>
 				</div>
 
