@@ -2,12 +2,13 @@ package Model;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
@@ -23,17 +24,18 @@ public class User {
 
 	@OneToOne(mappedBy = "user", fetch = FetchType.EAGER)
 	private UserInformation userInformation;
-	@ManyToOne
-	@JoinColumn(name = "user_id")
-	private User self;
-	@OneToMany(mappedBy = "listFriend")
-	private List<User> listFriend;
+	@Lob
+	@Column(length = Integer.MAX_VALUE)
+	private String listFriendId;
 
 	@ManyToMany(mappedBy = "listMember")
 	private List<Group> listGroup;
 
 	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
 	private List<Post> listPost;
+
+	@OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+	private List<Announce> announces;
 
 	public User() {
 	}
@@ -46,33 +48,29 @@ public class User {
 		this.userId = userId;
 		this.email = email;
 		this.password = password;
+		this.listFriendId = "";
 	}
 
-	public User(String userId, String email, UserInformation userInformation, String password, Integer friendQuantity,
-			List<User> listFriend, String avatar, List<Group> listGroup, List<Post> postList) {
+	public User(String userId, String avatar, UserInformation userInformation) {
 		this.userId = userId;
-		this.email = email;
-		this.userInformation = userInformation;
-		this.password = password;
-		this.friendQuantity = friendQuantity;
-		this.listFriend = listFriend;
 		this.avatar = avatar;
-		this.listGroup = listGroup;
-		this.listPost = postList;
+		this.userInformation = userInformation;
 	}
 
-	public User(String userId, String email, UserInformation userInformation, String password, Integer friendQuantity,
-			User self, List<User> listFriend, String avatar, List<Group> listGroup, List<Post> listPost) {
+	public User(String userId, String email, String password, Integer friendQuantity, boolean identifyStatus,
+			String avatar, UserInformation userInformation, String listFriendId, List<Group> listGroup,
+			List<Post> listPost, List<Announce> announce) {
 		this.userId = userId;
 		this.email = email;
-		this.userInformation = userInformation;
 		this.password = password;
 		this.friendQuantity = friendQuantity;
-		this.self = self;
-		this.listFriend = listFriend;
+		this.identifyStatus = identifyStatus;
 		this.avatar = avatar;
+		this.userInformation = userInformation;
+		this.listFriendId = listFriendId;
 		this.listGroup = listGroup;
 		this.listPost = listPost;
+		this.announces = announces;
 	}
 
 	public String getUserId() {
@@ -115,12 +113,12 @@ public class User {
 		this.friendQuantity = friendQuantity;
 	}
 
-	public List<User> getListFriend() {
-		return listFriend;
+	public String getListFriendId() {
+		return listFriendId;
 	}
 
-	public void setListFriend(List<User> listFriend) {
-		this.listFriend = listFriend;
+	public void setListFriend(String listFriendId) {
+		this.listFriendId = listFriendId;
 	}
 
 	public String getAvatar() {
@@ -155,14 +153,6 @@ public class User {
 		this.identifyStatus = identifyStatus;
 	}
 
-	public User getSelf() {
-		return self;
-	}
-
-	public void setSelf(User self) {
-		this.self = self;
-	}
-
 	public List<Post> getListPost() {
 		return listPost;
 	}
@@ -171,4 +161,21 @@ public class User {
 		this.listPost = listPost;
 	}
 
+	public List<Announce> getAnnounces() {
+		return announces;
+	}
+
+	public void setAnnounces(List<Announce> announces) {
+		this.announces = announces;
+	}
+
+	public void setListFriendId(String listFriendId) {
+		this.listFriendId = listFriendId;
+	}
+
+	@Override
+	public String toString() {
+		return "User [userId=" + userId + ", email=" + email + ", password=" + password + ", friendQuantity="
+				+ friendQuantity + ", identifyStatus=" + identifyStatus + ", avatar=" + avatar + "]";
+	}
 }

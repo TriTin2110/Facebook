@@ -15,14 +15,11 @@
 </head>
 <%
 String url = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+":"+request.getContextPath();
-User user = (User) session.getAttribute("user");
 String pattern = "EEE, dd MMMM yyyy";
 Locale locale = new Locale("vi", "vn");
 SimpleDateFormat df = new SimpleDateFormat(pattern, locale);
-List<Post> posts = new ArrayList<>();
-if (user != null) {
-	posts = user.getListPost();
-}
+User user = (User) request.getAttribute("postContent");
+List<Post> posts = user.getListPost();
 %>
 <body>
 	<%

@@ -1,14 +1,17 @@
-<%@page import="DAO.UserDAO"%>
 <%@page import="Model.UserInformation"%>
 <%@page import="Model.User"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%
+String url = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+		+ request.getContextPath();
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<link rel="stylesheet" href="../css/Profile.css" />
+<link rel="stylesheet" href="<%=url%>/css/Profile.css" />
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" />
 <link rel="stylesheet" type="text/css"
@@ -19,21 +22,21 @@
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
 <title>Trang cá nhân</title>
 </head>
+<%@include file="../component/AuthenticateUser.jsp"%>
 <%
-String url = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
-		+ request.getContextPath();
-User user = (User) session.getAttribute("user");
-if (user == null) {
-	response.sendRedirect(url+"/jsp/LoginPage.jsp");
-} else {
-	UserInformation profileInformation = user.getUserInformation();
+UserInformation profileInformation = user.getUserInformation();
+User currentUser = (User) request.getSession().getAttribute("user");
+String idUrl = request.getParameter("userId") + "";
+String currenUserId = currentUser.getUserId();
+String currentUserName = currentUser.getUserInformation().getFullName();
+String currentUserAvatar = currentUser.getAvatar();
 %>
 <body>
 	<div class="app">
 		<jsp:include page="/component/Header.jsp"></jsp:include>
 		<div class="header">
 			<div class="cover_photo">
-				<img src="../img/anhbia.jpg" alt="" /> <a href="#"
+				<img src="<%=url%>/img/anhbia.jpg" alt="" /> <a href="#"
 					class="update_cover_photo"> <i class="fa-solid fa-camera"></i>
 					Chỉnh sửa ảnh bìa
 				</a>
@@ -41,25 +44,21 @@ if (user == null) {
 			<div class="avt_info">
 				<div class="img_info">
 					<div class="avt_img">
-						<img src="../img/<%=user.getAvatar()%>" alt="" />
+						<img src="<%=url%>/img/<%=user.getAvatar()%>" alt="" />
 					</div>
 					<div class="info">
-						<h1 class="name"><%=profileInformation.getFullName() %></h1>
+						<h1 class="name"><%=profileInformation.getFullName()%></h1>
 						<a href="#" class="number_friend">102 người bạn</a>
 					</div>
 				</div>
-				<div class="profile_setting">
-					<div class="setting_btn">
-						<a href="#" class="add_story"> <i class="fa-solid fa-plus"></i>
-							Thêm vào tin
-						</a> <a href="<%=url%>/jsp/InfoChange.jsp" class="setting"> <i
-							class="fa-solid fa-pen"></i> Chỉnh sửa trang cá nhân
-						</a>
-					</div>
-					<div class="setting_more">
-						<a href="#"><i class="fa-solid fa-chevron-down"></i></a>
-					</div>
-				</div>
+
+				<jsp:include page="../component/profile/FriendAndSelfOption.jsp">
+					<jsp:param value="<%=url%>" name="url" />
+					<jsp:param value="<%=idUrl%>" name="idUrl" />
+					<jsp:param value="<%=currenUserId%>" name="currenUserId" />
+					<jsp:param value="<%=currentUserName%>" name="currentUserName"/>
+					<jsp:param value="<%= currentUserAvatar%>" name="currentUserAvatar"/>
+				</jsp:include>
 			</div>
 			<div class="avt_list_btn">
 				<ul class="avt_list">
@@ -87,7 +86,7 @@ if (user == null) {
 					<a href="#" class="intro_btn">Thêm tiểu sử</a>
 					<ul>
 						<li><i class="fa-solid fa-house-chimney"></i> <span>Sống
-								tại <b><%=profileInformation.getHomeTown() %></b>
+								tại <b><%=profileInformation.getHomeTown()%></b>
 						</span></li>
 						<li><i class="fa-solid fa-heart"></i> <span>Đang hẹn
 								hò với <b>Lisa</b>
@@ -103,7 +102,8 @@ if (user == null) {
 			</div>
 			<div class="section_right">
 				<div class="status">
-					<form action="<%=url%>/posting" method="POST" enctype="multipart/form-data">
+					<form action="<%=url%>/posting" method="POST"
+						enctype="multipart/form-data">
 						<textarea name="content" placeholder="Bạn đang nghĩ gì?"></textarea>
 						<input type="file" name="image">
 						<button type="submit">Đăng bài</button>
@@ -131,9 +131,9 @@ if (user == null) {
 				<div class="modal-body">
 					<form action="posting" method="POST" enctype="multipart/form-data">
 						<div class="acc__post">
-							<img src="../img/avt.jpg" alt="">
+							<img src="<%=url%>/img/avt.jpg" alt="">
 							<div class="acc__name">
-								<h4><%=profileInformation.getFullName() %></h4>
+								<h4><%=profileInformation.getFullName()%></h4>
 								<select name="aithay" id="user_seen">
 									<option value="congkhai">Công khai</option>
 									<option value="banbe">Bạn bè</option>
@@ -157,53 +157,47 @@ if (user == null) {
 	</div>
 	</div>
 </body>
-<%
-}
-%>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script
 	src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
 	integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
 	crossorigin="anonymous"></script>
 
- <script>
+<script>
 $(document).ready(function() {
     $('form').on('submit', function(e) {
         e.preventDefault();
         var formData = new FormData(this);
 
         $.ajax({
-            url: '<%=url%>/posting',
-            type: 'POST',
-            data: formData,
-            success: function(response) {
-                alert('Bài viết đã được đăng thành công!');
-                loadPosts();
-                // Reset form sau khi đăng bài thành công
-                $('form')[0].reset();
-            },
-            error: function(xhr, status, error) {
-                alert('Có lỗi xảy ra: ' + error);
-            },
-            cache: false,
-            contentType: false,
-            processData: false
-        });
-    });
+            url: '<%=url%>
+	/posting',
+						type : 'POST',
+						data : formData,
+						success : function(response) {
+							alert('Bài viết đã được đăng thành công!');
+							loadPosts();
+							// Reset form sau khi đăng bài thành công
+							$('form')[0].reset();
+						},
+						error : function(xhr, status, error) {
+							alert('Có lỗi xảy ra: ' + error);
+						},
+						cache : false,
+						contentType : false,
+						processData : false
+					});
+				});
 
-   
-    // Hàm để escape HTML để ngăn chặn XSS
-    function escapeHtml(unsafe) {
-        return unsafe
-             .replace(/&/g, "&amp;")
-             .replace(/</g, "&lt;")
-             .replace(/>/g, "&gt;")
-             .replace(/"/g, "&quot;")
-             .replace(/'/g, "&#039;");
-    }
+				// Hàm để escape HTML để ngăn chặn XSS
+				function escapeHtml(unsafe) {
+					return unsafe.replace(/&/g, "&amp;").replace(/</g, "&lt;")
+							.replace(/>/g, "&gt;").replace(/"/g, "&quot;")
+							.replace(/'/g, "&#039;");
+				}
 
-    loadPosts(); // Load posts when page loads
-});
+				loadPosts(); // Load posts when page loads
+			});
 </script>
 <script src="<%=url%>/js/Profile.js" type="text/javascript"></script>
 </html>

@@ -2,6 +2,7 @@ package Model;
 
 import java.sql.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -12,6 +13,7 @@ import javax.persistence.Table;
 @Table(name = "user_information")
 public class UserInformation {
 	@Id
+	@Column(name = "user_information_id")
 	private String userId;
 	@OneToOne
 	@JoinColumn(name = "user_id")
