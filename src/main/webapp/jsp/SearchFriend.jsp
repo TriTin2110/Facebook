@@ -1,11 +1,12 @@
-<%@page import="Model.SearchFriend"%>
+<%@page import="Model.Friend"%>
 <%@page import="java.util.List"%>
 <%@page import="Model.User"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%
 String url = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath();
-List<SearchFriend> users = (List<SearchFriend>) request.getSession().getAttribute("listSearched");
+List<Friend> users = (List<Friend>) request.getSession().getAttribute("listSearched");
+request.getSession().removeAttribute("listSearched");
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -31,7 +32,7 @@ List<SearchFriend> users = (List<SearchFriend>) request.getSession().getAttribut
 		<jsp:include page="../component/LeftPanel.jsp">
 			<jsp:param value="<%=user.getAvatar()%>" name="avatar" />
 			<jsp:param value="<%=user.getUserInformation().getFullName()%>"
-				name="fullName"/>
+				name="fullName" />
 		</jsp:include>
 		<div class="search-friend">
 			<div class="search-friend_list">
@@ -40,19 +41,24 @@ List<SearchFriend> users = (List<SearchFriend>) request.getSession().getAttribut
 						<h2>Mọi người</h2>
 					</li>
 					<%
-					if (users.isEmpty()) {
+								if (user==null && users.isEmpty()) {
 					%>
 					<li style="display: flex; justify-content: center;">
 						<h2 style="color: gray;">Không có kết quả nào trùng khớp</h2>
 					</li>
 					<%
-					} else {
-					for (SearchFriend userInSearchedList : users) {
+								} else {
+								for (Friend userInSearchedList : users) {
 					%>
 					<li>
 						<div class="avt_name">
-							<img src="<%=url%>/img/<%=userInSearchedList.getAvatar()%>" alt="" />
-							<h3><a style="text-decoration: none; color: black;" href="<%=url%>/jsp/Profile.jsp?userId=<%=userInSearchedList.getId()%>"> <%=userInSearchedList.getFullName() %></a></h3>
+							<img src="<%=url%>/img/<%=userInSearchedList.getAvatar()%>"
+								alt="" />
+							<h3>
+								<a style="text-decoration: none; color: black;"
+									href="<%=url%>/jsp/Profile.jsp?userId=<%=userInSearchedList.getId()%>">
+									<%=userInSearchedList.getFullName() %></a>
+							</h3>
 						</div>
 						<div class="addfr_btn">
 							<a href="#">Thêm bạn bè</a>

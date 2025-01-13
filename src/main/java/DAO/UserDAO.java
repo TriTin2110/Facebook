@@ -12,7 +12,7 @@ import org.hibernate.Transaction;
 
 import HibernateUtil.HibernateUtil;
 import Model.Announce;
-import Model.SearchFriend;
+import Model.Friend;
 import Model.User;
 
 public class UserDAO implements InterfaceDAO<User> {
@@ -142,15 +142,15 @@ public class UserDAO implements InterfaceDAO<User> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<SearchFriend> selectByFullName(String fullName) {
-		List<SearchFriend> users = new ArrayList<SearchFriend>();
+	public List<Friend> selectByFullName(String fullName) {
+		List<Friend> users = new ArrayList<Friend>();
 		SessionFactory fac = HibernateUtil.getSessionFactory();
 		Session session = fac.openSession();
 		try {
-			String queryStatement = "select new Model.SearchFriend(u.userId, ui.fullName, u.avatar)  from User u "
+			String queryStatement = "select new Model.Friend(u.userId, ui.fullName, u.avatar)  from User u "
 					+ "join UserInformation ui on u.userId = ui.userId " + "where ui.fullName like :fullName";
 
-			Query query = session.createQuery(queryStatement, SearchFriend.class);
+			Query query = session.createQuery(queryStatement, Friend.class);
 			query.setParameter("fullName", "%" + fullName + "%");
 			users = query.getResultList();
 			session.close();

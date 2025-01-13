@@ -1,3 +1,4 @@
+<%@page import="DAO.UserDAO"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
 <%@page import="Model.User"%>
@@ -15,17 +16,22 @@ String url = request.getScheme() + "://" + request.getServerName() + ":" + reque
 </head>
 <%
 	User user = (User) session.getAttribute("user");
+UserDAO userDAO = new UserDAO();
+String[] friendIds = user.getListFriendId().split(";");
 %>
 <body>
 	<div class="friend">
 		<h4>Người liên hệ</h4>
 		<ul>
 		<%
-			List<User> friends = new ArrayList<>();
-			for(User friend : friends)
+			
+			for(String friendId: friendIds)
 			{
+				User friend = new User();
+				friend.setUserId(friendId);
+				friend = userDAO.selectById(friend);
 				%>
-					<li><img src="<%=url%>/img/friend2.jpg"/><span
+					<li><img src="<%=url%>/img/<%=friend.getAvatar()%>"/><span
 					class="name-friend"><%=friend.getUserInformation().getFullName()%></span></li>
 				<%
 			}

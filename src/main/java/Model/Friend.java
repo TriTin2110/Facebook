@@ -1,12 +1,12 @@
 package Model;
 
-public class SearchFriend {
+public class Friend {
 	private String id, fullName, avatar;
 
-	public SearchFriend() {
+	public Friend() {
 	}
 
-	public SearchFriend(String id, String fullName, String avatar) {
+	public Friend(String id, String fullName, String avatar) {
 		this.id = id;
 		this.fullName = fullName;
 		this.avatar = avatar;

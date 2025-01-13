@@ -21,6 +21,8 @@ String idUrl = request.getParameter("idUrl");
 String currenUserId = request.getParameter("currenUserId");
 String currentUserName = request.getParameter("currentUserName");
 String currentUserAvatar = request.getParameter("currentUserAvatar");
+String userPageName = request.getParameter("userPageName");
+String userPageAvatar = request.getParameter("userPageAvatar");
 %>
 <body>
 	<%
@@ -49,8 +51,9 @@ String currentUserAvatar = request.getParameter("currentUserAvatar");
 					type="hidden" name="userSentRequestId" value="<%=currenUserId%>"><input
 					type="hidden" name="fullName" value="<%=currentUserName%>">
 				<input type="hidden" name="avatar" value="<%=currentUserAvatar%>">
-
-				<input type="hidden" name="method" value="proccess-adding-friend">
+				<input type="hidden" name="userPageName" value="<%=userPageName%>" />
+				<input type="hidden" name="userPageAvatar" value="<%=userPageAvatar%>" /> <input
+					type="hidden" name="method" value="proccess-adding-friend">
 				<button type="submit" class="btn btn-primary"
 					id="adding-friend-button">
 					<i class="fas fa-user-friends"></i> Thêm bạn bè

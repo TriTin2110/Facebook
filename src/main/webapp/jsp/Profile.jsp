@@ -58,6 +58,9 @@ String currentUserAvatar = currentUser.getAvatar();
 					<jsp:param value="<%=currenUserId%>" name="currenUserId" />
 					<jsp:param value="<%=currentUserName%>" name="currentUserName"/>
 					<jsp:param value="<%= currentUserAvatar%>" name="currentUserAvatar"/>
+					<jsp:param value="<%=profileInformation.getFullName()%>" name="userPageName"/>
+					<jsp:param value="<%=user.getAvatar()%>" name="userPageAvatar"/>
+					
 				</jsp:include>
 			</div>
 			<div class="avt_list_btn">

@@ -8,13 +8,13 @@ import javax.persistence.Query;
 import org.hibernate.Session;
 
 import HibernateUtil.HibernateUtil;
-import Model.SearchFriend;
+import Model.Friend;
 import Model.User;
 
 public class SeacrchFriendDAO {
 	@SuppressWarnings("unchecked")
-	public List<SearchFriend> selectByFullName(String fullName) {
-		List<SearchFriend> SearchFriends = new ArrayList<SearchFriend>();
+	public List<Friend> selectByFullName(String fullName) {
+		List<Friend> SearchFriends = new ArrayList<Friend>();
 		try {
 			String queryStatement = "u.userId, ui.fullName, u.avatar from User u "
 					+ "join UserInformation ui on u.userId = ui.userId " + "where ui.fullName like :fullName";

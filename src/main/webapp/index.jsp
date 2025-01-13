@@ -240,8 +240,6 @@ if(request.getSession().getAttribute("dataSearched") == null)
 			</div>
 		</div>
 	</div>
-
-	<script src="<%=url + "/javascript/index.js"%>" type="text/javascript">
-	</script>
+	<script src="<%=url%>/javascript/index.js" type="text/javascript"></script>
 </body>
 </html>

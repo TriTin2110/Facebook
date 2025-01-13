@@ -92,8 +92,8 @@ public class AnnounceDAO implements InterfaceDAO<Announce> {
 		return announces;
 	}
 
-	public void setUpAnnounce(String idFriend, String idUserSendRequest, String userSendRequestFullName,
-			String userSendRequestAvatar) {
+	public void setUpAnnounce(String idFriend, String idUserSendRequest, String content, String userFullName,
+			String userAvatar, boolean checked) {
 		User toUser = new User();
 		UserDAO userDAO = new UserDAO();
 		toUser.setUserId(idFriend);
@@ -101,9 +101,8 @@ public class AnnounceDAO implements InterfaceDAO<Announce> {
 		List<Announce> announces = toUser.getAnnounces();
 		long dateReceiveRequest = System.currentTimeMillis();
 
-		Announce announce = new Announce(idUserSendRequest + dateReceiveRequest,
-				userSendRequestFullName + " đã gửi lời mời kết bạn dành cho bạn!", userSendRequestFullName,
-				userSendRequestAvatar, toUser, false, dateReceiveRequest);
+		Announce announce = new Announce(idUserSendRequest + dateReceiveRequest, content, userFullName, userAvatar,
+				toUser, checked, dateReceiveRequest);
 		announces.add(announce);
 		toUser.setAnnounces(announces);
 		add(announce);

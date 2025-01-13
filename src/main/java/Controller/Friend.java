@@ -86,20 +86,39 @@ public class Friend extends HttpServlet {
 	}
 
 	private void proccessAddingFriend(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		// TODO Auto-generated method stub
+
 		String idFriend = request.getParameter("userId");
 		String idUserSendRequest = request.getParameter("userSentRequestId");
-		String fullName = request.getParameter("fullName");
+
+		// Thông báo cho người nhận
+		String userNameRequested = request.getParameter("fullName");
 		String avatar = request.getParameter("avatar");
-		sendAddFriendRequest(idFriend, idUserSendRequest, fullName, avatar);
+
+		// Thông báo cho người gửi
+		String userPageName = request.getParameter("userPageName");
+		String userPageAvatar = request.getParameter("userPageAvatar");
+
+		sendAddFriendRequest(idFriend, idUserSendRequest, userNameRequested, avatar);
+		sendAddFriendSelfNotification(idUserSendRequest, idFriend, userNameRequested, userPageName, userPageAvatar);
+
 		request.getRequestDispatcher("/jsp/Profile.jsp?userId=" + idFriend).forward(request, response);
 	}
 
-	private void sendAddFriendRequest(String idFriend, String idUserSendRequest, String fullName, String avatar) {
+	private void sendAddFriendRequest(String idFriend, String idUserSendRequest, String userNameRequested,
+			String avatar) {
 		// TODO Auto-generated method stub
 		// Tạo thông báo mới
 		AnnounceDAO dao = new AnnounceDAO();
-		dao.setUpAnnounce(idFriend, idUserSendRequest, fullName, avatar);
+		dao.setUpAnnounce(idFriend, idUserSendRequest, "đã gửi lời mời kết bạn dành cho bạn!", userNameRequested,
+				avatar, false);
+	}
+
+	private void sendAddFriendSelfNotification(String idFriend, String idUserSendRequest, String userNameRequested,
+			String userPageName, String userPageAvatar) {
+		// TODO Auto-generated method stub
+		AnnounceDAO dao = new AnnounceDAO();
+		dao.setUpAnnounce(idFriend, idUserSendRequest, ". Bạn đã gửi lời mời kết bạn dành cho " + userPageName + "!",
+				userNameRequested, userPageAvatar, true);
 	}
 
 	private void addFriend(HttpServletRequest request, HttpServletResponse response) throws Exception {

@@ -1,3 +1,4 @@
+<%@page import="Model.Announce"%>
 <%@page import="java.util.Set"%>
 <%@page import="java.util.List"%>
 <%@page import="Model.User"%>
@@ -26,6 +27,7 @@ String url = request.getScheme() + "://" + request.getServerName() + ":" + reque
 <%
 List<String> searched = (List<String>) request.getSession().getAttribute("dataSearched");
 User user = (User) session.getAttribute("user");
+List<Announce> annonces = user.getAnnounces();
 request.setCharacterEncoding("UTF-8");
 %>
 <body>
@@ -36,10 +38,9 @@ request.setCharacterEncoding("UTF-8");
 			</div>
 
 			<div class="search">
-				<form action="<%=url%>/Friend" method="get"
-					id="searching-form">
-					<input type="hidden" name="method" value="search">
-					<input type="text" id="search" name="searchedData"
+				<form action="<%=url%>/Friend" method="get" id="searching-form">
+					<input type="hidden" name="method" value="search"> <input
+						type="text" id="search" name="searchedData"
 						placeholder="Tìm kiếm trên BodyBook" autocomplete="off" />
 					<%
 					if (!searched.isEmpty()) {
@@ -82,8 +83,23 @@ request.setCharacterEncoding("UTF-8");
 						class="nm_icon fa-solid fa-ellipsis"></i></a></li>
 				<li class="nm_item"><a href="Messenger.jsp" class="nm_link"><i
 						class="nm_icon fa-solid fa-comments"></i></a></li>
-				<li class="nm_item"><a href="#" class="nm_link"><i
-						class="nm_icon fa-solid fa-bell"></i></a></li>
+				<li class="nm_item"><a href="#" class="nm_link"
+					id="open-notify"> <i class="nm_icon fa-solid fa-bell"></i>
+						<div class="notify_more">
+							<ul>
+							<%
+								for(Announce ann : annonces)
+								{
+							%>
+								<li><a href="#"> <img src="<%=url%>/img/<%=ann.getUserAvatarRequested()%>" alt="">
+										<p>
+											<b><%=ann.getUserNameRequested() %></b> <%=ann.getData()%>
+										</p>
+								</a></li>
+								<%} %>
+							</ul>
+						</div>
+				</a></li>
 				<li class="nm_item"><a href="#" class="nm_link"> <img
 						src="<%=url%>/img/<%=user.getAvatar()%>" alt="" id="open-profile" />
 						<div class="acc_more">
@@ -116,4 +132,5 @@ request.setCharacterEncoding("UTF-8");
 		</div>
 	</div>
 </body>
+<script type="text/javascript" src="<%=url%>/javascript/Header.js"></script>
 </html>

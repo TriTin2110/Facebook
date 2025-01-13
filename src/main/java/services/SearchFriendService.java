@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import DAO.UserDAO;
-import Model.SearchFriend;
+import Model.Friend;
 
 public class SearchFriendService {
-	public List<SearchFriend> getListUser(String dataSearching) {
-		List<SearchFriend> users = new ArrayList<SearchFriend>();
+	public List<Friend> getListUser(String dataSearching) {
+		List<Friend> users = new ArrayList<Friend>();
 		UserDAO dao = new UserDAO();
 		users = dao.selectByFullName(dataSearching);
 		return users;
