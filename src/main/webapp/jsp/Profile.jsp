@@ -166,41 +166,34 @@ String currentUserAvatar = currentUser.getAvatar();
 	integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
 	crossorigin="anonymous"></script>
 
-<script>
-$(document).ready(function() {
-    $('form').on('submit', function(e) {
-        e.preventDefault();
-        var formData = new FormData(this);
-
-        $.ajax({
-            url: '<%=url%>
-	/posting',
-						type : 'POST',
-						data : formData,
-						success : function(response) {
-							alert('Bài viết đã được đăng thành công!');
-							loadPosts();
-							// Reset form sau khi đăng bài thành công
-							$('form')[0].reset();
-						},
-						error : function(xhr, status, error) {
-							alert('Có lỗi xảy ra: ' + error);
-						},
-						cache : false,
-						contentType : false,
-						processData : false
-					});
+	<script>
+		const baseUrl = '<%=url%>'; 
+		
+		$(document).ready(function() {
+			$('form').on('submit', function(e) {
+				e.preventDefault();
+				var formData = new FormData(this);
+		
+				$.ajax({
+					url: baseUrl + '/posting', 
+					type: 'POST',
+					data: formData,
+					success: function(response) {
+						alert('Bài viết đã được đăng thành công!');
+						loadPosts();
+						$('form')[0].reset();
+					},
+					error: function(xhr, status, error) {
+						alert('Có lỗi xảy ra: ' + error);
+					},
+					cache: false,
+					contentType: false,
+					processData: false
 				});
-
-				// Hàm để escape HTML để ngăn chặn XSS
-				function escapeHtml(unsafe) {
-					return unsafe.replace(/&/g, "&amp;").replace(/</g, "&lt;")
-							.replace(/>/g, "&gt;").replace(/"/g, "&quot;")
-							.replace(/'/g, "&#039;");
-				}
-
-				loadPosts(); // Load posts when page loads
 			});
-</script>
+		
+			loadPosts(); 
+		});
+		</script>
 <script src="<%=url%>/js/Profile.js" type="text/javascript"></script>
 </html>
