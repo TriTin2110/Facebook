@@ -1,7 +1,7 @@
 package Controller;
 
 import java.io.IOException;
-import java.sql.Date;
+import java.util.Calendar;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,13 +11,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import DAO.UserDAO;
-import DAO.UserInformationDAO;
+import Interact.UserInformationInteract;
+import Interact.UserInteract;
 import Model.User;
 import Model.UserInformation;
-import util.BcryptUtil;
-import util.PasswordUtils;
 import util.SendingMail;
-import util.Hash.HashUtil;
 
 @WebServlet("/Account")
 public class Account extends HttpServlet {
@@ -52,84 +50,47 @@ public class Account extends HttpServlet {
 		doGet(request, response);
 	}
 
-	@SuppressWarnings({ "removal", "deprecation" })
 	private void singUp(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String email = request.getParameter("email");
-		String password = request.getParameter("matkhau");
-		String lastName = request.getParameter("ho");
-		String firstName = request.getParameter("ten");
-
 		UserDAO userDAO = new UserDAO();
+		UserInteract userInt = new UserInteract(request);
+		UserInformationInteract infoInt = new UserInformationInteract(request);
+
+		String email = request.getParameter("email");
+		User user = userInt.createUser();
 
 		// Mã hóa thông tin đăng nhập
-		String passwordEncrypted = BcryptUtil.hashPassword(password);
-		String emailEncrypted = HashUtil.hashWithSHA256(email);
-		String idUserEncrypted = HashUtil.hashWithSHA256(System.currentTimeMillis() + email);
+		user = userInt.encryptPasswordEmailId(user);
+		UserInformation userInformation = infoInt.createUserInformation(user);
+		user.setUserInformation(userInformation);
 
-		User user = new User(idUserEncrypted, emailEncrypted, passwordEncrypted);
-		user.setAvatar("friend2.jpg");
-		if (getAccountByInputedEmail(userDAO, user) != null) {
+		if (userDAO.selectByEmail(user) != null) {
 			request.setAttribute("error", "Tài khoản đã tồn tại");
+			String[] name = { request.getParameter("ten"), request.getParameter("ho") };
+			gainValueForSignUpForm(request, name, userInformation);
 		} else {
-			UserInformation userInformation = createUserInformation(user, idUserEncrypted, request);
-			UserInformationDAO userInformationDAO = new UserInformationDAO();
-
 			if (addUserSuccess(user, userDAO)) {
-				if (addUserInformationSuccess(userInformation, userInformationDAO)) {
-					String urlEmailConfirm = request.getScheme() + "://" + request.getServerName() + ":"
-							+ request.getServerPort() + request.getContextPath();
-					request.setAttribute("error", "Tạo tài khoản thành công! Vui lòng kiểm tra email đã đăng ký");
-					SendingMail.sendMail(email, userInformation.getFullName(), idUserEncrypted, urlEmailConfirm);
-				} else {
-					request.setAttribute("error", "Tạo tài khoản không thành công");
-					userDAO.remove(user);
-				}
+				String urlEmailConfirm = request.getScheme() + "://" + request.getServerName() + ":"
+						+ request.getServerPort() + request.getContextPath();
+				request.setAttribute("error", "Tạo tài khoản thành công! Vui lòng kiểm tra email đã đăng ký");
+				SendingMail.sendMail(email, userInformation.getFullName(), user.getUserId(), urlEmailConfirm);
 			} else {
 				request.setAttribute("error", "Tạo tài khoản không thành công");
 			}
 
-			String[] name = { firstName, lastName };
-			gainValueForSignUpForm(request, name, userInformation);
 		}
 		getServletContext().getRequestDispatcher("/jsp/LoginPage.jsp").forward(request, response);
-	}
-
-	private User getAccountByInputedEmail(UserDAO userDAO, User user) {
-		return userDAO.selectByEmail(user);
-	}
-
-	@SuppressWarnings({ "deprecation", "removal" })
-	private UserInformation createUserInformation(User user, String idUserEncrypt, HttpServletRequest request) {
-		String lastName = request.getParameter("ho");
-		String firstName = request.getParameter("ten");
-		String dOB = request.getParameter("ngaysinh");
-		String mOB = request.getParameter("thangsinh");
-		String yOB = request.getParameter("namsinh");
-		String gender = request.getParameter("gioitinh");
-
-		UserInformation userInformation = new UserInformation(idUserEncrypt, user, lastName + " " + firstName,
-				new Boolean(gender),
-				new Date(Integer.parseInt(yOB) - 1900, Integer.parseInt(mOB) - 1, Integer.parseInt(dOB)), "", "", "",
-				"", "");
-		return userInformation;
 	}
 
 	private boolean addUserSuccess(User user, UserDAO userDAO) {
 		return (userDAO.add(user) <= 0) ? false : true;
 	}
 
-	private boolean addUserInformationSuccess(UserInformation userInformation, UserInformationDAO userInformationDAO) {
-		return (userInformationDAO.add(userInformation) <= 0) ? false : true;
-	}
-
-	@SuppressWarnings("deprecation")
-	private void gainValueForSignUpForm(HttpServletRequest request, String[] information,
-			UserInformation userInformation) {
-		request.setAttribute("firstName", information[0]);
-		request.setAttribute("lastName", information[1]);
-		request.setAttribute("dOB", userInformation.getDateOfBirth().getDay());
-		request.setAttribute("mOB", userInformation.getDateOfBirth().getMonth());
-		request.setAttribute("yOB", userInformation.getDateOfBirth().getYear());
+	private void gainValueForSignUpForm(HttpServletRequest request, String[] name, UserInformation userInformation) {
+		request.setAttribute("firstName", name[0]);
+		request.setAttribute("lastName", name[1]);
+		request.setAttribute("dOB", userInformation.getDateOfBirth().get(Calendar.DAY_OF_MONTH));
+		request.setAttribute("mOB", userInformation.getDateOfBirth().get(Calendar.MONTH));
+		request.setAttribute("yOB", userInformation.getDateOfBirth().get(Calendar.YEAR));
 		request.setAttribute("gender", userInformation.getGender());
 	}
 
@@ -138,42 +99,32 @@ public class Account extends HttpServlet {
 		request.setCharacterEncoding("UTF-8");
 		response.setCharacterEncoding("UTF-8");
 
+		UserDAO userDAO = new UserDAO();
+		UserInteract userInt = new UserInteract(request);
+
 		String emailInput = request.getParameter("typeEmail");
 		String passwordInput = request.getParameter("typePassword");
-
 		String url = "/jsp/LoginPage.jsp";
+		String userEmailInputEncrypted = userInt.hashEncrypt(emailInput);
 
-		UserDAO userDAO = new UserDAO();
-		String userEmailInputEncrypted = HashUtil.hashWithSHA256(emailInput);
-		User user = getAccountByInputedEmail(userDAO, new User(userEmailInputEncrypted));
+		User user = userDAO.selectByEmail(new User(userEmailInputEncrypted));
 		HttpSession session = request.getSession();
 
 		if (user == null) {
 			request.setAttribute("error", "Email không tồn tại");
 		} else {
+			userInt.setUser(user);
 			// Kiểm tra mật khẩu
-			if (PasswordUtils.checkPassword(passwordInput, user.getPassword())) {
-				if (emailIsConfirmed(userEmailInputEncrypted)) {
-					url = request.getContextPath();
-					session.setAttribute("user", user);
-					response.sendRedirect(url);
-					return;
-				} else {
-					request.setAttribute("error", "Email chưa được xác thực!");
-				}
-			} else {
-				request.setAttribute("error", "Mật khẩu không chính xác");
-			}
+			boolean passwordAndEmailCorrected = userInt.checkingAccount(userEmailInputEncrypted, passwordInput);
+			if (passwordAndEmailCorrected) {
+				url = request.getContextPath();
+				session.setAttribute("user", user);
+				response.sendRedirect(url);
+				return;
+			} else
+				request.setAttribute("error", "Email chưa được xác thực hoặc Mật khẩu không chính xác!");
 		}
 		request.getRequestDispatcher(url).forward(request, response);
-	}
-
-	private boolean emailIsConfirmed(String email) {
-		UserDAO userDAO = new UserDAO();
-		User user = new User();
-		user.setEmail(email);
-		user = userDAO.selectByEmail(user);
-		return user.isIdentifyStatus();
 	}
 
 	private void emailConfirm(HttpServletRequest request, HttpServletResponse response)

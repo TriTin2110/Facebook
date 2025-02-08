@@ -1,3 +1,7 @@
+<%@page import="java.util.Locale"%>
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.util.Date"%>
+<%@page import="java.util.Calendar"%>
 <%@page import="Model.User"%>
 <%@page import="DAO.UserDAO"%>
 <%@page import="DAO.UserInformationDAO"%>
@@ -20,7 +24,12 @@ else
 	userInformation = user.getUserInformation();
 	if (userInformation.isGender()!=null && userInformation.isGender())
 		gender = true;
-	%>
+	Calendar cal = userInformation.getDateOfBirth();
+	int day = cal.get(Calendar.DAY_OF_MONTH);
+	int month = cal.get(Calendar.MONTH);
+	int year = cal.get(Calendar.YEAR);
+	
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -82,7 +91,7 @@ else
 						class="list-group-item content__item d-flex justify-content-between align-items-center">
 						<div>
 							<strong class="item__title">Ngày sinh:</strong>
-							<p class="item__info"><%=userInformation.getDateOfBirth() %></p>
+							<p class="item__info"><%=day+"-"+month+"-"+year%></p>
 						</div>
 						<button class="btn btn-sm" data-bs-toggle="modal"
 							data-bs-target="#dobModal">Sửa</button>

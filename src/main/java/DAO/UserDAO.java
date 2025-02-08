@@ -30,6 +30,7 @@ public class UserDAO implements InterfaceDAO<User> {
 			result = 1;
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
 		} finally {
 			session.close();
 			fac.close();

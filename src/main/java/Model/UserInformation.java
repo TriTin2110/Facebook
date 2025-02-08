@@ -1,6 +1,6 @@
 package Model;
 
-import java.sql.Date;
+import java.util.Calendar;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,7 +20,7 @@ public class UserInformation {
 	private User user;
 	private String fullName;
 	private Boolean gender;
-	private Date dateOfBirth;
+	private Calendar dateOfBirth;
 	private String phoneNumber;
 	private String country;
 	private String homeTown;
@@ -43,9 +43,21 @@ public class UserInformation {
 		this.homeTown = homeTown;
 	}
 
-	public UserInformation(String userId, User user, String fullName, Boolean gender, Date dateOfBirth,
+	public UserInformation(String userId, User user, String fullName, Boolean gender, Calendar dateOfBirth) {
+		this.userId = userId;
+		this.user = user;
+		this.fullName = fullName;
+		this.gender = gender;
+		this.dateOfBirth = dateOfBirth;
+		this.phoneNumber = "";
+		this.country = "";
+		this.homeTown = "";
+		this.workingPlace = "";
+		this.selfDescription = "";
+	}
+
+	public UserInformation(String userId, User user, String fullName, Boolean gender, Calendar dateOfBirth,
 			String phoneNumber, String country, String homeTown, String workingPlace, String selfDescription) {
-		super();
 		this.userId = userId;
 		this.user = user;
 		this.fullName = fullName;
@@ -82,11 +94,11 @@ public class UserInformation {
 		this.gender = gender;
 	}
 
-	public Date getDateOfBirth() {
+	public Calendar getDateOfBirth() {
 		return dateOfBirth;
 	}
 
-	public void setDateOfBirth(Date dateOfBirth) {
+	public void setDateOfBirth(Calendar dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
 	}
 

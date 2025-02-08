@@ -1,5 +1,6 @@
 package Model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -22,7 +23,7 @@ public class User {
 	private boolean identifyStatus;
 	private String avatar;
 
-	@OneToOne(mappedBy = "user", fetch = FetchType.EAGER)
+	@OneToOne(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private UserInformation userInformation;
 	@Lob
 	@Column(length = Integer.MAX_VALUE)
@@ -48,7 +49,14 @@ public class User {
 		this.userId = userId;
 		this.email = email;
 		this.password = password;
+		this.friendQuantity = 0;
+		this.identifyStatus = false;
+		this.avatar = "friend2.jpg";
 		this.listFriendId = "";
+		this.userInformation = new UserInformation();
+		this.listGroup = new ArrayList<Group>();
+		this.listPost = new ArrayList<Post>();
+		this.announces = new ArrayList<Announce>();
 	}
 
 	public User(String userId, String avatar, UserInformation userInformation) {
@@ -59,7 +67,7 @@ public class User {
 
 	public User(String userId, String email, String password, Integer friendQuantity, boolean identifyStatus,
 			String avatar, UserInformation userInformation, String listFriendId, List<Group> listGroup,
-			List<Post> listPost, List<Announce> announce) {
+			List<Post> listPost, List<Announce> announces) {
 		this.userId = userId;
 		this.email = email;
 		this.password = password;

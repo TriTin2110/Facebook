@@ -1,0 +1,79 @@
+package Interact;
+
+import javax.servlet.http.HttpServletRequest;
+
+import DAO.UserDAO;
+import Model.User;
+import util.BcryptUtil;
+import util.PasswordUtils;
+import util.Hash.HashUtil;
+
+public class UserInteract {
+	private HttpServletRequest request;
+	private User user;
+
+	public UserInteract(HttpServletRequest request) {
+		this.request = request;
+	}
+
+	public User createUser() {
+		User user = new User();
+		String email = request.getParameter("email");
+		String password = request.getParameter("matkhau");
+
+		user.setEmail(email);
+		user.setPassword(password);
+
+		return user;
+	}
+
+	public String bcryptEncrypt(String text) {
+		return BcryptUtil.hashPassword(text);
+	}
+
+	public String hashEncrypt(String text) {
+		return HashUtil.hashWithSHA256(text);
+	}
+
+	public User encryptPasswordEmailId(User user) {
+		String passwordEncrypted = bcryptEncrypt(user.getPassword());
+		String emailEncrypted = hashEncrypt(user.getEmail());
+		String idUserEncrypted = HashUtil.hashWithSHA256(System.currentTimeMillis() + user.getEmail());
+
+		user = new User(idUserEncrypted, emailEncrypted, passwordEncrypted);
+		return user;
+	}
+
+	public boolean checkingAccount(String userEmailInputEncrypted, String passwordInput) {
+		boolean passwordIsCorrected = checkingPassword(passwordInput);
+		boolean emailIsCorrected = checkingEmailConfirm(userEmailInputEncrypted);
+		if (!passwordIsCorrected) {
+			return false;
+
+		} else if (!emailIsCorrected) {
+			return false;
+		}
+		return true;
+	}
+
+	private boolean checkingPassword(String passwordInput) {
+		return PasswordUtils.checkPassword(passwordInput, user.getPassword());
+	}
+
+	private boolean checkingEmailConfirm(String email) {
+		UserDAO userDAO = new UserDAO();
+		User user = new User();
+		user.setEmail(email);
+		user = userDAO.selectByEmail(user);
+		return user.isIdentifyStatus();
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+}

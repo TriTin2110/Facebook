@@ -1,7 +1,7 @@
 package Controller;
 
 import java.io.IOException;
-import java.sql.Date;
+import java.util.Calendar;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -69,12 +69,16 @@ public class ChangeInformation extends HttpServlet {
 	private boolean updateDOB(HttpServletRequest request) {
 		// TODO Auto-generated method stub
 		HttpSession session = request.getSession();
-		Date dob = Date.valueOf(request.getParameter("dob"));
-
+		UserInformationDAO userInformationDAO = new UserInformationDAO();
+		String[] dateOfBirth = request.getParameter("dob").split("-");
+		int year = Integer.parseInt(dateOfBirth[0]);
+		int month = Integer.parseInt(dateOfBirth[1]) - 1;
+		int day = Integer.parseInt(dateOfBirth[2]);
+		Calendar dob = Calendar.getInstance();
 		User user = (User) session.getAttribute("user");
 		UserInformation userInformation = user.getUserInformation();
-		UserInformationDAO userInformationDAO = new UserInformationDAO();
 
+		dob.set(year, month, day);
 		userInformation.setDateOfBirth(dob);
 
 		if (userInformationDAO.update(userInformation) == 1) {

@@ -15,26 +15,34 @@ String url = request.getScheme() + "://" + request.getServerName() + ":" + reque
 <title>Insert title here</title>
 </head>
 <%
-	User user = (User) session.getAttribute("user");
+User user = (User) session.getAttribute("user");
 UserDAO userDAO = new UserDAO();
-String[] friendIds = user.getListFriendId().split(";");
+String[] friendIds;
+List<User> friends = new ArrayList<>();
+if(!user.getListFriendId().isBlank())
+{
+	friendIds = user.getListFriendId().split(";");
+	for(String friendId: friendIds)
+	{
+		User friend = new User();
+		friend.setUserId(friendId);
+		friend = userDAO.selectById(friend);
+		friends.add(friend);
+	}
+}
+
 %>
 <body>
 	<div class="friend">
 		<h4>Người liên hệ</h4>
 		<ul>
 		<%
-			
-			for(String friendId: friendIds)
-			{
-				User friend = new User();
-				friend.setUserId(friendId);
-				friend = userDAO.selectById(friend);
-				%>
-					<li><img src="<%=url%>/img/<%=friend.getAvatar()%>"/><span
-					class="name-friend"><%=friend.getUserInformation().getFullName()%></span></li>
-				<%
-			}
+		for(User f : friends){
+			%>
+			<li><img src="<%=url%>/img/<%=f.getAvatar()%>"/><span
+			class="name-friend"><%=f.getUserInformation().getFullName()%></span></li>
+			<%
+		}
 		%>
 		</ul>
 	</div>
