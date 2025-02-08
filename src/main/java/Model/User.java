@@ -45,10 +45,10 @@ public class User {
 		this.email = email;
 	}
 
-	public User(String userId, String email, String password) {
-		this.userId = userId;
+	public User(String email, String password) {
 		this.email = email;
 		this.password = password;
+		this.userId = "";
 		this.friendQuantity = 0;
 		this.identifyStatus = false;
 		this.avatar = "friend2.jpg";

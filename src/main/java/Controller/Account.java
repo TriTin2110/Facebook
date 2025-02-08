@@ -54,35 +54,39 @@ public class Account extends HttpServlet {
 		UserDAO userDAO = new UserDAO();
 		UserInteract userInt = new UserInteract(request);
 		UserInformationInteract infoInt = new UserInformationInteract(request);
+		UserInformation userInformation = null;
+		User user = null;
 
 		String email = request.getParameter("email");
-		User user = userInt.createUser();
+		String notice = "Tạo tài khoản thành công! Vui lòng kiểm tra email đã đăng ký";
+		String firstName = request.getParameter("ten");
+		String lastName = request.getParameter("ho");
+		String urlEmailConfirm = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+				+ request.getContextPath();
 
+		user = userInt.createUser();
 		// Mã hóa thông tin đăng nhập
 		user = userInt.encryptPasswordEmailId(user);
-		UserInformation userInformation = infoInt.createUserInformation(user);
+		userInformation = infoInt.createUserInformation(user);
 		user.setUserInformation(userInformation);
 
 		if (userDAO.selectByEmail(user) != null) {
-			request.setAttribute("error", "Tài khoản đã tồn tại");
-			String[] name = { request.getParameter("ten"), request.getParameter("ho") };
+			notice = "Tài khoản đã tồn tại";
+			request.setAttribute("error", notice);
+			String[] name = { firstName, lastName };
 			gainValueForSignUpForm(request, name, userInformation);
 		} else {
-			if (addUserSuccess(user, userDAO)) {
-				String urlEmailConfirm = request.getScheme() + "://" + request.getServerName() + ":"
-						+ request.getServerPort() + request.getContextPath();
-				request.setAttribute("error", "Tạo tài khoản thành công! Vui lòng kiểm tra email đã đăng ký");
+			boolean addUserSuccess = userDAO.add(user) > 0;
+			if (addUserSuccess) {
+				request.setAttribute("error", notice);
 				SendingMail.sendMail(email, userInformation.getFullName(), user.getUserId(), urlEmailConfirm);
 			} else {
-				request.setAttribute("error", "Tạo tài khoản không thành công");
+				notice = "Tạo tài khoản không thành công";
+				request.setAttribute("error", notice);
 			}
 
 		}
 		getServletContext().getRequestDispatcher("/jsp/LoginPage.jsp").forward(request, response);
-	}
-
-	private boolean addUserSuccess(User user, UserDAO userDAO) {
-		return (userDAO.add(user) <= 0) ? false : true;
 	}
 
 	private void gainValueForSignUpForm(HttpServletRequest request, String[] name, UserInformation userInformation) {
@@ -99,19 +103,21 @@ public class Account extends HttpServlet {
 		request.setCharacterEncoding("UTF-8");
 		response.setCharacterEncoding("UTF-8");
 
-		UserDAO userDAO = new UserDAO();
 		UserInteract userInt = new UserInteract(request);
+		UserDAO userDAO = new UserDAO();
 
 		String emailInput = request.getParameter("typeEmail");
 		String passwordInput = request.getParameter("typePassword");
-		String url = "/jsp/LoginPage.jsp";
 		String userEmailInputEncrypted = userInt.hashEncrypt(emailInput);
+		String notice = "Email chưa được xác thực hoặc Mật khẩu không chính xác!";
+		String url = "/jsp/LoginPage.jsp";
 
 		User user = userDAO.selectByEmail(new User(userEmailInputEncrypted));
 		HttpSession session = request.getSession();
 
 		if (user == null) {
-			request.setAttribute("error", "Email không tồn tại");
+			notice = "Email không tồn tại";
+			request.setAttribute("error", notice);
 		} else {
 			userInt.setUser(user);
 			// Kiểm tra mật khẩu
@@ -120,11 +126,11 @@ public class Account extends HttpServlet {
 				url = request.getContextPath();
 				session.setAttribute("user", user);
 				response.sendRedirect(url);
-				return;
-			} else
-				request.setAttribute("error", "Email chưa được xác thực hoặc Mật khẩu không chính xác!");
+			} else {
+				request.setAttribute("error", notice);
+				request.getRequestDispatcher(url).forward(request, response);
+			}
 		}
-		request.getRequestDispatcher(url).forward(request, response);
 	}
 
 	private void emailConfirm(HttpServletRequest request, HttpServletResponse response)
@@ -133,15 +139,17 @@ public class Account extends HttpServlet {
 		request.setCharacterEncoding("UTF-8");
 		response.setCharacterEncoding("UTF-8");
 
-		String idUser = request.getParameter("iduser");
 		UserDAO userDAO = new UserDAO();
+
+		String idUser = request.getParameter("iduser");
 		User user = userDAO.confirmEmail(idUser);
+		String url = "/jsp/EmailConfirmSuccess.jsp";
 		if (user != null) {
 			request.getSession().setAttribute("user", user);
-			request.getRequestDispatcher("/jsp/EmailConfirmSuccess.jsp").forward(request, response);
+			request.getRequestDispatcher(url).forward(request, response);
 		} else {
-			request.getRequestDispatcher("/jsp/LoginPage.jsp").forward(request, response);
+			url = "/jsp/LoginPage.jsp";
+			request.getRequestDispatcher(url).forward(request, response);
 		}
-
 	}
 }

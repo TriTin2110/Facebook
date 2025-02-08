@@ -21,8 +21,7 @@ public class UserInteract {
 		String email = request.getParameter("email");
 		String password = request.getParameter("matkhau");
 
-		user.setEmail(email);
-		user.setPassword(password);
+		user = new User(email, password);
 
 		return user;
 	}
@@ -40,7 +39,10 @@ public class UserInteract {
 		String emailEncrypted = hashEncrypt(user.getEmail());
 		String idUserEncrypted = HashUtil.hashWithSHA256(System.currentTimeMillis() + user.getEmail());
 
-		user = new User(idUserEncrypted, emailEncrypted, passwordEncrypted);
+		user.setUserId(idUserEncrypted);
+		user.setEmail(emailEncrypted);
+		user.setPassword(passwordEncrypted);
+
 		return user;
 	}
 
