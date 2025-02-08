@@ -24,7 +24,6 @@ public class Account extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	public Account() {
-		super();
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
