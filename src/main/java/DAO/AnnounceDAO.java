@@ -13,12 +13,29 @@ import Model.User;
 
 public class AnnounceDAO implements InterfaceDAO<Announce> {
 
+	private int result;
+	private SessionFactory sessionFactory;
+	private Session session;
+
+	private void openSession() {
+		if (sessionFactory == null || sessionFactory.isClosed() && !session.isOpen()) {
+			this.sessionFactory = HibernateUtil.getSessionFactory();
+			this.session = sessionFactory.openSession();
+		}
+		result = 0;
+	}
+
+	private void closeSession() {
+		if (session.isOpen() && sessionFactory.isOpen()) {
+			this.session.close();
+			this.sessionFactory.close();
+		}
+	}
+
 	@Override
 	public int add(Announce t) {
 		// TODO Auto-generated method stub
-		int result = 1;
-		SessionFactory fac = HibernateUtil.getSessionFactory();
-		Session session = fac.openSession();
+		openSession();
 		Transaction transaction = session.beginTransaction();
 		try {
 			session.save(t);
@@ -29,8 +46,7 @@ public class AnnounceDAO implements InterfaceDAO<Announce> {
 			transaction.rollback();
 			e.printStackTrace();
 		} finally {
-			fac.close();
-			session.close();
+			closeSession();
 		}
 		return result;
 	}
@@ -38,9 +54,7 @@ public class AnnounceDAO implements InterfaceDAO<Announce> {
 	@Override
 	public int remove(Announce t) {
 		// TODO Auto-generated method stub
-		int result = 1;
-		SessionFactory fac = HibernateUtil.getSessionFactory();
-		Session session = fac.openSession();
+		openSession();
 		Transaction transaction = session.beginTransaction();
 		try {
 			session.remove(t);
@@ -50,15 +64,13 @@ public class AnnounceDAO implements InterfaceDAO<Announce> {
 			transaction.rollback();
 			e.printStackTrace();
 		} finally {
-			session.close();
-			fac.close();
+			closeSession();
 		}
 		return result;
 	}
 
 	@Override
 	public int update(Announce t) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
@@ -66,16 +78,14 @@ public class AnnounceDAO implements InterfaceDAO<Announce> {
 	public Announce selectById(Announce t) {
 		// TODO Auto-generated method stub
 		Announce announce = new Announce();
-		SessionFactory fac = HibernateUtil.getSessionFactory();
-		Session session = fac.openSession();
+		openSession();
 		try {
 			announce = session.find(Announce.class, t.getId());
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
 		} finally {
-			session.close();
-			fac.close();
+			closeSession();
 		}
 		return announce;
 	}
@@ -84,11 +94,14 @@ public class AnnounceDAO implements InterfaceDAO<Announce> {
 	public List<Announce> selectAll() {
 		// TODO Auto-generated method stub
 		List<Announce> announces = new ArrayList<Announce>();
-		SessionFactory fac = HibernateUtil.getSessionFactory();
-		Session session = fac.openSession();
-		announces = session.createQuery("from Announce", Announce.class).getResultList();
-		session.close();
-		fac.close();
+		openSession();
+		try {
+			announces = session.createQuery("from Announce", Announce.class).getResultList();
+		} finally {
+			// TODO: handle finally clause
+			closeSession();
+		}
+
 		return announces;
 	}
 
@@ -96,14 +109,17 @@ public class AnnounceDAO implements InterfaceDAO<Announce> {
 			String userAvatar, boolean checked) {
 		User toUser = new User();
 		UserDAO userDAO = new UserDAO();
+
 		toUser.setUserId(idFriend);
 		toUser = userDAO.selectById(toUser);
+
 		List<Announce> announces = toUser.getAnnounces();
 		long dateReceiveRequest = System.currentTimeMillis();
 
 		Announce announce = new Announce(idUserSendRequest + dateReceiveRequest, content, userFullName, userAvatar,
 				toUser, checked, dateReceiveRequest);
 		announces.add(announce);
+
 		toUser.setAnnounces(announces);
 		add(announce);
 	}

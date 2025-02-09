@@ -14,12 +14,29 @@ import Model.Post;
 import Model.User;
 
 public class PostDAO implements InterfaceDAO<Post> {
+	private int result;
+	private SessionFactory sessionFactory;
+	private Session session;
+
+	private void openSession() {
+		if (sessionFactory == null || sessionFactory.isClosed() && !session.isOpen()) {
+			this.sessionFactory = HibernateUtil.getSessionFactory();
+			this.session = sessionFactory.openSession();
+		}
+		result = 0;
+	}
+
+	private void closeSession() {
+		if (session.isOpen() && sessionFactory.isOpen()) {
+			this.session.close();
+			this.sessionFactory.close();
+		}
+	}
+
 	@Override
 	public int add(Post t) {
 		// TODO Auto-generated method stub
-		int result = 0;
-		SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-		Session session = sessionFactory.openSession();
+		openSession();
 		try {
 			Transaction transaction = session.beginTransaction();
 			session.save(t);
@@ -27,18 +44,18 @@ public class PostDAO implements InterfaceDAO<Post> {
 			result = 1;
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
+			result = 0;
+		} finally {
+			closeSession();
 		}
-		session.close();
-		sessionFactory.close();
 		return result;
 	}
 
 	@Override
 	public int remove(Post t) {
 		// TODO Auto-generated method stub
-		int result = 0;
-		SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-		Session session = sessionFactory.openSession();
+		openSession();
 		try {
 			Transaction transaction = session.beginTransaction();
 			session.remove(t);
@@ -46,18 +63,18 @@ public class PostDAO implements InterfaceDAO<Post> {
 			result = 1;
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
+			result = 0;
+		} finally {
+			closeSession();
 		}
-		session.close();
-		sessionFactory.close();
 		return result;
 	}
 
 	@Override
 	public int update(Post t) {
 		// TODO Auto-generated method stub
-		int result = 0;
-		SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-		Session session = sessionFactory.openSession();
+		openSession();
 		try {
 			Transaction transaction = session.beginTransaction();
 			session.update(t);
@@ -65,21 +82,26 @@ public class PostDAO implements InterfaceDAO<Post> {
 			result = 1;
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
+			result = 0;
+		} finally {
+			closeSession();
 		}
-		session.close();
-		sessionFactory.close();
 		return result;
 	}
 
 	public List<Post> getPostsByUser(User user) {
 		List<Post> posts = null;
-		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+		try {
+			openSession();
 			Transaction transaction = session.beginTransaction();
 			posts = session.createQuery("from Post where user = :user order by createdAt desc", Post.class)
 					.setParameter("user", user).list();
 			transaction.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			closeSession();
 		}
 		return posts;
 	}
@@ -99,8 +121,9 @@ public class PostDAO implements InterfaceDAO<Post> {
 	public void exportPostsToSQL(String filePath) {
 		List<Post> posts = selectAll();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-		try (PrintWriter writer = new PrintWriter(new FileWriter(filePath, true))) {
+		PrintWriter writer = null;
+		try {
+			writer = new PrintWriter(new FileWriter(filePath, true));
 			writer.println("LOCK TABLES `post` WRITE;");
 			writer.println("/*!40000 ALTER TABLE `post` DISABLE KEYS */;");
 			writer.println("INSERT INTO `post` VALUES");
@@ -121,18 +144,22 @@ public class PostDAO implements InterfaceDAO<Post> {
 			writer.println("UNLOCK TABLES;");
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			writer.close();
 		}
 	}
 
 	public List<Post> getPostByDateDesc() {
+		List<Post> posts = null;
 		try {
-			Session session = HibernateUtil.getSessionFactory().openSession();
-			List<Post> posts = session.createQuery("from Post order by createdAt desc", Post.class).list();
-			return posts;
+			openSession();
+			posts = session.createQuery("from Post order by createdAt desc", Post.class).list();
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
+		} finally {
+			closeSession();
 		}
-		return null;
+		return posts;
 	}
 }

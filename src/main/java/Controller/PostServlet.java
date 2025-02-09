@@ -31,15 +31,17 @@ import Model.User;
 @WebServlet("/posting")
 @MultipartConfig
 public class PostServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
 	private static final String UPLOAD_DIRECTORY = "uploads";
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		try {
-			PostDAO postDAO = new PostDAO();
-			List<Post> posts = postDAO.getPostByDateDesc();
 			resp.setContentType("application/json");
 			resp.setCharacterEncoding("UTF-8");
+
+			PostDAO postDAO = new PostDAO();
+			List<Post> posts = postDAO.getPostByDateDesc();
 
 			Gson gson = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
 				@Override

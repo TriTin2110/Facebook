@@ -20,19 +20,23 @@ import util.SendingMail;
 @WebServlet("/Account")
 public class Account extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
-	public Account() {
-	}
+	private UserDAO userDAO;
+	private UserInteract userInt;
+	private UserInformationInteract infoInt;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		response.setContentType("text/html");
 		request.setCharacterEncoding("UTF-8");
 		response.setCharacterEncoding("UTF-8");
+
+		createUtil(request);
+
 		String action = request.getParameter("action");
+
 		switch (action) {
 		case "dang-ky":
-			singUp(request, response);
+			signUp(request, response);
 			break;
 
 		case "dang-nhap":
@@ -45,15 +49,18 @@ public class Account extends HttpServlet {
 		}
 	}
 
+	private void createUtil(HttpServletRequest request) {
+		userDAO = new UserDAO();
+		userInt = new UserInteract(request);
+		infoInt = new UserInformationInteract(request);
+	}
+
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		doGet(request, response);
 	}
 
-	private void singUp(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		UserDAO userDAO = new UserDAO();
-		UserInteract userInt = new UserInteract(request);
-		UserInformationInteract infoInt = new UserInformationInteract(request);
+	private void signUp(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		UserInformation userInformation = null;
 		User user = null;
 
@@ -99,13 +106,6 @@ public class Account extends HttpServlet {
 	}
 
 	private void signIn(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.setContentType("text/html");
-		request.setCharacterEncoding("UTF-8");
-		response.setCharacterEncoding("UTF-8");
-
-		UserInteract userInt = new UserInteract(request);
-		UserDAO userDAO = new UserDAO();
-
 		String emailInput = request.getParameter("typeEmail");
 		String passwordInput = request.getParameter("typePassword");
 		String userEmailInputEncrypted = userInt.hashEncrypt(emailInput);
@@ -135,12 +135,6 @@ public class Account extends HttpServlet {
 
 	private void emailConfirm(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		response.setContentType("text/html");
-		request.setCharacterEncoding("UTF-8");
-		response.setCharacterEncoding("UTF-8");
-
-		UserDAO userDAO = new UserDAO();
-
 		String idUser = request.getParameter("iduser");
 		User user = userDAO.confirmEmail(idUser);
 		String url = "/jsp/EmailConfirmSuccess.jsp";

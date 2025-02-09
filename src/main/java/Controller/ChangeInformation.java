@@ -20,25 +20,17 @@ import Model.UserInformation;
 @WebServlet("/ChangeInformation")
 public class ChangeInformation extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private UserInformationDAO userInformationDAO;
+	private HttpSession session;
 
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public ChangeInformation() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		response.setContentType("text/html");
 		response.setCharacterEncoding("UTF-8");
 		request.setCharacterEncoding("UTF-8");
+
+		createUtil(request);
 
 		String action = request.getParameter("update");
 		boolean updateSuccess = false;
@@ -52,6 +44,69 @@ public class ChangeInformation extends HttpServlet {
 			break;
 		}
 
+		notice(updateSuccess, request, response);
+	}
+
+	public void createUtil(HttpServletRequest request) {
+		userInformationDAO = new UserInformationDAO();
+		session = request.getSession();
+	}
+
+	private boolean updateGeneralInformation(HttpServletRequest request) {
+		User user = (User) session.getAttribute("user");
+		UserInformation userInformation = user.getUserInformation();
+		userInformation = setAttributeForUserInformation(request, userInformation);
+
+		boolean updateSucceed = userInformationDAO.update(userInformation) > 0;
+		if (updateSucceed) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	private UserInformation setAttributeForUserInformation(HttpServletRequest request,
+			UserInformation userInformation) {
+		String name = request.getParameter("name");
+		boolean gender = request.getParameter("gender").equals("Nam");
+		String phoneNumber = request.getParameter("phone");
+		String homeTown = request.getParameter("home-town");
+
+		userInformation.setFullName(name);
+		userInformation.setGender(gender);
+		userInformation.setPhoneNumber(phoneNumber);
+		userInformation.setHomeTown(homeTown);
+
+		return userInformation;
+	}
+
+	private boolean updateDOB(HttpServletRequest request) {
+		User user = (User) session.getAttribute("user");
+		UserInformation userInformation = user.getUserInformation();
+		userInformation = setDOBUserInformation(request, userInformation);
+
+		boolean updateSucceed = userInformationDAO.update(userInformation) > 0;
+		if (updateSucceed) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public UserInformation setDOBUserInformation(HttpServletRequest request, UserInformation userInformation) {
+		String[] dateOfBirth = request.getParameter("dob").split("-");
+		int year = Integer.parseInt(dateOfBirth[0]);
+		int month = Integer.parseInt(dateOfBirth[1]) - 1;
+		int day = Integer.parseInt(dateOfBirth[2]);
+		Calendar dob = Calendar.getInstance();
+		dob.set(year, month, day);
+
+		userInformation.setDateOfBirth(dob);
+
+		return userInformation;
+	}
+
+	private void notice(boolean updateSuccess, HttpServletRequest request, HttpServletResponse response) {
 		if (updateSuccess)
 			request.setAttribute("notice", "Cập nhật thành công");
 		else {
@@ -66,56 +121,6 @@ public class ChangeInformation extends HttpServlet {
 		}
 	}
 
-	private boolean updateDOB(HttpServletRequest request) {
-		// TODO Auto-generated method stub
-		HttpSession session = request.getSession();
-		UserInformationDAO userInformationDAO = new UserInformationDAO();
-		String[] dateOfBirth = request.getParameter("dob").split("-");
-		int year = Integer.parseInt(dateOfBirth[0]);
-		int month = Integer.parseInt(dateOfBirth[1]) - 1;
-		int day = Integer.parseInt(dateOfBirth[2]);
-		Calendar dob = Calendar.getInstance();
-		User user = (User) session.getAttribute("user");
-		UserInformation userInformation = user.getUserInformation();
-
-		dob.set(year, month, day);
-		userInformation.setDateOfBirth(dob);
-
-		if (userInformationDAO.update(userInformation) == 1) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	private boolean updateGeneralInformation(HttpServletRequest request) {
-		// TODO Auto-generated method stub
-		HttpSession session = request.getSession();
-		String name = request.getParameter("name");
-		boolean gender = request.getParameter("gender").equals("Nam");
-		String phoneNumber = request.getParameter("phone");
-		String homeTown = request.getParameter("home-town");
-
-		User user = (User) session.getAttribute("user");
-		UserInformation userInformation = user.getUserInformation();
-		UserInformationDAO userInformationDAO = new UserInformationDAO();
-
-		userInformation.setFullName(name);
-		userInformation.setGender(gender);
-		userInformation.setPhoneNumber(phoneNumber);
-		userInformation.setHomeTown(homeTown);
-
-		if (userInformationDAO.update(userInformation) == 1) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub

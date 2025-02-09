@@ -29,4 +29,5 @@ public class UserInformationInteract {
 		UserInformation userInformation = new UserInformation(user.getUserId(), user, fullName, gender, cal);
 		return userInformation;
 	}
+
 }

@@ -1,6 +1,5 @@
 package DAO;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Query;
@@ -14,20 +13,22 @@ import Model.User;
 public class SeacrchFriendDAO {
 	@SuppressWarnings("unchecked")
 	public List<Friend> selectByFullName(String fullName) {
-		List<Friend> SearchFriends = new ArrayList<Friend>();
+		List<Friend> searchFriends = null;
+		Session session = HibernateUtil.getSessionFactory().openSession();
 		try {
-			String queryStatement = "u.userId, ui.fullName, u.avatar from User u "
+			String queryStatement = "select u.userId, ui.fullName, u.avatar from User u "
 					+ "join UserInformation ui on u.userId = ui.userId " + "where ui.fullName like :fullName";
 
-			Session session = HibernateUtil.getSessionFactory().openSession();
 			Query query = session.createQuery(queryStatement, User.class);
 			query.setParameter("fullName", "%" + fullName + "%");
-			SearchFriends = query.getResultList();
-			session.close();
+
+			searchFriends = query.getResultList();
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
+		} finally {
+			session.close();
 		}
-		return SearchFriends;
+		return searchFriends;
 	}
 }

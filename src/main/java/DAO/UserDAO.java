@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
@@ -16,13 +17,29 @@ import Model.Friend;
 import Model.User;
 
 public class UserDAO implements InterfaceDAO<User> {
+	private int result;
+	private SessionFactory sessionFactory;
+	private Session session;
+
+	private void openSession() {
+		if (sessionFactory == null || sessionFactory.isClosed() && !session.isOpen()) {
+			sessionFactory = HibernateUtil.getSessionFactory();
+			session = sessionFactory.openSession();
+		}
+		result = 0;
+	}
+
+	private void closeSession() {
+		if (session.isOpen() && sessionFactory.isOpen()) {
+			this.session.close();
+			this.sessionFactory.close();
+		}
+	}
 
 	@Override
 	public int add(User t) {
 		// TODO Auto-generated method stub
-		int result = 0;
-		SessionFactory fac = HibernateUtil.getSessionFactory();
-		Session session = fac.openSession();
+		openSession();
 		try {
 			Transaction transaction = session.beginTransaction();
 			session.save(t);
@@ -32,8 +49,7 @@ public class UserDAO implements InterfaceDAO<User> {
 			// TODO: handle exception
 			e.printStackTrace();
 		} finally {
-			session.close();
-			fac.close();
+			closeSession();
 		}
 		return result;
 	}
@@ -41,9 +57,7 @@ public class UserDAO implements InterfaceDAO<User> {
 	@Override
 	public int remove(User t) {
 		// TODO Auto-generated method stub
-		int result = 0;
-		SessionFactory fac = HibernateUtil.getSessionFactory();
-		Session session = fac.openSession();
+		openSession();
 		try {
 			Transaction transaction = session.beginTransaction();
 			session.remove(t);
@@ -52,8 +66,7 @@ public class UserDAO implements InterfaceDAO<User> {
 		} catch (Exception e) {
 			// TODO: handle exception
 		} finally {
-			session.close();
-			fac.close();
+			closeSession();
 		}
 		return result;
 	}
@@ -61,9 +74,7 @@ public class UserDAO implements InterfaceDAO<User> {
 	@Override
 	public int update(User t) {
 		// TODO Auto-generated method stub
-		int result = 0;
-		SessionFactory fac = HibernateUtil.getSessionFactory();
-		Session session = fac.openSession();
+		openSession();
 		try {
 			Transaction transaction = session.beginTransaction();
 			session.update(t);
@@ -73,8 +84,7 @@ public class UserDAO implements InterfaceDAO<User> {
 			// TODO: handle exception
 			e.printStackTrace();
 		} finally {
-			session.close();
-			fac.close();
+			closeSession();
 		}
 		return result;
 	}
@@ -82,33 +92,35 @@ public class UserDAO implements InterfaceDAO<User> {
 	@Override
 	public User selectById(User t) {
 		// TODO Auto-generated method stub
-		SessionFactory fac = HibernateUtil.getSessionFactory();
-		Session session = fac.openSession();
+		openSession();
 		User user = new User();
-		user = session.find(User.class, t.getUserId());
-		Hibernate.initialize(user.getListFriendId());
-		Hibernate.initialize(user.getAnnounces());
-		session.close();
-		fac.close();
+		try {
+			user = session.find(User.class, t.getUserId());
+			Hibernate.initialize(user.getAnnounces());
+		} finally {
+			// TODO: handle finally clause
+			closeSession();
+		}
 		return user;
 	}
 
 	@SuppressWarnings("unchecked")
 	public User selectByEmail(User t) {
 		// TODO Auto-generated method stub
-		SessionFactory fac = HibernateUtil.getSessionFactory();
-		Session session = fac.openSession();
-		List<User> result = null;
-		Query query = session.createQuery("from User where email = :email");
-		query.setParameter("email", t.getEmail());
-		result = query.getResultList();
-		User user = (result.isEmpty()) ? null : result.get(0);
-		if (user != null) {
-			Hibernate.initialize(user.getListFriendId());
-			Hibernate.initialize(user.getAnnounces());
+		openSession();
+		User user = null;
+		try {
+			TypedQuery<User> query = session.createQuery("from User where email = :email");
+			query.setParameter("email", t.getEmail());
+			user = query.getSingleResult();
+			if (user != null)
+				Hibernate.initialize(user.getAnnounces());
+		} catch (Exception e) {
+			// TODO: handle exception
+		} finally {
+			closeSession();
 		}
-		session.close();
-		fac.close();
+
 		return user;
 
 	}
@@ -120,13 +132,13 @@ public class UserDAO implements InterfaceDAO<User> {
 	}
 
 	public User confirmEmail(String idUser) {
-		SessionFactory fac = HibernateUtil.getSessionFactory();
-		Session session = fac.openSession();
+		openSession();
+		User user = new User();
 		try {
-			User user = new User();
 			user.setUserId(idUser);
 			user = selectById(user);
 			user.setIdentifyStatus(true);
+
 			Transaction transaction = session.beginTransaction();
 			session.update(user);
 			transaction.commit();
@@ -136,17 +148,16 @@ public class UserDAO implements InterfaceDAO<User> {
 			// TODO: handle exception
 			e.printStackTrace();
 		} finally {
-			session.close();
-			fac.close();
+			closeSession();
 		}
-		return null;
+		return user;
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<Friend> selectByFullName(String fullName) {
 		List<Friend> users = new ArrayList<Friend>();
-		SessionFactory fac = HibernateUtil.getSessionFactory();
-		Session session = fac.openSession();
+
+		openSession();
 		try {
 			String queryStatement = "select new Model.Friend(u.userId, ui.fullName, u.avatar)  from User u "
 					+ "join UserInformation ui on u.userId = ui.userId " + "where ui.fullName like :fullName";
@@ -159,8 +170,7 @@ public class UserDAO implements InterfaceDAO<User> {
 			// TODO: handle exception
 			e.printStackTrace();
 		} finally {
-			session.close();
-			fac.close();
+			closeSession();
 		}
 		return users;
 	}

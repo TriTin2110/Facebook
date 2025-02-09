@@ -7,7 +7,7 @@ import DAO.UserDAO;
 import Model.Friend;
 
 public class SearchFriendService {
-	public List<Friend> getListUser(String dataSearching) {
+	public List<Friend> getUsersByData(String dataSearching) {
 		List<Friend> users = new ArrayList<Friend>();
 		UserDAO dao = new UserDAO();
 		users = dao.selectByFullName(dataSearching);
