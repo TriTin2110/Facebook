@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.Lob;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -25,9 +25,10 @@ public class User {
 
 	@OneToOne(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private UserInformation userInformation;
-	@Lob
-	@Column(length = Integer.MAX_VALUE)
-	private String listFriendId;
+
+	@ManyToMany
+	@JoinTable(name = "user_friend", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "friend_id"))
+	private List<User> listFriendId;
 
 	@ManyToMany(mappedBy = "listMember")
 	private List<Group> listGroup;
@@ -52,7 +53,7 @@ public class User {
 		this.friendQuantity = 0;
 		this.identifyStatus = false;
 		this.avatar = "friend2.jpg";
-		this.listFriendId = "";
+		this.listFriendId = new ArrayList<User>();
 		this.userInformation = new UserInformation();
 		this.listGroup = new ArrayList<Group>();
 		this.listPost = new ArrayList<Post>();
@@ -66,7 +67,7 @@ public class User {
 	}
 
 	public User(String userId, String email, String password, Integer friendQuantity, boolean identifyStatus,
-			String avatar, UserInformation userInformation, String listFriendId, List<Group> listGroup,
+			String avatar, UserInformation userInformation, List<User> listFriendId, List<Group> listGroup,
 			List<Post> listPost, List<Announce> announces) {
 		this.userId = userId;
 		this.email = email;
@@ -121,11 +122,11 @@ public class User {
 		this.friendQuantity = friendQuantity;
 	}
 
-	public String getListFriendId() {
+	public List<User> getListFriendId() {
 		return listFriendId;
 	}
 
-	public void setListFriend(String listFriendId) {
+	public void setListFriend(List<User> listFriendId) {
 		this.listFriendId = listFriendId;
 	}
 
@@ -177,7 +178,7 @@ public class User {
 		this.announces = announces;
 	}
 
-	public void setListFriendId(String listFriendId) {
+	public void setListFriendId(List<User> listFriendId) {
 		this.listFriendId = listFriendId;
 	}
 

@@ -3,6 +3,7 @@ package DAO;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
@@ -22,7 +23,7 @@ public class UserDAO implements InterfaceDAO<User> {
 	private Session session;
 
 	private void openSession() {
-		if (sessionFactory == null || sessionFactory.isClosed() && !session.isOpen()) {
+		if (sessionFactory == null) {
 			sessionFactory = HibernateUtil.getSessionFactory();
 			session = sessionFactory.openSession();
 		}
@@ -30,9 +31,10 @@ public class UserDAO implements InterfaceDAO<User> {
 	}
 
 	private void closeSession() {
-		if (session.isOpen() && sessionFactory.isOpen()) {
-			this.session.close();
-			this.sessionFactory.close();
+		if (sessionFactory != null) {
+			session.close();
+			sessionFactory.close();
+			sessionFactory = null;
 		}
 	}
 
@@ -97,6 +99,7 @@ public class UserDAO implements InterfaceDAO<User> {
 		try {
 			user = session.find(User.class, t.getUserId());
 			Hibernate.initialize(user.getAnnounces());
+			Hibernate.initialize(user.getListFriendId());
 		} finally {
 			// TODO: handle finally clause
 			closeSession();
@@ -113,8 +116,14 @@ public class UserDAO implements InterfaceDAO<User> {
 			TypedQuery<User> query = session.createQuery("from User where email = :email");
 			query.setParameter("email", t.getEmail());
 			user = query.getSingleResult();
-			if (user != null)
+			if (user != null) {
 				Hibernate.initialize(user.getAnnounces());
+				Hibernate.initialize(user.getListFriendId());
+			}
+
+		} catch (NoResultException e) {
+			// TODO: handle exception
+
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -133,13 +142,13 @@ public class UserDAO implements InterfaceDAO<User> {
 	}
 
 	public User confirmEmail(String idUser) {
-		openSession();
 		User user = new User();
-		try {
-			user.setUserId(idUser);
-			user = selectById(user);
-			user.setIdentifyStatus(true);
+		user.setUserId(idUser);
+		user = selectById(user);
+		user.setIdentifyStatus(true);
 
+		openSession();
+		try {
 			Transaction transaction = session.beginTransaction();
 			session.update(user);
 			transaction.commit();
@@ -184,17 +193,15 @@ public class UserDAO implements InterfaceDAO<User> {
 
 		friend.setUserId(friendId);
 		friend = selectById(friend);
-		updateFriend(user.getUserId(), friend);
-		updateUser(friendId, user);
+
+		updateFriend(friend, user);
+		updateFriend(user, friend);
+
 		removeAnnounce(announceId);
 	}
 
-	public void updateFriend(String userId, User friend) {
-		addingFriend(userId, friend);
-	}
-
-	public void updateUser(String friendId, User user) {
-		addingFriend(friendId, user);
+	public void updateFriend(User user, User friend) {
+		addingFriend(friend, user);
 	}
 
 	public void removeAnnounce(String announceId) {
@@ -204,12 +211,12 @@ public class UserDAO implements InterfaceDAO<User> {
 		announceDAO.remove(announce);
 	}
 
-	public void addingFriend(String id, User user) {
-		String listFriend = user.getListFriendId();
-		listFriend += id + ";";
-		user.setListFriend(listFriend);
-		user.setFriendQuantity((user.getFriendQuantity() == null) ? 1 : user.getFriendQuantity() + 1);
-		update(user);
-		user = selectById(user);
+	public void addingFriend(User user1, User user2) {
+		List<User> users = user1.getListFriendId();
+		users.add(user2);
+		user1.setListFriend(users);
+		user1.setFriendQuantity(users.size());
+		update(user1);
+		user1 = selectById(user1);
 	}
 }

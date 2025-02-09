@@ -19,18 +19,9 @@ User user = (User) session.getAttribute("user");
 String[] friendIds;
 List<User> friends;
 friends = (List<User>) request.getSession().getAttribute("listFriend");
-if(friends == null && !user.getListFriendId().isBlank())
+if(friends == null)
 {
-	friends = new ArrayList<>();
-	UserDAO userDAO = new UserDAO();
-	friendIds = user.getListFriendId().split(";");
-	for(String friendId: friendIds)
-	{
-		User friend = new User();
-		friend.setUserId(friendId);
-		friend = userDAO.selectById(friend);
-		friends.add(friend);
-	}
+	friends = user.getListFriendId();
 	request.getSession().setAttribute("listFriend", friends);
 }
 
