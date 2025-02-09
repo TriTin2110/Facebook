@@ -14,6 +14,7 @@ public class Announce {
 	private String data;
 	private String userNameRequested;
 	private String userAvatarRequested;
+	private String typeOfAnnouce;
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User user;
@@ -45,7 +46,7 @@ public class Announce {
 	}
 
 	public Announce(String id, String data, String userNameRequested, String userAvatarRequested, User user,
-			boolean checked, long date) {
+			boolean checked, long date, String typeOfAnnouce) {
 		super();
 		this.id = id;
 		this.data = data;
@@ -54,6 +55,7 @@ public class Announce {
 		this.user = user;
 		this.checked = checked;
 		this.date = date;
+		this.typeOfAnnouce = typeOfAnnouce;
 	}
 
 	public String getId() {
@@ -116,6 +118,14 @@ public class Announce {
 	public String toString() {
 		return "Announce [id=" + id + ", data=" + data + ", user=" + user + ", checked=" + checked + ", date="
 				+ new Date(date) + "]";
+	}
+
+	public String getTypeOfAnnouce() {
+		return typeOfAnnouce;
+	}
+
+	public void setTypeOfAnnouce(String typeOfAnnouce) {
+		this.typeOfAnnouce = typeOfAnnouce;
 	}
 
 }

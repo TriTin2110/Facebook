@@ -5,7 +5,8 @@
       var openAvt = document.getElementById("open-profile");
       var moreProfile = document.querySelector(".acc_more");
       openAvt.addEventListener("click", function(e) {
-        e.preventDefault();
+		  console.log("Đã click")
+		  
         if (moreProfile.style.display == 'none') {
 			moreProfile.style.display = 'none';
          	moreNotify.style.display = 'none';
@@ -13,6 +14,7 @@
           moreProfile.style.display = 'block';
           moreNotify.style.display = 'none';
         }
+        e.preventDefault();
       });
       
       // MỞ THÔNG BÁO

@@ -210,6 +210,7 @@ display: block; /* Hiển thị khi input được focus */
 /* Open Profile Setting */
 #open-profile {
     position: relative;
+    
 }
 
 .acc_more, .notify_more {

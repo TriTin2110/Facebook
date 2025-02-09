@@ -100,8 +100,8 @@ request.setCharacterEncoding("UTF-8");
 							</ul>
 						</div>
 				</a></li>
-				<li class="nm_item"><a href="#" class="nm_link"> <img
-						src="<%=url%>/img/<%=user.getAvatar()%>" alt="" id="open-profile" />
+				<li class="nm_item"><a href="" class="nm_link"> <img
+						src="<%=url%>/img/<%=user.getAvatar()%>" id="open-profile" />
 						<div class="acc_more">
 							<ul>
 								<li><a href="<%=url%>/jsp/Profile.jsp"> <img

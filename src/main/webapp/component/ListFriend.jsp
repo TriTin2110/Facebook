@@ -16,9 +16,7 @@ String url = request.getScheme() + "://" + request.getServerName() + ":" + reque
 </head>
 <%
 User user = (User) session.getAttribute("user");
-String[] friendIds;
-List<User> friends;
-friends = (List<User>) request.getSession().getAttribute("listFriend");
+List<User> friends = (List<User>) request.getSession().getAttribute("listFriend");
 if(friends == null)
 {
 	friends = user.getListFriendId();

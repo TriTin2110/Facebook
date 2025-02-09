@@ -11,8 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import DAO.AnnounceDAO;
 import DAO.UserDAO;
+import Model.Announce;
 import Model.User;
 import services.SearchFriendService;
 
@@ -23,7 +23,6 @@ import services.SearchFriendService;
 public class Friend extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private HttpSession session;
-	private AnnounceDAO dao;
 
 	public Friend() {
 	}
@@ -65,7 +64,6 @@ public class Friend extends HttpServlet {
 
 	private void createUtil(HttpServletRequest request) {
 		session = request.getSession();
-		dao = new AnnounceDAO();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -92,36 +90,69 @@ public class Friend extends HttpServlet {
 
 	private void proccessAddingFriend(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-		String idFriend = request.getParameter("userId");
-		String idUserSendRequest = request.getParameter("userSentRequestId");
-		// Thông báo cho người nhận
-		String userNameRequested = request.getParameter("fullName");
-		String avatar = request.getParameter("avatar");
-		// Thông báo cho người gửi
-		String userPageName = request.getParameter("userPageName");
-		String userPageAvatar = request.getParameter("userPageAvatar");
-		String url = "/jsp/Profile.jsp?userId=" + idFriend;
+		String idReceiver = request.getParameter("userId");
+		String idSender = request.getParameter("userSentRequestId");
+		String url = "/jsp/Profile.jsp?userId=" + idReceiver;
 
-		sendAddFriendRequest(idFriend, idUserSendRequest, userNameRequested, avatar);
-		sendAddFriendSelfNotification(idUserSendRequest, idFriend, userNameRequested, userPageName, userPageAvatar);
+		User receiver = createAnnouceForReceiver(request, idReceiver);
+		User sender = createAnnouceForSender(request, idSender);
+
+		UserDAO userDAO = new UserDAO();
+		userDAO.update(receiver);
+		userDAO.update(sender);
 
 		request.getRequestDispatcher(url).forward(request, response);
 	}
 
-	private void sendAddFriendRequest(String idFriend, String idUserSendRequest, String userNameRequested,
-			String avatar) {
-		// Tạo thông báo mới
-		String message = "đã gửi lời mời kết bạn dành cho bạn!";
-		boolean checked = false;
-		dao.setUpAnnounce(idFriend, idUserSendRequest, message, userNameRequested, avatar, checked);
+	private User createAnnouceForReceiver(HttpServletRequest request, String idReceiver) {
+		// Thông báo cho người nhận
+		String userNameRequested = request.getParameter("fullName");
+		String avatar = request.getParameter("avatar");
+		String message = userNameRequested + " đã gửi lời mời kết bạn dành cho bạn!";
+		String typeOfAnnouce = "FR";
+
+		User receiver = updateAnnouceForUser(request, message, typeOfAnnouce, idReceiver, avatar);
+		return receiver;
 	}
 
-	private void sendAddFriendSelfNotification(String idFriend, String idUserSendRequest, String userNameRequested,
-			String userPageName, String userPageAvatar) {
-		// TODO Auto-generated method stub
+	private User createAnnouceForSender(HttpServletRequest request, String idSender) {
+		// Thông báo cho người nhận
+		String userPageName = request.getParameter("userPageName");
 		String message = ". Bạn đã gửi lời mời kết bạn dành cho " + userPageName + "!";
-		boolean checked = true;
-		dao.setUpAnnounce(idFriend, idUserSendRequest, message, userNameRequested, userPageAvatar, checked);
+		String typeOfAnnouce = "SN";
+		String avatar = request.getParameter("userPageAvatar");
+
+		User sender = updateAnnouceForUser(request, message, typeOfAnnouce, idSender, avatar);
+		return sender;
+	}
+
+	private User updateAnnouceForUser(HttpServletRequest request, String message, String typeOfAnnouce, String idUser,
+			String avatar) {
+		UserDAO userDAO = new UserDAO();
+		// Thông báo cho người nhận
+		String userNameRequested = request.getParameter("fullName");
+
+		boolean checked = false;
+		long dateReceiveRequest = System.currentTimeMillis();
+
+		User user = new User();
+		user.setUserId(idUser);
+		user = userDAO.selectById(user);
+
+		Announce senderAnnouce = createAnnouce(idUser, message, userNameRequested, avatar, typeOfAnnouce, user, checked,
+				dateReceiveRequest);
+		List<Announce> announces = user.getAnnounces();
+		announces.add(senderAnnouce);
+		user.setAnnounces(announces);
+		return user;
+	}
+
+	private Announce createAnnouce(String idUserSendRequest, String content, String nameUserRequested,
+			String avatarUserRequested, String typeOfNotice, User toUser, boolean checked, long dateReceiveRequest) {
+
+		Announce announce = new Announce(idUserSendRequest + dateReceiveRequest, content, nameUserRequested,
+				avatarUserRequested, toUser, checked, dateReceiveRequest, typeOfNotice);
+		return announce;
 	}
 
 	private void acceptingAddFriend(HttpServletRequest request, HttpServletResponse response) throws Exception {

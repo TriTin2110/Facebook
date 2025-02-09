@@ -9,7 +9,6 @@ import org.hibernate.Transaction;
 
 import HibernateUtil.HibernateUtil;
 import Model.Announce;
-import Model.User;
 
 public class AnnounceDAO implements InterfaceDAO<Announce> {
 
@@ -105,22 +104,4 @@ public class AnnounceDAO implements InterfaceDAO<Announce> {
 		return announces;
 	}
 
-	public void setUpAnnounce(String idFriend, String idUserSendRequest, String content, String userFullName,
-			String userAvatar, boolean checked) {
-		User toUser = new User();
-		UserDAO userDAO = new UserDAO();
-
-		toUser.setUserId(idFriend);
-		toUser = userDAO.selectById(toUser);
-
-		List<Announce> announces = toUser.getAnnounces();
-		long dateReceiveRequest = System.currentTimeMillis();
-
-		Announce announce = new Announce(idUserSendRequest + dateReceiveRequest, content, userFullName, userAvatar,
-				toUser, checked, dateReceiveRequest);
-		announces.add(announce);
-
-		toUser.setAnnounces(announces);
-		add(announce);
-	}
 }

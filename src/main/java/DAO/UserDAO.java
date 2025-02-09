@@ -204,13 +204,6 @@ public class UserDAO implements InterfaceDAO<User> {
 		addingFriend(friend, user);
 	}
 
-	public void removeAnnounce(String announceId) {
-		AnnounceDAO announceDAO = new AnnounceDAO();
-		System.out.println(announceId);
-		Announce announce = announceDAO.selectById(new Announce(announceId));
-		announceDAO.remove(announce);
-	}
-
 	public void addingFriend(User user1, User user2) {
 		List<User> users = user1.getListFriendId();
 		users.add(user2);
@@ -219,4 +212,12 @@ public class UserDAO implements InterfaceDAO<User> {
 		update(user1);
 		user1 = selectById(user1);
 	}
+
+	public void removeAnnounce(String announceId) {
+		AnnounceDAO announceDAO = new AnnounceDAO();
+		System.out.println(announceId);
+		Announce announce = announceDAO.selectById(new Announce(announceId));
+		announceDAO.remove(announce);
+	}
+
 }

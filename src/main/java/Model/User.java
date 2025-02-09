@@ -36,7 +36,7 @@ public class User {
 	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
 	private List<Post> listPost;
 
-	@OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private List<Announce> announces;
 
 	public User() {

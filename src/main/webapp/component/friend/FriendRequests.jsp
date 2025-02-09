@@ -20,14 +20,16 @@ SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
 	<%
 	if (announces != null && !announces.isEmpty()) {
 		for (Announce announce : announces) {
+			if (announce.getTypeOfAnnouce().equals("FR")) {
 	%>
 	<div class="newfriend">
-		<img src="<%=url + "/img/" + announce.getUserAvatarRequested()%>" alt=""
-			class="nf-avt" />
+		<img src="<%=url + "/img/" + announce.getUserAvatarRequested()%>"
+			alt="" class="nf-avt" />
 		<div class="nf-information">
 			<div class="name-acpt">
 				<h5><%=announce.getUserNameRequested()%></h5>
-				<a href="<%=url%>/Friend?method=add&friendId=<%=announce.getId()%>">Xác nhận</a>
+				<a href="<%=url%>/Friend?method=add&friendId=<%=announce.getId()%>">Xác
+					nhận</a>
 			</div>
 			<div class="time-refuse">
 				<h6><%=df.format(new Date(announce.getDate()))%></h6>
@@ -36,6 +38,7 @@ SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
 		</div>
 	</div>
 	<%
+	}
 	}
 	}
 	%>
