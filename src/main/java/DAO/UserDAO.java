@@ -117,6 +117,7 @@ public class UserDAO implements InterfaceDAO<User> {
 				Hibernate.initialize(user.getAnnounces());
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
 		} finally {
 			closeSession();
 		}

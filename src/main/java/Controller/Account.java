@@ -121,7 +121,7 @@ public class Account extends HttpServlet {
 		} else {
 			userInt.setUser(user);
 			// Kiểm tra mật khẩu
-			boolean passwordAndEmailCorrected = userInt.checkingAccount(userEmailInputEncrypted, passwordInput);
+			boolean passwordAndEmailCorrected = userInt.checkingAccount(passwordInput);
 			if (passwordAndEmailCorrected) {
 				url = request.getContextPath();
 				session.setAttribute("user", user);

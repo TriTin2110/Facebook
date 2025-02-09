@@ -19,7 +19,7 @@
 			</span> <span> <i class="fa-solid fa-face-flushed color_face emotion"
 				data-emotion="Rìa lí man"></i>
 			</span>
-			<spanhá"> <i
+			<span> <i
 				class="fa-solid fa-face-grin-tongue-squint color_face emotion"
 				data-emotion="Há há"></i> </span> <span"> <i
 				class="fa-solid fa-face-sad-cry color_face emotion"

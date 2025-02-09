@@ -2,7 +2,6 @@ package Interact;
 
 import javax.servlet.http.HttpServletRequest;
 
-import DAO.UserDAO;
 import Model.User;
 import util.BcryptUtil;
 import util.PasswordUtils;
@@ -46,9 +45,9 @@ public class UserInteract {
 		return user;
 	}
 
-	public boolean checkingAccount(String userEmailInputEncrypted, String passwordInput) {
+	public boolean checkingAccount(String passwordInput) {
 		boolean passwordIsCorrected = checkingPassword(passwordInput);
-		boolean emailIsCorrected = checkingEmailConfirm(userEmailInputEncrypted);
+		boolean emailIsCorrected = user.isIdentifyStatus();
 		if (!passwordIsCorrected) {
 			return false;
 
@@ -60,14 +59,6 @@ public class UserInteract {
 
 	private boolean checkingPassword(String passwordInput) {
 		return PasswordUtils.checkPassword(passwordInput, user.getPassword());
-	}
-
-	private boolean checkingEmailConfirm(String email) {
-		UserDAO userDAO = new UserDAO();
-		User user = new User();
-		user.setEmail(email);
-		user = userDAO.selectByEmail(user);
-		return user.isIdentifyStatus();
 	}
 
 	public User getUser() {

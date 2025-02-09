@@ -16,11 +16,13 @@ String url = request.getScheme() + "://" + request.getServerName() + ":" + reque
 </head>
 <%
 User user = (User) session.getAttribute("user");
-UserDAO userDAO = new UserDAO();
 String[] friendIds;
-List<User> friends = new ArrayList<>();
-if(!user.getListFriendId().isBlank())
+List<User> friends;
+friends = (List<User>) request.getSession().getAttribute("listFriend");
+if(friends == null && !user.getListFriendId().isBlank())
 {
+	friends = new ArrayList<>();
+	UserDAO userDAO = new UserDAO();
 	friendIds = user.getListFriendId().split(";");
 	for(String friendId: friendIds)
 	{
@@ -29,6 +31,7 @@ if(!user.getListFriendId().isBlank())
 		friend = userDAO.selectById(friend);
 		friends.add(friend);
 	}
+	request.getSession().setAttribute("listFriend", friends);
 }
 
 %>
