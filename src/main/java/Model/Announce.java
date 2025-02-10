@@ -2,24 +2,31 @@ package Model;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Announce {
 	@Id
 	private String id;
-	private String data;
+	private String message;
 	private String userNameRequested;
 	private String userAvatarRequested;
 	private String typeOfAnnouce;
+	private boolean checked;
+	private long date;
+
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User user;
-	private boolean checked;
-	private long date;
+
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "annouce_for_sender_id")
+	private Announce annouce;
 
 	public Announce() {
 	}
@@ -29,27 +36,27 @@ public class Announce {
 		this.id = id;
 	}
 
-	public Announce(String id, String data, boolean checked, long date) {
+	public Announce(String id, String message, boolean checked, long date) {
 		this.id = id;
-		this.data = data;
+		this.message = message;
 		this.checked = checked;
 		this.date = date;
 	}
 
-	public Announce(String id, String data, User user, boolean checked, long date) {
+	public Announce(String id, String message, User user, boolean checked, long date) {
 		super();
 		this.id = id;
-		this.data = data;
+		this.message = message;
 		this.user = user;
 		this.checked = checked;
 		this.date = date;
 	}
 
-	public Announce(String id, String data, String userNameRequested, String userAvatarRequested, User user,
+	public Announce(String id, String message, String userNameRequested, String userAvatarRequested, User user,
 			boolean checked, long date, String typeOfAnnouce) {
 		super();
 		this.id = id;
-		this.data = data;
+		this.message = message;
 		this.userNameRequested = userNameRequested;
 		this.userAvatarRequested = userAvatarRequested;
 		this.user = user;
@@ -66,12 +73,12 @@ public class Announce {
 		this.id = id;
 	}
 
-	public String getData() {
-		return data;
+	public String getMessage() {
+		return message;
 	}
 
-	public void setData(String data) {
-		this.data = data;
+	public void setMessage(String message) {
+		this.message = message;
 	}
 
 	public User getUser() {
@@ -116,7 +123,7 @@ public class Announce {
 
 	@Override
 	public String toString() {
-		return "Announce [id=" + id + ", data=" + data + ", user=" + user + ", checked=" + checked + ", date="
+		return "Announce [id=" + id + ", message=" + message + ", user=" + user + ", checked=" + checked + ", date="
 				+ new Date(date) + "]";
 	}
 
@@ -126,6 +133,14 @@ public class Announce {
 
 	public void setTypeOfAnnouce(String typeOfAnnouce) {
 		this.typeOfAnnouce = typeOfAnnouce;
+	}
+
+	public Announce getAnnouce() {
+		return annouce;
+	}
+
+	public void setAnnouce(Announce annouce) {
+		this.annouce = annouce;
 	}
 
 }

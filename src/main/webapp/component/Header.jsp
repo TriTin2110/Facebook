@@ -93,7 +93,7 @@ request.setCharacterEncoding("UTF-8");
 							%>
 								<li><a href="#"> <img src="<%=url%>/img/<%=ann.getUserAvatarRequested()%>" alt="">
 										<p>
-											<b><%=ann.getUserNameRequested() %></b> <%=ann.getData()%>
+											<%=ann.getMessage()%>
 										</p>
 								</a></li>
 								<%} %>

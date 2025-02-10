@@ -12,8 +12,8 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 public class SendingMail {
-	static final String from = "minhtrietpro8@gmail.com";
-	static final String password = "itrjdkdydkllbdgr";
+	private static final String from = "minhtrietpro8@gmail.com";
+	private static final String password = "itrjdkdydkllbdgr";
 
 	public static void sendMail(String email, String fullName, String userId, String url) {
 		String css = "/css/emailAnnounce.css";

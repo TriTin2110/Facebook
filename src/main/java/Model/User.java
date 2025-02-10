@@ -19,7 +19,6 @@ public class User {
 	private String userId;
 	private String email;
 	private String password;
-	private Integer friendQuantity;
 	private boolean identifyStatus;
 	private String avatar;
 
@@ -28,7 +27,7 @@ public class User {
 
 	@ManyToMany
 	@JoinTable(name = "user_friend", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "friend_id"))
-	private List<User> listFriendId;
+	private List<User> listFriend;
 
 	@ManyToMany(mappedBy = "listMember")
 	private List<Group> listGroup;
@@ -50,10 +49,9 @@ public class User {
 		this.email = email;
 		this.password = password;
 		this.userId = "";
-		this.friendQuantity = 0;
 		this.identifyStatus = false;
 		this.avatar = "friend2.jpg";
-		this.listFriendId = new ArrayList<User>();
+		this.listFriend = new ArrayList<User>();
 		this.userInformation = new UserInformation();
 		this.listGroup = new ArrayList<Group>();
 		this.listPost = new ArrayList<Post>();
@@ -66,17 +64,16 @@ public class User {
 		this.userInformation = userInformation;
 	}
 
-	public User(String userId, String email, String password, Integer friendQuantity, boolean identifyStatus,
-			String avatar, UserInformation userInformation, List<User> listFriendId, List<Group> listGroup,
-			List<Post> listPost, List<Announce> announces) {
+	public User(String userId, String email, String password, boolean identifyStatus, String avatar,
+			UserInformation userInformation, List<User> listFriendId, List<Group> listGroup, List<Post> listPost,
+			List<Announce> announces) {
 		this.userId = userId;
 		this.email = email;
 		this.password = password;
-		this.friendQuantity = friendQuantity;
 		this.identifyStatus = identifyStatus;
 		this.avatar = avatar;
 		this.userInformation = userInformation;
-		this.listFriendId = listFriendId;
+		this.listFriend = listFriendId;
 		this.listGroup = listGroup;
 		this.listPost = listPost;
 		this.announces = announces;
@@ -114,20 +111,12 @@ public class User {
 		this.password = password;
 	}
 
-	public Integer getFriendQuantity() {
-		return friendQuantity;
+	public List<User> getListFriend() {
+		return listFriend;
 	}
 
-	public void setFriendQuantity(Integer friendQuantity) {
-		this.friendQuantity = friendQuantity;
-	}
-
-	public List<User> getListFriendId() {
-		return listFriendId;
-	}
-
-	public void setListFriend(List<User> listFriendId) {
-		this.listFriendId = listFriendId;
+	public void setListFriend(List<User> listFriend) {
+		this.listFriend = listFriend;
 	}
 
 	public String getAvatar() {
@@ -178,13 +167,9 @@ public class User {
 		this.announces = announces;
 	}
 
-	public void setListFriendId(List<User> listFriendId) {
-		this.listFriendId = listFriendId;
-	}
-
 	@Override
 	public String toString() {
-		return "User [userId=" + userId + ", email=" + email + ", password=" + password + ", friendQuantity="
-				+ friendQuantity + ", identifyStatus=" + identifyStatus + ", avatar=" + avatar + "]";
+		return "User [userId=" + userId + ", email=" + email + ", password=" + password + ", identifyStatus="
+				+ identifyStatus + ", avatar=" + avatar + "]";
 	}
 }

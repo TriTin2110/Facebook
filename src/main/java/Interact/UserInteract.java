@@ -3,8 +3,7 @@ package Interact;
 import javax.servlet.http.HttpServletRequest;
 
 import Model.User;
-import util.BcryptUtil;
-import util.PasswordUtils;
+import util.PasswordBcrypt;
 import util.Hash.HashUtil;
 
 public class UserInteract {
@@ -26,7 +25,7 @@ public class UserInteract {
 	}
 
 	public String bcryptEncrypt(String text) {
-		return BcryptUtil.hashPassword(text);
+		return PasswordBcrypt.hashPassword(text);
 	}
 
 	public String hashEncrypt(String text) {
@@ -48,17 +47,15 @@ public class UserInteract {
 	public boolean checkingAccount(String passwordInput) {
 		boolean passwordIsCorrected = checkingPassword(passwordInput);
 		boolean emailIsCorrected = user.isIdentifyStatus();
-		if (!passwordIsCorrected) {
+		if (!passwordIsCorrected || !emailIsCorrected) {
 			return false;
 
-		} else if (!emailIsCorrected) {
-			return false;
 		}
 		return true;
 	}
 
 	private boolean checkingPassword(String passwordInput) {
-		return PasswordUtils.checkPassword(passwordInput, user.getPassword());
+		return PasswordBcrypt.checkPassword(passwordInput, user.getPassword());
 	}
 
 	public User getUser() {

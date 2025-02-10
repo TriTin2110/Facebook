@@ -19,7 +19,7 @@ User user = (User) session.getAttribute("user");
 List<User> friends = (List<User>) request.getSession().getAttribute("listFriend");
 if(friends == null)
 {
-	friends = user.getListFriendId();
+	friends = user.getListFriend();
 	request.getSession().setAttribute("listFriend", friends);
 }
 

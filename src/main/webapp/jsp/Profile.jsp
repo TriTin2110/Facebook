@@ -30,6 +30,7 @@ String idUrl = request.getParameter("userId") + "";
 String currenUserId = currentUser.getUserId();
 String currentUserName = currentUser.getUserInformation().getFullName();
 String currentUserAvatar = currentUser.getAvatar();
+int friendQuanlity = user.getListFriend().size();
 %>
 <body>
 	<div class="app">
@@ -48,7 +49,7 @@ String currentUserAvatar = currentUser.getAvatar();
 					</div>
 					<div class="info">
 						<h1 class="name"><%=profileInformation.getFullName()%></h1>
-						<a href="#" class="number_friend">Số lương bạn: <%=user.getFriendQuantity()%></a>
+						<a href="#" class="number_friend">Số lương bạn: <%=friendQuanlity%></a>
 					</div>
 				</div>
 

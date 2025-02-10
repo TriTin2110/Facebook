@@ -111,7 +111,6 @@ public class Account extends HttpServlet {
 		String userEmailInputEncrypted = userInt.hashEncrypt(emailInput);
 		String notice = "Email chưa được xác thực hoặc Mật khẩu không chính xác!";
 		String url = "/jsp/LoginPage.jsp";
-
 		User user = userDAO.selectByEmail(new User(userEmailInputEncrypted));
 		HttpSession session = request.getSession();
 
@@ -126,11 +125,12 @@ public class Account extends HttpServlet {
 				url = request.getContextPath();
 				session.setAttribute("user", user);
 				response.sendRedirect(url);
+				return;
 			} else {
 				request.setAttribute("error", notice);
-				request.getRequestDispatcher(url).forward(request, response);
 			}
 		}
+		request.getRequestDispatcher(url).forward(request, response);
 	}
 
 	private void emailConfirm(HttpServletRequest request, HttpServletResponse response)
