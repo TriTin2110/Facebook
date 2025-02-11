@@ -3,6 +3,8 @@ package DAO;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.TypedQuery;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -104,4 +106,18 @@ public class AnnounceDAO implements InterfaceDAO<Announce> {
 		return announces;
 	}
 
+	public List<Announce> selectAnnoucesByUserId(String id) {
+		List<Announce> announces = new ArrayList<Announce>();
+		openSession();
+		try {
+			TypedQuery<Announce> query = session.createQuery("from Announce where user_id=:id", Announce.class);
+			query.setParameter("id", id);
+			announces = query.getResultList();
+		} finally {
+			// TODO: handle finally clause
+			closeSession();
+		}
+
+		return announces;
+	}
 }

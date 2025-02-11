@@ -13,7 +13,7 @@ import javax.persistence.OneToMany;
 @Entity
 public class Post {
 	@ManyToOne
-	@JoinColumn(name = "by_user")
+	@JoinColumn(name = "user_id")
 	private User user;
 	@Id
 	private String postId;

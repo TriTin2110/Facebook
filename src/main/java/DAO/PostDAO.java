@@ -5,6 +5,8 @@ import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+import javax.persistence.TypedQuery;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -154,6 +156,22 @@ public class PostDAO implements InterfaceDAO<Post> {
 		try {
 			openSession();
 			posts = session.createQuery("from Post order by createdAt desc", Post.class).list();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		} finally {
+			closeSession();
+		}
+		return posts;
+	}
+
+	public List<Post> selectAllPostByUserId(String id) {
+		List<Post> posts = null;
+		try {
+			openSession();
+			TypedQuery<Post> query = session.createQuery("from Post where user_id=:id", Post.class);
+			query.setParameter("id", id);
+			posts = query.getResultList();
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();

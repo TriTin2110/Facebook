@@ -1,3 +1,4 @@
+<%@page import="DAO.AnnounceDAO"%>
 <%@page import="Model.Announce"%>
 <%@page import="java.util.HashSet"%>
 <%@page import="java.util.ArrayList"%>
@@ -38,6 +39,9 @@ if(request.getSession().getAttribute("dataSearched") == null)
 </head>
 <%@include file="../component/AuthenticateUser.jsp" %>
 <%
+	AnnounceDAO annouceDAO = new AnnounceDAO();
+	List<Announce> announces = annouceDAO.selectAnnoucesByUserId(user.getUserId());
+	user.setAnnounces(announces);
 	request.setAttribute("announces", user.getAnnounces());
 %>
 <body>

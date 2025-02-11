@@ -116,7 +116,11 @@ int friendQuanlity = user.getListFriend().size();
 				<div id="postList">
 					<!-- Danh sách bài viết sẽ được thêm vào đây -->
 				</div>
-				<jsp:include page="/component/PostContent.jsp"></jsp:include>
+				<jsp:include page="/component/PostContent.jsp">
+				<jsp:param value="<%=idUrl%>" name="userId"/>
+					<jsp:param value="<%=user.getUserInformation().getFullName() %>" name="userFullName"/>
+					<jsp:param value="<%=user.getAvatar() %>" name="userAvatar"/>
+				</jsp:include>
 			</div>
 		</div>
 	</div>

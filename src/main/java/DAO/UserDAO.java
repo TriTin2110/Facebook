@@ -6,6 +6,9 @@ import java.util.List;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
@@ -116,11 +119,6 @@ public class UserDAO implements InterfaceDAO<User> {
 			TypedQuery<User> query = session.createQuery("from User where email = :email");
 			query.setParameter("email", t.getEmail());
 			user = query.getSingleResult();
-			if (user != null) {
-				Hibernate.initialize(user.getAnnounces());
-				Hibernate.initialize(user.getListFriend());
-			}
-
 		} catch (NoResultException e) {
 			// TODO: handle exception
 
@@ -229,4 +227,21 @@ public class UserDAO implements InterfaceDAO<User> {
 		return user1;
 	}
 
+	public List<User> selectFriendsByUserId(String userId) {
+		List<User> users = new ArrayList<User>();
+
+		openSession();
+
+		Transaction transaction = session.beginTransaction();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<User> query = builder.createQuery(User.class);
+		Root<User> root = query.from(User.class);
+		query.where(builder.equal(root.get("userId"), userId));
+		session.createQuery(query).getResultList().forEach(o -> users.add(o));
+		transaction.commit();
+
+		closeSession();
+
+		return users;
+	}
 }

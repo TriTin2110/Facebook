@@ -1,3 +1,4 @@
+<%@page import="DAO.PostDAO"%>
 <%@page import="java.util.Locale"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.sql.Date"%>
@@ -14,13 +15,21 @@
 <title>Insert title here</title>
 </head>
 <%
+PostDAO postDAO = new PostDAO();
+
 String url = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 		+ request.getContextPath();
 String pattern = "EEE, dd MMMM yyyy";
 Locale locale = new Locale("vi", "vn");
 SimpleDateFormat df = new SimpleDateFormat(pattern, locale);
-User user = (User) request.getAttribute("postContent");
-List<Post> posts = user.getListPost();
+String userFullName = request.getParameter("userFullName");
+String userAvatar = request.getParameter("userAvatar");
+String userId = request.getParameter("userId");
+
+//User user = (User) request.getAttribute("postContent");
+
+List<Post> posts = postDAO.selectAllPostByUserId(userId);
+
 %>
 <body>
 	<%
@@ -34,9 +43,9 @@ List<Post> posts = user.getListPost();
 	%>
 	<div class="post_content">
 		<div class="header_post">
-			<img src="<%=url%>/img/<%=user.getAvatar()%>" alt="">
+			<img src="<%=url%>/img/<%=userAvatar%>" alt="">
 			<div class="name-acc_post">
-				<h4><%=user.getUserInformation().getFullName()%></h4>
+				<h4><%=userFullName%></h4>
 				<span><%=df.format(post.getCreatedAt())%></span>
 			</div>
 		</div>

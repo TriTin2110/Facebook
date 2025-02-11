@@ -32,7 +32,7 @@ public class User {
 	@ManyToMany(mappedBy = "listMember")
 	private List<Group> listGroup;
 
-	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "user")
 	private List<Post> listPost;
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
