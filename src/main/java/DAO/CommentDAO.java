@@ -87,7 +87,7 @@ public class CommentDAO implements InterfaceDAO<Comment> {
 	}
 
 	@Override
-	public Comment selectById(Comment t) {
+	public Comment selectById(String t) {
 		// TODO Auto-generated method stub
 		return null;
 	}

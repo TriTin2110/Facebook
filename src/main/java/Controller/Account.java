@@ -16,7 +16,6 @@ import Interact.UserInformationInteract;
 import Interact.UserInteract;
 import Model.User;
 import Model.UserInformation;
-import util.SendingMail;
 
 @WebServlet("/Account")
 public class Account extends HttpServlet {
@@ -87,7 +86,7 @@ public class Account extends HttpServlet {
 			boolean addUserSuccess = userDAO.add(user) > 0;
 			if (addUserSuccess) {
 				request.setAttribute("error", notice);
-				SendingMail.sendMail(email, userInformation.getFullName(), user.getUserId(), urlEmailConfirm);
+//				SendingMail.sendMail(email, userInformation.getFullName(), user.getUserId(), urlEmailConfirm);
 			} else {
 				notice = "Tạo tài khoản không thành công";
 				request.setAttribute("error", notice);

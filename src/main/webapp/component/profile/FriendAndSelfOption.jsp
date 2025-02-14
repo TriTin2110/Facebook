@@ -18,11 +18,6 @@
 <%
 String url = request.getParameter("url");
 String idUrl = request.getParameter("idUrl");
-String currenUserId = request.getParameter("currenUserId");
-String currentUserName = request.getParameter("currentUserName");
-String currentUserAvatar = request.getParameter("currentUserAvatar");
-String userPageName = request.getParameter("userPageName");
-String userPageAvatar = request.getParameter("userPageAvatar");
 %>
 <body>
 	<%
@@ -46,22 +41,10 @@ String userPageAvatar = request.getParameter("userPageAvatar");
 	%>
 	<div class="profile_setting">
 		<div class="setting_btn">
-			<form action="<%=url%>/Friend" method="post">
-				<input type="hidden" name="userId" value="<%=idUrl%>"> <input
-					type="hidden" name="userSentRequestId" value="<%=currenUserId%>"><input
-					type="hidden" name="fullName" value="<%=currentUserName%>">
-				<input type="hidden" name="avatar" value="<%=currentUserAvatar%>">
-				<input type="hidden" name="userPageName" value="<%=userPageName%>" />
-				<input type="hidden" name="userPageAvatar" value="<%=userPageAvatar%>" /> <input
-					type="hidden" name="method" value="proccess-adding-friend">
-				<button type="submit" class="btn btn-primary"
-					id="adding-friend-button">
-					<i class="fas fa-user-friends"></i> Thêm bạn bè
-				</button>
-				<a href="<%=url%>/jsp/InfoChange.jsp" class="setting"> <i
+			<a class="btn" href="<%=url%>/Friend?method=proccess-adding-friend&userId=<%=idUrl%>">Thêm bạn bè</a>
+			<a href="<%=url%>/jsp/InfoChange.jsp" class="setting"> <i
 					class="fab fa-facebook-messenger"></i> Nhắn tin
 				</a>
-			</form>
 		</div>
 		<div class="setting_more">
 			<a href="#"><i class="fa-solid fa-chevron-down"></i></a>

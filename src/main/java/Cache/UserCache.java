@@ -30,7 +30,13 @@ public class UserCache {
 	}
 
 	public List<User> selectFriendsByUserIdCache(String id) {
-		return friends.get(id);
+		List<User> friendList = friends.get(id);
+		return friendList;
+	}
+
+	public void resetFriendList(String id) {
+		friends.refresh(id);
+		friends.cleanUp();
 	}
 
 	public List<Announce> selectAnnouncesByUserIdDAO(String id) {

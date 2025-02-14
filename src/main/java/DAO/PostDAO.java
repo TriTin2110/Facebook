@@ -109,7 +109,7 @@ public class PostDAO implements InterfaceDAO<Post> {
 	}
 
 	@Override
-	public Post selectById(Post t) {
+	public Post selectById(String t) {
 		// TODO Auto-generated method stub
 		return null;
 	}

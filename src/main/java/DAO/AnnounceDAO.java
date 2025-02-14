@@ -76,12 +76,12 @@ public class AnnounceDAO implements InterfaceDAO<Announce> {
 	}
 
 	@Override
-	public Announce selectById(Announce t) {
+	public Announce selectById(String t) {
 		// TODO Auto-generated method stub
 		Announce announce = new Announce();
 		openSession();
 		try {
-			announce = session.find(Announce.class, t.getId());
+			announce = session.find(Announce.class, t);
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();

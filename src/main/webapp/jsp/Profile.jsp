@@ -24,10 +24,15 @@ String url = request.getScheme() + "://" + request.getServerName() + ":" + reque
 </head>
 <%@include file="../component/AuthenticateUser.jsp"%>
 <%
-UserInformation profileInformation = user.getUserInformation();
+
 User currentUser = cache.getCurrentUser();
 
-String userIdFound = request.getParameter("found-user-id") + "";
+String userIdFound = request.getParameter("found-user-id").toString();
+
+userDAO = new UserDAO();
+User userFound = userDAO.selectById(userIdFound);
+UserInformation profileInformation = userFound.getUserInformation();
+
 
 String currenUserId = currentUser.getUserId();
 String currentUserName = currentUser.getUserInformation().getFullName();
@@ -46,22 +51,18 @@ String currentUserAvatar = currentUser.getAvatar();
 			<div class="avt_info">
 				<div class="img_info">
 					<div class="avt_img">
-						<img src="<%=url%>/img/<%=user.getAvatar()%>" alt="" />
+						<img src="<%=url%>/img/<%=userFound.getAvatar()%>" alt="" />
 					</div>
 					<div class="info">
 						<h1 class="name"><%=profileInformation.getFullName()%></h1>
 					</div>
 				</div>
 
+				
+	
 				<jsp:include page="../component/profile/FriendAndSelfOption.jsp">
 					<jsp:param value="<%=url%>" name="url" />
 					<jsp:param value="<%=userIdFound%>" name="idUrl" />
-					<jsp:param value="<%=currenUserId%>" name="currenUserId" />
-					<jsp:param value="<%=currentUserName%>" name="currentUserName"/>
-					<jsp:param value="<%= currentUserAvatar%>" name="currentUserAvatar"/>
-					<jsp:param value="<%=profileInformation.getFullName()%>" name="userPageName"/>
-					<jsp:param value="<%=user.getAvatar()%>" name="userPageAvatar"/>
-					
 				</jsp:include>
 			</div>
 			<div class="avt_list_btn">
@@ -118,8 +119,8 @@ String currentUserAvatar = currentUser.getAvatar();
 				</div>
 				<jsp:include page="/component/PostContent.jsp">
 				<jsp:param value="<%=userIdFound%>" name="userId"/>
-					<jsp:param value="<%=user.getUserInformation().getFullName() %>" name="userFullName"/>
-					<jsp:param value="<%=user.getAvatar() %>" name="userAvatar"/>
+					<jsp:param value="<%=userFound.getUserInformation().getFullName() %>" name="userFullName"/>
+					<jsp:param value="<%=userFound.getAvatar() %>" name="userAvatar"/>
 				</jsp:include>
 			</div>
 		</div>

@@ -9,7 +9,7 @@ public interface InterfaceDAO<T> {
 
 	public int update(T t);
 
-	public T selectById(T t);
+	public T selectById(String t);
 
 	public List<T> selectAll();
 }

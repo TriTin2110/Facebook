@@ -1,3 +1,4 @@
+<%@page import="Cache.UserCache"%>
 <%@page import="java.sql.Date"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="Model.Announce"%>
@@ -11,9 +12,10 @@
 <title>Insert title here</title>
 </head>
 <%
+UserCache cache = (UserCache) request.getSession().getAttribute("cache");
 String url = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 		+ request.getContextPath();
-List<Announce> announces = (List<Announce>) request.getAttribute("announces");
+List<Announce> announces = cache.selectAnnouncesByUserIdCache(cache.getCurrentUser().getUserId());
 SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
 %>
 <body>

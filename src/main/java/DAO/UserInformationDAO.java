@@ -87,12 +87,12 @@ public class UserInformationDAO implements InterfaceDAO<UserInformation> {
 	}
 
 	@Override
-	public UserInformation selectById(UserInformation t) {
+	public UserInformation selectById(String t) {
 		// TODO Auto-generated method stub
 		UserInformation userInformation = null;
 		openSession();
 		try {
-			userInformation = session.get(UserInformation.class, t.getUserId());
+			userInformation = session.get(UserInformation.class, t);
 		} finally {
 			// TODO: handle finally clause
 			closeSession();

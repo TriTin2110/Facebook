@@ -2,6 +2,7 @@ package Controller;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import Cache.UserCache;
 import DAO.UserDAO;
 import Model.Announce;
 import Model.User;
@@ -129,55 +131,37 @@ public class Friend extends HttpServlet {
 	}
 
 	private void proccessAddingFriend(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
+		UserDAO userDAO = new UserDAO();
+		UserCache userCache = (UserCache) request.getSession().getAttribute("cache");
 		String idReceiver = request.getParameter("userId");
-		String idSender = request.getParameter("userSentRequestId");
-		String url = "/jsp/Profile.jsp?userId=" + idReceiver;
+		String url = "/jsp/Profile.jsp?found-user-id=" + idReceiver;
 
-		User receiver = getUserById(idReceiver);
-		User sender = getUserById(idSender);
+		User receiver = userDAO.selectById(idReceiver);
+		User sender = userCache.getCurrentUser();
 
-		AnnouceForm annouceFormReceiver = createAnnouceFormReciver(request);
-		AnnouceForm annouceFormSender = createAnnouceFormSender(request);
+		AnnouceForm annouceFormReceiver = new AnnouceForm(sender.getUserInformation().getFullName(),
+				receiver.getAvatar(), true);
+		AnnouceForm annouceFormSender = new AnnouceForm(receiver.getUserInformation().getFullName(), sender.getAvatar(),
+				false);
 
-		Announce announceReceiver = createAnnouce(idSender, receiver, annouceFormReceiver);
-		Announce announceSender = createAnnouce(idSender, sender, annouceFormSender);
+		Announce announceReceiver = createAnnouce(sender.getUserId(), receiver, annouceFormReceiver);
+		Announce announceSender = createAnnouce(sender.getUserId(), sender, annouceFormSender);
 
 		announceReceiver.setAnnouce(announceSender);
 
 		saveAnnouce(announceReceiver, receiver);
 
-		List<User> listFriend = sender.getListFriend();
+		System.out.println("Adding Friend");
+
+		List<User> listFriend = userCache.selectFriendsByUserIdCache(sender.getUserId());
+		if (listFriend.isEmpty())
+			listFriend = new LinkedList<>();
 		listFriend.add(receiver);
 		sender.setListFriend(listFriend);
 		userDAO.update(sender);
 
+		userCache.resetFriendList(sender.getUserId());
 		request.getRequestDispatcher(url).forward(request, response);
-	}
-
-	private User getUserById(String userId) {
-		User user = new User();
-		user.setUserId(userId);
-		user = userDAO.selectById(user);
-		return user;
-	}
-
-	private AnnouceForm createAnnouceFormReciver(HttpServletRequest request) {
-		String userNameSender = request.getParameter("fullName");
-		String avatarSender = request.getParameter("avatar");
-		boolean isReceiver = true;
-
-		AnnouceForm form = new AnnouceForm(userNameSender, avatarSender, isReceiver);
-		return form;
-	}
-
-	private AnnouceForm createAnnouceFormSender(HttpServletRequest request) {
-		String userPageName = request.getParameter("userPageName");
-		String avatarReceiver = request.getParameter("userPageAvatar");
-		boolean isReceiver = false;
-
-		AnnouceForm form = new AnnouceForm(userPageName, avatarReceiver, isReceiver);
-		return form;
 	}
 
 	private Announce createAnnouce(String idUserSendRequest, User toUser, AnnouceForm form) {
@@ -200,10 +184,15 @@ public class Friend extends HttpServlet {
 	private void acceptingAddFriend(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		// TODO Auto-generated method stub
 		String idFriend = request.getParameter("friendId");
-		User user = (User) request.getSession().getAttribute("user");
+		UserCache cache = (UserCache) request.getSession().getAttribute("cache");
+		User user = cache.getCurrentUser();
 
+		List<User> friends = cache.selectFriendsByUserIdCache(user.getUserId());
+		if (friends.isEmpty())
+			friends = new LinkedList<User>();
+		user.setListFriend(friends);
 		userDAO.processAddingFriend(idFriend, user);
-
+		cache.resetFriendList(user.getUserId());
 		response.sendRedirect(request.getContextPath());
 	}
 }

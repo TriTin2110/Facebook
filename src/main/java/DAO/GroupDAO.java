@@ -87,7 +87,7 @@ public class GroupDAO implements InterfaceDAO<Group> {
 	}
 
 	@Override
-	public Group selectById(Group t) {
+	public Group selectById(String t) {
 		// TODO Auto-generated method stub
 		return null;
 	}

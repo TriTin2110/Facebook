@@ -61,11 +61,11 @@ public class MessengerDAO implements InterfaceDAO<Messenger> {
 	}
 
 	@Override
-	public Messenger selectById(Messenger t) {
+	public Messenger selectById(String t) {
 		Messenger messenger = new Messenger();
 		openSession();
 		try {
-			messenger = session.find(Messenger.class, t.getUserNameGuestName());
+			messenger = session.find(Messenger.class, t);
 		} finally {
 			// TODO: handle finally clause
 			closeSession();

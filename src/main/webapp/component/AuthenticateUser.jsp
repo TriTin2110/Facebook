@@ -30,8 +30,7 @@ else
 	//user = User có profile Id đó
 	if(id != null && id!=user.getUserId())
 	{
-		user.setUserId(id);
-		user = userDAO.selectById(user);
+		user = userDAO.selectById(id);
 	}
 }
 request.setAttribute("postContent", user);

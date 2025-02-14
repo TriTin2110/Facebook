@@ -29,6 +29,7 @@ public class UserDAO implements InterfaceDAO<User> {
 		if (sessionFactory == null) {
 			sessionFactory = HibernateUtil.getSessionFactory();
 			session = sessionFactory.openSession();
+
 		}
 		result = 0;
 	}
@@ -95,12 +96,12 @@ public class UserDAO implements InterfaceDAO<User> {
 	}
 
 	@Override
-	public User selectById(User t) {
+	public User selectById(String t) {
 		// TODO Auto-generated method stub
 		openSession();
 		User user = new User();
 		try {
-			user = session.find(User.class, t.getUserId());
+			user = session.find(User.class, t);
 			Hibernate.initialize(user.getAnnounces());
 			Hibernate.initialize(user.getListFriend());
 		} finally {
@@ -140,9 +141,7 @@ public class UserDAO implements InterfaceDAO<User> {
 	}
 
 	public User confirmEmail(String idUser) {
-		User user = new User();
-		user.setUserId(idUser);
-		user = selectById(user);
+		User user = selectById(idUser);
 		user.setIdentifyStatus(true);
 
 		openSession();
@@ -190,7 +189,7 @@ public class UserDAO implements InterfaceDAO<User> {
 		friendId = friendId.substring(0, friendId.indexOf("-"));
 
 		friend.setUserId(friendId);
-		friend = selectById(friend);
+		friend = selectById(friend.getUserId());
 
 		String messageForReceiver = "Bạn và " + friend.getUserInformation().getFullName() + " đã trở thành bạn bè!";
 		String messageForSender = "Bạn và " + user.getUserInformation().getFullName() + " đã trở thành bạn bè!";
@@ -237,7 +236,7 @@ public class UserDAO implements InterfaceDAO<User> {
 		CriteriaQuery<User> query = builder.createQuery(User.class);
 		Root<User> root = query.from(User.class);
 		query.where(builder.equal(root.get("userId"), userId));
-		session.createQuery(query).getResultList().forEach(o -> users.add(o));
+		session.createQuery(query).getSingleResult().getListFriend().forEach(o -> users.add(o));
 		transaction.commit();
 
 		closeSession();

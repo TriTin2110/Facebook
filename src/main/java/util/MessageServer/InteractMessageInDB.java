@@ -29,8 +29,9 @@ public class InteractMessageInDB {
 		messengerInDB.setUserNameGuestName(userNameGuestName[0] + userNameGuestName[1]);
 
 		MessengerDAO messengerDAO = new MessengerDAO();
-		messengerInDB = messengerDAO.selectById(messengerInDB); // Tìm kiếm tin nhắn trong db dưa vào tên của
-																// currentUser và
+		messengerInDB = messengerDAO.selectById(messengerInDB.getUserNameGuestName()); // Tìm kiếm tin nhắn trong db dưa
+																						// vào tên của
+		// currentUser và
 		// guest (đã đc sắp xếp)
 		// Khi tin nhắn giữa 2 người đã tồn tại trong db
 		// Lưu tin nhắn DB vào map
