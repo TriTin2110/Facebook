@@ -25,12 +25,13 @@ String url = request.getScheme() + "://" + request.getServerName() + ":" + reque
 <%@include file="../component/AuthenticateUser.jsp"%>
 <%
 UserInformation profileInformation = user.getUserInformation();
-User currentUser = (User) request.getSession().getAttribute("user");
-String idUrl = request.getParameter("userId") + "";
+User currentUser = cache.getCurrentUser();
+
+String userIdFound = request.getParameter("found-user-id") + "";
+
 String currenUserId = currentUser.getUserId();
 String currentUserName = currentUser.getUserInformation().getFullName();
 String currentUserAvatar = currentUser.getAvatar();
-int friendQuanlity = user.getListFriend().size();
 %>
 <body>
 	<div class="app">
@@ -49,13 +50,12 @@ int friendQuanlity = user.getListFriend().size();
 					</div>
 					<div class="info">
 						<h1 class="name"><%=profileInformation.getFullName()%></h1>
-						<a href="#" class="number_friend">Số lương bạn: <%=friendQuanlity%></a>
 					</div>
 				</div>
 
 				<jsp:include page="../component/profile/FriendAndSelfOption.jsp">
 					<jsp:param value="<%=url%>" name="url" />
-					<jsp:param value="<%=idUrl%>" name="idUrl" />
+					<jsp:param value="<%=userIdFound%>" name="idUrl" />
 					<jsp:param value="<%=currenUserId%>" name="currenUserId" />
 					<jsp:param value="<%=currentUserName%>" name="currentUserName"/>
 					<jsp:param value="<%= currentUserAvatar%>" name="currentUserAvatar"/>
@@ -117,7 +117,7 @@ int friendQuanlity = user.getListFriend().size();
 					<!-- Danh sách bài viết sẽ được thêm vào đây -->
 				</div>
 				<jsp:include page="/component/PostContent.jsp">
-				<jsp:param value="<%=idUrl%>" name="userId"/>
+				<jsp:param value="<%=userIdFound%>" name="userId"/>
 					<jsp:param value="<%=user.getUserInformation().getFullName() %>" name="userFullName"/>
 					<jsp:param value="<%=user.getAvatar() %>" name="userAvatar"/>
 				</jsp:include>

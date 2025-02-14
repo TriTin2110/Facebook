@@ -56,7 +56,7 @@ request.getSession().removeAttribute("listSearched");
 								alt="" />
 							<h3>
 								<a style="text-decoration: none; color: black;"
-									href="<%=url%>/jsp/Profile.jsp?userId=<%=userInSearchedList.getId()%>">
+									href="<%=url%>/jsp/Profile.jsp?found-user-id=<%=userInSearchedList.getId()%>">
 									<%=userInSearchedList.getFullName() %></a>
 							</h3>
 						</div>

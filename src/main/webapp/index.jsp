@@ -1,3 +1,5 @@
+<%@page import="Cache.UserCache"%>
+<%@page import="com.github.benmanes.caffeine.cache.Cache"%>
 <%@page import="DAO.AnnounceDAO"%>
 <%@page import="Model.Announce"%>
 <%@page import="java.util.HashSet"%>
@@ -37,16 +39,12 @@ if(request.getSession().getAttribute("dataSearched") == null)
 	crossorigin="anonymous"></script>
 <title>BodyBook</title>
 </head>
-<%@include file="../component/AuthenticateUser.jsp" %>
-<%
-	AnnounceDAO annouceDAO = new AnnounceDAO();
-	List<Announce> announces = annouceDAO.selectAnnoucesByUserId(user.getUserId());
-	user.setAnnounces(announces);
-	request.setAttribute("announces", user.getAnnounces());
-%>
+<%@include file="./component/AuthenticateUser.jsp"%>
 <body>
 	<div class="app">
-		<jsp:include page="/component/Header.jsp"></jsp:include>
+		<jsp:include page="/component/Header.jsp">
+			<jsp:param value="<%=user.getUserId()%>" name="currentUserId"/>
+		</jsp:include>
 		<div class="body">
 			<jsp:include page="/component/LeftPanel.jsp">
 				<jsp:param value="<%=user.getAvatar()%>" name="avatar" />

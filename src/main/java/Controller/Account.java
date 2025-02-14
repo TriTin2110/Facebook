@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import Cache.UserCache;
 import DAO.UserDAO;
 import Interact.UserInformationInteract;
 import Interact.UserInteract;
@@ -122,8 +123,12 @@ public class Account extends HttpServlet {
 			// Kiểm tra mật khẩu
 			boolean passwordAndEmailCorrected = userInt.checkingAccount(passwordInput);
 			if (passwordAndEmailCorrected) {
+				UserCache cache = new UserCache();
+				cache.setCurrentUser(user);
+				System.out.println(cache.getCurrentUser());
+
+				session.setAttribute("cache", cache);
 				url = request.getContextPath();
-				session.setAttribute("user", user);
 				response.sendRedirect(url);
 				return;
 			} else {

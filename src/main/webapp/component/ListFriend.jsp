@@ -1,3 +1,4 @@
+<%@page import="Cache.UserCache"%>
 <%@page import="DAO.UserDAO"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
@@ -15,16 +16,9 @@ String url = request.getScheme() + "://" + request.getServerName() + ":" + reque
 <title>Insert title here</title>
 </head>
 <%
-User user = (User) session.getAttribute("user");
-List<User> friends = (List<User>) request.getSession().getAttribute("listFriend");
-if(friends == null)
-{
-	UserDAO userDAO = new UserDAO();
-	friends = userDAO.selectFriendsByUserId(user.getUserId());
-	user.setListFriend(friends);
-	request.getSession().setAttribute("listFriend", friends);
-}
-
+UserCache cache = (UserCache) request.getSession().getAttribute("cache");
+User user = cache.getCurrentUser();
+List<User> friends = cache.selectFriendsByUserIdCache(user.getUserId());
 %>
 <body>
 	<div class="friend">

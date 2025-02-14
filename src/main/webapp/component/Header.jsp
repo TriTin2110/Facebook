@@ -1,3 +1,6 @@
+<%@page import="DAO.AnnounceDAO"%>
+<%@page import="DAO.UserDAO"%>
+<%@page import="Cache.UserCache"%>
 <%@page import="Model.Announce"%>
 <%@page import="java.util.Set"%>
 <%@page import="java.util.List"%>
@@ -26,8 +29,16 @@ String url = request.getScheme() + "://" + request.getServerName() + ":" + reque
 </head>
 <%
 List<String> searched = (List<String>) request.getSession().getAttribute("dataSearched");
-User user = (User) session.getAttribute("user");
-List<Announce> annonces = user.getAnnounces();
+
+UserCache cache = (UserCache) request.getSession().getAttribute("cache");
+User user = cache.getCurrentUser();
+
+List<Announce> announces = cache.selectAnnouncesByUserIdCache(user.getUserId());
+
+user.setAnnounces(announces);
+cache.setCurrentUser(user);
+
+request.setAttribute("announces", announces);
 request.setCharacterEncoding("UTF-8");
 %>
 <body>
@@ -88,7 +99,7 @@ request.setCharacterEncoding("UTF-8");
 						<div class="notify_more">
 							<ul>
 							<%
-								for(Announce ann : annonces)
+								for(Announce ann : announces)
 								{
 							%>
 								<li><a href="#"> <img src="<%=url%>/img/<%=ann.getUserAvatarRequested()%>" alt="">

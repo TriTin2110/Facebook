@@ -165,23 +165,30 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<version>8.0.33</version>
 		</dependency>
-	
-            <dependency>
-                <groupId>com.sun.mail</groupId>
-                <artifactId>javax.mail</artifactId>
-                <version>1.6.2</version>
-            </dependency>
-	     <dependency>
-   		<groupId>com.google.code.gson</groupId>
-    		<artifactId>gson</artifactId>
-    		<version>2.8.8</version>
-	    </dependency>
+
 		<dependency>
-		    <groupId>org.mindrot</groupId>
-		    <artifactId>jbcrypt</artifactId>
-		    <version>0.4</version>
+			<groupId>com.sun.mail</groupId>
+			<artifactId>javax.mail</artifactId>
+			<version>1.6.2</version>
 		</dependency>
-            
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.8.8</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mindrot</groupId>
+			<artifactId>jbcrypt</artifactId>
+			<version>0.4</version>
+		</dependency>
+		<!--
+		https://mvnrepository.com/artifact/com.github.ben-manes.caffeine/caffeine -->
+		<dependency>
+			<groupId>com.github.ben-manes.caffeine</groupId>
+			<artifactId>caffeine</artifactId>
+			<version>3.2.0</version>
+		</dependency>
+
 	</dependencies>
 	<build>
 		<plugins>

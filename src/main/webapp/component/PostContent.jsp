@@ -1,3 +1,4 @@
+<%@page import="Cache.UserCache"%>
 <%@page import="DAO.PostDAO"%>
 <%@page import="java.util.Locale"%>
 <%@page import="java.text.SimpleDateFormat"%>
@@ -15,8 +16,7 @@
 <title>Insert title here</title>
 </head>
 <%
-PostDAO postDAO = new PostDAO();
-
+UserCache cache = (UserCache) request.getSession().getAttribute("cache");
 String url = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 		+ request.getContextPath();
 String pattern = "EEE, dd MMMM yyyy";
@@ -28,7 +28,7 @@ String userId = request.getParameter("userId");
 
 //User user = (User) request.getAttribute("postContent");
 
-List<Post> posts = postDAO.selectAllPostByUserId(userId);
+List<Post> posts = cache.selectPostsByUserIdCache(userId);
 
 %>
 <body>

@@ -1,3 +1,4 @@
+<%@page import="Cache.UserCache"%>
 <%@page import="DAO.UserDAO"%>
 <%@page import="Model.User"%>
 <%@page import="util.CheckingLogin"%>
@@ -10,26 +11,32 @@
 <title>Insert title here</title>
 </head>
 <%
-UserDAO dao = new UserDAO();
-User user = new User();
+UserDAO userDAO = new UserDAO();
+UserCache cache = (UserCache) request.getSession().getAttribute("cache");
+
+User user = null;
 String id = request.getParameter("userId");
-//Kiểm tra là bạn hay là bản thân
-if(id!=null)
+if(cache == null)
 {
-	user.setUserId(id);
-	user = dao.selectById(user);
+	%>
+	<jsp:forward page="/jsp/LoginPage.jsp"></jsp:forward>
+<%	
 }
 else
 {
-	user = (User) request.getSession().getAttribute("user"); //Lưu phiên của người dùng hiện tại
+	user = cache.getCurrentUser();
+	//Kiểm tra User để hiển thị trang profile
+	//Nếu User profile Id khác với người dùng hiện tại 
+	//user = User có profile Id đó
+	if(id != null && id!=user.getUserId())
+	{
+		user.setUserId(id);
+		user = userDAO.selectById(user);
+	}
 }
 request.setAttribute("postContent", user);
 request.setCharacterEncoding("UTF-8");
-if (user == null) {
-		%>
-			<jsp:forward page="/jsp/LoginPage.jsp"></jsp:forward>
-		<%
-}
+
 %>
 <body>
 </body>
