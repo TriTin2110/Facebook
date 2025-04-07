@@ -142,20 +142,20 @@ public class UserDAO implements InterfaceDAO<User> {
 
 	public User confirmEmail(String idUser) {
 		User user = selectById(idUser);
-		user.setIdentifyStatus(true);
-
-		openSession();
-		try {
-			Transaction transaction = session.beginTransaction();
-			session.update(user);
-			transaction.commit();
-			session.close();
-			return user;
-		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
-		} finally {
-			closeSession();
+		if (user != null) {
+			user.setIdentifyStatus(true);
+			openSession();
+			try {
+				Transaction transaction = session.beginTransaction();
+				session.update(user);
+				transaction.commit();
+				session.close();
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			} finally {
+				closeSession();
+			}
 		}
 		return user;
 	}

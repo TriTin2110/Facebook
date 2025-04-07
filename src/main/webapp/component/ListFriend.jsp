@@ -16,9 +16,8 @@ String url = request.getScheme() + "://" + request.getServerName() + ":" + reque
 <title>Insert title here</title>
 </head>
 <%
-UserCache cache = (UserCache) request.getSession().getAttribute("cache");
-User user = cache.getCurrentUser();
-List<User> friends = cache.selectFriendsByUserIdCache(user.getUserId());
+User user = (User) request.getSession().getAttribute("user");
+List<User> friends = user.getListFriend();
 %>
 <body>
 	<div class="friend">

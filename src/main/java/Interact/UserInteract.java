@@ -24,14 +24,6 @@ public class UserInteract {
 		return user;
 	}
 
-	public String bcryptEncrypt(String text) {
-		return PasswordBcrypt.hashPassword(text);
-	}
-
-	public String hashEncrypt(String text) {
-		return HashUtil.hashWithSHA256(text);
-	}
-
 	public User encryptPasswordEmailId(User user) {
 		String passwordEncrypted = bcryptEncrypt(user.getPassword());
 		String emailEncrypted = hashEncrypt(user.getEmail());
@@ -42,6 +34,14 @@ public class UserInteract {
 		user.setPassword(passwordEncrypted);
 
 		return user;
+	}
+
+	public String bcryptEncrypt(String text) {
+		return PasswordBcrypt.hashPassword(text);
+	}
+
+	public String hashEncrypt(String text) {
+		return HashUtil.hashWithSHA256(text);
 	}
 
 	public boolean checkingAccount(String passwordInput) {

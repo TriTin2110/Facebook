@@ -25,7 +25,7 @@ String url = request.getScheme() + "://" + request.getServerName() + ":" + reque
 <%@include file="../component/AuthenticateUser.jsp"%>
 <%
 
-User currentUser = cache.getCurrentUser();
+User currentUser = (User) request.getSession().getAttribute("user");
 
 String userIdFound = request.getParameter("found-user-id").toString();
 

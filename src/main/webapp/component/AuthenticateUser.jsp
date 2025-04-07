@@ -12,11 +12,9 @@
 </head>
 <%
 UserDAO userDAO = new UserDAO();
-UserCache cache = (UserCache) request.getSession().getAttribute("cache");
-
-User user = null;
+User user = (User) request.getSession().getAttribute("user");
 String id = request.getParameter("userId");
-if(cache == null)
+if(user == null)
 {
 	%>
 	<jsp:forward page="/jsp/LoginPage.jsp"></jsp:forward>
@@ -24,7 +22,6 @@ if(cache == null)
 }
 else
 {
-	user = cache.getCurrentUser();
 	//Kiểm tra User để hiển thị trang profile
 	//Nếu User profile Id khác với người dùng hiện tại 
 	//user = User có profile Id đó

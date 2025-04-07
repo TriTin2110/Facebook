@@ -1,6 +1,5 @@
 <%@page import="DAO.AnnounceDAO"%>
 <%@page import="DAO.UserDAO"%>
-<%@page import="Cache.UserCache"%>
 <%@page import="Model.Announce"%>
 <%@page import="java.util.Set"%>
 <%@page import="java.util.List"%>
@@ -30,13 +29,9 @@ String url = request.getScheme() + "://" + request.getServerName() + ":" + reque
 <%
 List<String> searched = (List<String>) request.getSession().getAttribute("dataSearched");
 
-UserCache cache = (UserCache) request.getSession().getAttribute("cache");
-User user = cache.getCurrentUser();
+User user = (User) request.getSession().getAttribute("user");
 
-List<Announce> announces = cache.selectAnnouncesByUserIdCache(user.getUserId());
-
-user.setAnnounces(announces);
-cache.setCurrentUser(user);
+List<Announce> announces = user.getAnnounces();
 
 request.setAttribute("announces", announces);
 request.setCharacterEncoding("UTF-8");

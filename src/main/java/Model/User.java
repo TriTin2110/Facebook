@@ -39,6 +39,11 @@ public class User {
 	private List<Announce> announces;
 
 	public User() {
+		this.listFriend = new ArrayList<User>();
+		this.userInformation = new UserInformation();
+		this.listGroup = new ArrayList<Group>();
+		this.listPost = new ArrayList<Post>();
+		this.announces = new ArrayList<Announce>();
 	}
 
 	public User(String email) {
