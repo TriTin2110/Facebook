@@ -27,11 +27,12 @@ String url = request.getScheme() + "://" + request.getServerName() + ":" + reque
 
 User currentUser = (User) request.getSession().getAttribute("user");
 
-String userIdFound = request.getParameter("found-user-id").toString();
-
+String userIdFound = request.getParameter("found-user-id");
+if(userIdFound == null)
+	userIdFound = currentUser.getUserId();
 userDAO = new UserDAO();
-User userFound = userDAO.selectById(userIdFound);
-UserInformation profileInformation = userFound.getUserInformation();
+User userPage = userDAO.selectById(userIdFound.toString());
+UserInformation profilePage = userPage.getUserInformation();
 
 
 String currenUserId = currentUser.getUserId();
@@ -51,10 +52,10 @@ String currentUserAvatar = currentUser.getAvatar();
 			<div class="avt_info">
 				<div class="img_info">
 					<div class="avt_img">
-						<img src="<%=url%>/img/<%=userFound.getAvatar()%>" alt="" />
+						<img src="<%=url%>/img/<%=userPage.getAvatar()%>" alt="" />
 					</div>
 					<div class="info">
-						<h1 class="name"><%=profileInformation.getFullName()%></h1>
+						<h1 class="name"><%=profilePage.getFullName()%></h1>
 					</div>
 				</div>
 
@@ -62,7 +63,7 @@ String currentUserAvatar = currentUser.getAvatar();
 	
 				<jsp:include page="../component/profile/FriendAndSelfOption.jsp">
 					<jsp:param value="<%=url%>" name="url" />
-					<jsp:param value="<%=userIdFound%>" name="idUrl" />
+					<jsp:param value="<%=userIdFound.toString()%>" name="idUrl" />
 				</jsp:include>
 			</div>
 			<div class="avt_list_btn">
@@ -91,7 +92,7 @@ String currentUserAvatar = currentUser.getAvatar();
 					<a href="#" class="intro_btn">Thêm tiểu sử</a>
 					<ul>
 						<li><i class="fa-solid fa-house-chimney"></i> <span>Sống
-								tại <b><%=profileInformation.getHomeTown()%></b>
+								tại <b><%=profilePage.getHomeTown()%></b>
 						</span></li>
 						<li><i class="fa-solid fa-heart"></i> <span>Đang hẹn
 								hò với <b>Lisa</b>
@@ -118,9 +119,9 @@ String currentUserAvatar = currentUser.getAvatar();
 					<!-- Danh sách bài viết sẽ được thêm vào đây -->
 				</div>
 				<jsp:include page="/component/PostContent.jsp">
-				<jsp:param value="<%=userIdFound%>" name="userId"/>
-					<jsp:param value="<%=userFound.getUserInformation().getFullName() %>" name="userFullName"/>
-					<jsp:param value="<%=userFound.getAvatar() %>" name="userAvatar"/>
+				<jsp:param value="<%=userIdFound.toString()%>" name="userId"/>
+					<jsp:param value="<%=userPage.getUserInformation().getFullName() %>" name="userFullName"/>
+					<jsp:param value="<%=userPage.getAvatar() %>" name="userAvatar"/>
 				</jsp:include>
 			</div>
 		</div>
@@ -142,7 +143,7 @@ String currentUserAvatar = currentUser.getAvatar();
 						<div class="acc__post">
 							<img src="<%=url%>/img/avt.jpg" alt="">
 							<div class="acc__name">
-								<h4><%=profileInformation.getFullName()%></h4>
+								<h4><%=profilePage.getFullName()%></h4>
 								<select name="aithay" id="user_seen">
 									<option value="congkhai">Công khai</option>
 									<option value="banbe">Bạn bè</option>
@@ -152,7 +153,7 @@ String currentUserAvatar = currentUser.getAvatar();
 						</div>
 						<div class="content__post">
 							<textarea name="content" id="content_area"
-								placeholder="<%=profileInformation.getFullName()%>, bạn đang nghĩ gì thế?"></textarea>
+								placeholder="<%=profilePage.getFullName()%>, bạn đang nghĩ gì thế?"></textarea>
 						</div>
 						<div class="upload__post">
 							<input type="file" id="fileInput" name="image">

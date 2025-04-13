@@ -20,5 +20,7 @@
         <mapping class="Model.Comment"/>
         <mapping class="Model.Messenger"/>
         <mapping class="Model.Announce"/>
+        <mapping class="Model.FriendRequest"/>
+        <mapping class="Model.FriendReceive"/>
     </session-factory>
 </hibernate-configuration>

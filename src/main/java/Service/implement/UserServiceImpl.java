@@ -10,26 +10,32 @@ import javax.servlet.http.HttpSession;
 
 import Cache.UserAnnounce;
 import Cache.UserFriend;
+import DAO.PostDAO;
 import DAO.UserDAO;
 import Interact.UserInformationInteract;
 import Interact.UserInteract;
 import Model.Announce;
+import Model.FriendRequest2;
+import Model.Post;
 import Model.User;
 import Model.UserInformation;
 import Service.UserService;
 
 public class UserServiceImpl implements UserService {
 	private UserDAO userDAO;
-	private UserInteract userInt;
 	private UserInformationInteract infoInt;
+
+	public UserServiceImpl() {
+		userDAO = new UserDAO();
+	}
 
 	public UserServiceImpl(HttpServletRequest request) {
 		userDAO = new UserDAO();
-		userInt = new UserInteract(request);
 		infoInt = new UserInformationInteract(request);
 	}
 
 	public HttpServletRequest signUp(HttpServletRequest request, HttpServletResponse response) {
+		UserInteract userInt = new UserInteract(request);
 		UserInformation userInformation = null;
 		User user;
 		String notice = "Tạo tài khoản thành công! Vui lòng kiểm tra email đã đăng ký";
@@ -40,7 +46,7 @@ public class UserServiceImpl implements UserService {
 		String lastName = request.getParameter("ho");
 		// Tạo user với email và passowrd
 		user = userInt.createUser();
-		user = new User();
+		System.out.println(user.getEmail());
 		// Mã hóa email và password cho user đồng thời tạo id cho user
 		user = userInt.encryptPasswordEmailId(user);
 
@@ -78,6 +84,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	public Object signIn(HttpServletRequest request, HttpServletResponse response) {
+		UserInteract userInt = new UserInteract(request);
 		String notice = "Email chưa được xác thực hoặc Mật khẩu không chính xác!";
 
 		String emailInput = request.getParameter("typeEmail");
@@ -121,5 +128,31 @@ public class UserServiceImpl implements UserService {
 			request.setAttribute("notice", "Email đã xác thực thành công! Mời bạn đăng nhập lại");
 		}
 		return request;
+	}
+
+	@Override
+	public List<Post> getAllPost(String userId) {
+		// TODO Auto-generated method stub
+		PostDAO postDAO = new PostDAO();
+		List<Post> posts = postDAO.selectAllPostByUserId(userId);
+		return posts;
+	}
+
+	@Override
+	public List<User> getAllFriend(String userId) {
+		// TODO Auto-generated method stub
+		return userDAO.selectFriendsByUserId(userId);
+	}
+
+	@Override
+	public List<FriendRequest2> getFriendRequests(String userId) {
+		// TODO Auto-generated method stub
+		return userDAO.selectFriendRequestsByUserId(userId);
+	}
+
+	@Override
+	public User selectUserByUserId(String userId) {
+		// TODO Auto-generated method stub
+		return userDAO.selectById(userId);
 	}
 }

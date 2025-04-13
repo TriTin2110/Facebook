@@ -2,7 +2,6 @@ package Controller;
 
 import java.io.IOException;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -12,14 +11,23 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import Cache.UserCache;
 import DAO.UserDAO;
-import Model.Announce;
+import Model.FriendReceive;
+import Model.FriendRequest;
+import Model.FriendRequest2;
 import Model.User;
+import Service.UserService;
+import Service.implement.UserServiceImpl;
 import services.SearchFriendService;
 
+enum TypeAnnouce {
+	FR, SN;
+
+}
+
 class AnnouceForm {
-	private String userName, message, typeOfAnnouce, avatar;
+	private String userName, message, avatar;
+	private TypeAnnouce typeOfAnnouce;
 	@SuppressWarnings("unused")
 	private boolean isReceiver;
 
@@ -29,10 +37,10 @@ class AnnouceForm {
 		this.isReceiver = isReceiver;
 		if (isReceiver) {
 			this.message = userName + " đã gửi lời mời kết bạn dành cho bạn!";
-			this.typeOfAnnouce = "FR";
+			this.typeOfAnnouce = TypeAnnouce.FR;
 		} else {
 			this.message = "Bạn đã gửi lời mời kết bạn dành cho " + userName + "!";
-			this.typeOfAnnouce = "SN";
+			this.typeOfAnnouce = TypeAnnouce.SN;
 		}
 
 	}
@@ -45,7 +53,7 @@ class AnnouceForm {
 		return message;
 	}
 
-	public String getTypeOfAnnouce() {
+	public TypeAnnouce getTypeOfAnnouce() {
 		return typeOfAnnouce;
 	}
 
@@ -78,14 +86,14 @@ public class Friend extends HttpServlet {
 		createUtil(request);
 
 		String method = request.getParameter("method");
-
+		StringBuilder url = new StringBuilder();
 		try {
 			switch (method) {
 			case "search":
 				searchFriend(request, response);
-				break;
+				return;
 			case "proccess-adding-friend":
-				proccessAddingFriend(request, response);
+				url.append(proccessAddingFriend(request, response));
 				break;
 			case "add":
 				acceptingAddFriend(request, response);
@@ -95,7 +103,7 @@ public class Friend extends HttpServlet {
 			// TODO: handle exception
 			e.printStackTrace();
 		}
-
+		request.getRequestDispatcher(url.toString()).forward(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -130,69 +138,49 @@ public class Friend extends HttpServlet {
 		}
 	}
 
-	private void proccessAddingFriend(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		UserDAO userDAO = new UserDAO();
-		UserCache userCache = (UserCache) request.getSession().getAttribute("cache");
-		String idReceiver = request.getParameter("userId");
-		String url = "/jsp/Profile.jsp?found-user-id=" + idReceiver;
+	private String proccessAddingFriend(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		User sender = (User) request.getSession().getAttribute("user");
+		UserService service = new UserServiceImpl();
+		String idOfReceiverAnnouce = request.getParameter("userId");
+		User receiver = service.selectUserByUserId(idOfReceiverAnnouce);
+		sender = service.selectUserByUserId(sender.getUserId());
 
-		User receiver = userDAO.selectById(idReceiver);
-		User sender = userCache.getCurrentUser();
+		FriendRequest friendRequest = new FriendRequest(sender, receiver);
+		FriendReceive friendReceive = new FriendReceive(receiver, sender);
 
-		AnnouceForm annouceFormReceiver = new AnnouceForm(sender.getUserInformation().getFullName(),
-				receiver.getAvatar(), true);
-		AnnouceForm annouceFormSender = new AnnouceForm(receiver.getUserInformation().getFullName(), sender.getAvatar(),
-				false);
-
-		Announce announceReceiver = createAnnouce(sender.getUserId(), receiver, annouceFormReceiver);
-		Announce announceSender = createAnnouce(sender.getUserId(), sender, annouceFormSender);
-
-		announceReceiver.setAnnouce(announceSender);
-
-		saveAnnouce(announceReceiver, receiver);
-
-		System.out.println("Adding Friend");
-
-		List<User> listFriend = userCache.selectFriendsByUserIdCache(sender.getUserId());
-		if (listFriend.isEmpty())
-			listFriend = new LinkedList<>();
-		listFriend.add(receiver);
-		sender.setListFriend(listFriend);
-		userDAO.update(sender);
-
-		userCache.resetFriendList(sender.getUserId());
-		request.getRequestDispatcher(url).forward(request, response);
-	}
-
-	private Announce createAnnouce(String idUserSendRequest, User toUser, AnnouceForm form) {
-		boolean checked = false;
-		long dateReceiveRequest = System.currentTimeMillis();
-		Announce announce = new Announce(idUserSendRequest + "-" + dateReceiveRequest, form.getMessage(),
-				form.getUserName(), form.getAvatar(), toUser, checked, dateReceiveRequest, form.getTypeOfAnnouce());
-		return announce;
-	}
-
-	private void saveAnnouce(Announce announceReceiver, User receiver) {
-		// TODO Auto-generated method stub
-		List<Announce> announces = receiver.getAnnounces();
-		announces.add(announceReceiver);
-		receiver.setAnnounces(announces);
+		receiver.getFriendReceives().add(friendReceive);
+		sender.getFriendRequests().add(friendRequest);
 
 		userDAO.update(receiver);
+		userDAO.update(sender);
+
+//		FriendRequest2 fr = createAnnouce(receiver, sender, idOfReceiverAnnouce);
+//
+//		List<FriendRequest2> receiverFRList = service.getFriendRequests(receiver.getUserId());
+//		List<FriendRequest2> senderFRList = service.getFriendRequests(sender.getUserId());
+//
+//		receiverFRList.add(fr);
+//		senderFRList.add(fr);
+
+//		receiver.setFriendRequests(receiverFRList);
+//		sender.setFriendRequests(senderFRList);
+
+		String url = "/jsp/Profile.jsp?found-user-id=" + idOfReceiverAnnouce;
+		return url;
+
+	}
+
+	private FriendRequest2 createAnnouce(User fromUser, User toUser, String message) {
+		FriendRequest2 fr = new FriendRequest2(fromUser, toUser, "Friend Request");
+		return fr;
 	}
 
 	private void acceptingAddFriend(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		// TODO Auto-generated method stub
 		String idFriend = request.getParameter("friendId");
-		UserCache cache = (UserCache) request.getSession().getAttribute("cache");
-		User user = cache.getCurrentUser();
-
-		List<User> friends = cache.selectFriendsByUserIdCache(user.getUserId());
-		if (friends.isEmpty())
-			friends = new LinkedList<User>();
-		user.setListFriend(friends);
+		User user = (User) request.getSession().getAttribute("user");
 		userDAO.processAddingFriend(idFriend, user);
-		cache.resetFriendList(user.getUserId());
+		request.getSession().setAttribute("user", user);
 		response.sendRedirect(request.getContextPath());
 	}
 }

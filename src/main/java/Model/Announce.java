@@ -2,67 +2,55 @@ package Model;
 
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+
+import Enums.TypeAnnouce;
 
 @Entity
+//Bảng cha và bảng con sẽ nằm tách biệt và liên kết với nhau thông qua
+// khóa ngoại
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Announce {
 	@Id
 	private String id;
 	private String message;
-	private String userNameRequested;
-	private String userAvatarRequested;
-	private String typeOfAnnouce;
-	private boolean checked;
-	private long date;
-
+	private Date date;
+	private TypeAnnouce typeAnnouce;
 	@ManyToOne
-	@JoinColumn(name = "user_id")
-	private User user;
-
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "annouce_for_sender_id")
-	private Announce annouce;
+	@JoinColumn(name = "to_user")
+	private User toUser;
 
 	public Announce() {
 	}
 
 	public Announce(String id) {
-		super();
 		this.id = id;
+		this.typeAnnouce = TypeAnnouce.FRIEND_REQUEST;
+		this.date = new Date(System.currentTimeMillis());
 	}
 
-	public Announce(String id, String message, boolean checked, long date) {
+	public Announce(String id, String message) {
 		this.id = id;
 		this.message = message;
-		this.checked = checked;
-		this.date = date;
 	}
 
-	public Announce(String id, String message, User user, boolean checked, long date) {
-		super();
+	public Announce(String id, User toUser) {
 		this.id = id;
-		this.message = message;
-		this.user = user;
-		this.checked = checked;
-		this.date = date;
+		this.toUser = toUser;
+		this.typeAnnouce = TypeAnnouce.FRIEND_REQUEST;
+		this.date = new Date(System.currentTimeMillis());
 	}
 
-	public Announce(String id, String message, String userNameRequested, String userAvatarRequested, User user,
-			boolean checked, long date, String typeOfAnnouce) {
-		super();
+	public Announce(String id, String message, User toUser) {
 		this.id = id;
 		this.message = message;
-		this.userNameRequested = userNameRequested;
-		this.userAvatarRequested = userAvatarRequested;
-		this.user = user;
-		this.checked = checked;
-		this.date = date;
-		this.typeOfAnnouce = typeOfAnnouce;
+		this.toUser = toUser;
+		this.date = new Date(System.currentTimeMillis());
 	}
 
 	public String getId() {
@@ -81,66 +69,28 @@ public class Announce {
 		this.message = message;
 	}
 
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
-	public boolean isChecked() {
-		return checked;
-	}
-
-	public void setChecked(boolean checked) {
-		this.checked = checked;
-	}
-
-	public long getDate() {
+	public Date getDate() {
 		return date;
 	}
 
-	public void setDate(long date) {
+	public void setDate(Date date) {
 		this.date = date;
 	}
 
-	public String getUserNameRequested() {
-		return userNameRequested;
+	public User getToUser() {
+		return toUser;
 	}
 
-	public void setUserNameRequested(String userNameRequested) {
-		this.userNameRequested = userNameRequested;
+	public void setToUser(User toUser) {
+		this.toUser = toUser;
 	}
 
-	public String getUserAvatarRequested() {
-		return userAvatarRequested;
+	public TypeAnnouce getTypeAnnouce() {
+		return typeAnnouce;
 	}
 
-	public void setUserAvatarRequested(String userAvatarRequested) {
-		this.userAvatarRequested = userAvatarRequested;
-	}
-
-	@Override
-	public String toString() {
-		return "Announce [id=" + id + ", message=" + message + ", user=" + user + ", checked=" + checked + ", date="
-				+ new Date(date) + "]";
-	}
-
-	public String getTypeOfAnnouce() {
-		return typeOfAnnouce;
-	}
-
-	public void setTypeOfAnnouce(String typeOfAnnouce) {
-		this.typeOfAnnouce = typeOfAnnouce;
-	}
-
-	public Announce getAnnouce() {
-		return annouce;
-	}
-
-	public void setAnnouce(Announce annouce) {
-		this.annouce = annouce;
+	public void setTypeAnnouce(TypeAnnouce typeAnnouce) {
+		this.typeAnnouce = typeAnnouce;
 	}
 
 }

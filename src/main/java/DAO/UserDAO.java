@@ -18,6 +18,7 @@ import org.hibernate.Transaction;
 import HibernateUtil.HibernateUtil;
 import Model.Announce;
 import Model.Friend;
+import Model.FriendRequest2;
 import Model.User;
 
 public class UserDAO implements InterfaceDAO<User> {
@@ -102,8 +103,11 @@ public class UserDAO implements InterfaceDAO<User> {
 		User user = new User();
 		try {
 			user = session.find(User.class, t);
-			Hibernate.initialize(user.getAnnounces());
+			Hibernate.initialize(user.getAnnounces()); // Khi load object thì load luôn cả list (do eager không hỗ trợ
+														// nhiều list)
 			Hibernate.initialize(user.getListFriend());
+			Hibernate.initialize(user.getFriendReceives());
+			Hibernate.initialize(user.getFriendRequests());
 		} finally {
 			// TODO: handle finally clause
 			closeSession();
@@ -206,13 +210,13 @@ public class UserDAO implements InterfaceDAO<User> {
 		List<Announce> announces = user.getAnnounces();
 
 		Announce annouceReceiver = announces.stream().filter(a -> a.getId().equals(annouceId)).findFirst().get();
-		Announce annouceSender = annouceReceiver.getAnnouce();
+//		Announce annouceSender = annouceReceiver.getAnnouce();
 
 		announces.remove(annouceReceiver);
 
 		annouceReceiver.setMessage(messageForReceiver);
-		annouceSender.setMessage(messageForSender);
-		annouceReceiver.setTypeOfAnnouce("SN");
+//		annouceSender.setMessage(messageForSender);
+//		annouceReceiver.setTypeOfAnnouce("SN");
 
 		announces.add(annouceReceiver);
 
@@ -240,6 +244,25 @@ public class UserDAO implements InterfaceDAO<User> {
 		transaction.commit();
 
 		closeSession();
+
+		return users;
+	}
+
+	public List<FriendRequest2> selectFriendRequestsByUserId(String userId) {
+		List<FriendRequest2> users = new ArrayList<FriendRequest2>();
+
+		openSession();
+		try {
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaQuery<FriendRequest2> query = builder.createQuery(FriendRequest2.class);
+			Root<FriendRequest2> root = query.from(FriendRequest2.class);
+			query.where(builder.like(root.get("userId"), "%" + userId + "%"));
+			users = session.createQuery(query).getResultList();
+		} catch (Exception e) {
+			// TODO: handle exception
+		} finally {
+			closeSession();
+		}
 
 		return users;
 	}

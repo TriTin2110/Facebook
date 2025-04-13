@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -22,7 +21,7 @@ public class User {
 	private boolean identifyStatus;
 	private String avatar;
 
-	@OneToOne(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
 	private UserInformation userInformation;
 
 	@ManyToMany
@@ -35,8 +34,13 @@ public class User {
 	@OneToMany(mappedBy = "user")
 	private List<Post> listPost;
 
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "toUser", cascade = CascadeType.ALL)
 	private List<Announce> announces;
+
+	@OneToMany(mappedBy = "toUser", cascade = CascadeType.ALL)
+	private List<FriendRequest> friendRequests;
+	@OneToMany(mappedBy = "fromUser", cascade = CascadeType.ALL)
+	private List<FriendReceive> friendReceives;
 
 	public User() {
 		this.listFriend = new ArrayList<User>();
@@ -44,6 +48,8 @@ public class User {
 		this.listGroup = new ArrayList<Group>();
 		this.listPost = new ArrayList<Post>();
 		this.announces = new ArrayList<Announce>();
+		this.friendRequests = new ArrayList<FriendRequest>();
+		this.friendReceives = new ArrayList<FriendReceive>();
 	}
 
 	public User(String email) {
@@ -170,6 +176,22 @@ public class User {
 
 	public void setAnnounces(List<Announce> announces) {
 		this.announces = announces;
+	}
+
+	public List<FriendRequest> getFriendRequests() {
+		return friendRequests;
+	}
+
+	public void setFriendRequests(List<FriendRequest> friendRequests) {
+		this.friendRequests = friendRequests;
+	}
+
+	public List<FriendReceive> getFriendReceives() {
+		return friendReceives;
+	}
+
+	public void setFriendReceives(List<FriendReceive> friendReceives) {
+		this.friendReceives = friendReceives;
 	}
 
 	@Override

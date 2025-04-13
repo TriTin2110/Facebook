@@ -1,3 +1,5 @@
+<%@page import="Service.UserService"%>
+<%@page import="Service.implement.UserServiceImpl"%>
 <%@page import="Cache.UserCache"%>
 <%@page import="DAO.PostDAO"%>
 <%@page import="java.util.Locale"%>
@@ -16,7 +18,8 @@
 <title>Insert title here</title>
 </head>
 <%
-UserCache cache = (UserCache) request.getSession().getAttribute("cache");
+UserService userService = new UserServiceImpl();
+User user = (User) request.getSession().getAttribute("user");
 String url = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 		+ request.getContextPath();
 String pattern = "EEE, dd MMMM yyyy";
@@ -28,7 +31,7 @@ String userId = request.getParameter("userId");
 
 //User user = (User) request.getAttribute("postContent");
 
-List<Post> posts = cache.selectPostsByUserIdCache(userId);
+List<Post> posts = userService.getAllPost(user.getUserId());
 
 %>
 <body>
