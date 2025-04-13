@@ -36,7 +36,6 @@ String url = request.getScheme() + "://" + request.getServerName() + ":" + reque
 				<h4>Lời mời kết bạn</h4>
 				<a href="#">Xem tất cả</a>
 			</div>
-			<jsp:include page="/component/friend/FriendRequests.jsp"></jsp:include>
 		</div>
 		<jsp:include page="/component/ListFriend.jsp"></jsp:include>
 	</div>

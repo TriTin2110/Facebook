@@ -124,6 +124,8 @@ public class UserDAO implements InterfaceDAO<User> {
 			TypedQuery<User> query = session.createQuery("from User where email = :email");
 			query.setParameter("email", t.getEmail());
 			user = query.getSingleResult();
+			Hibernate.initialize(user.getFriendReceives());
+			Hibernate.initialize(user.getFriendRequests());
 		} catch (NoResultException e) {
 			// TODO: handle exception
 

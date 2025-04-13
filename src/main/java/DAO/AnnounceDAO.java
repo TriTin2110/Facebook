@@ -110,7 +110,7 @@ public class AnnounceDAO implements InterfaceDAO<Announce> {
 		List<Announce> announces = new ArrayList<Announce>();
 		openSession();
 		try {
-			TypedQuery<Announce> query = session.createQuery("from Announce where user_id=:id", Announce.class);
+			TypedQuery<Announce> query = session.createQuery("FROM Announce WHERE id=:id", Announce.class);
 			query.setParameter("id", id);
 			announces = query.getResultList();
 		} finally {

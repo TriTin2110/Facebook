@@ -1,3 +1,5 @@
+<%@page import="Model.FriendRequest"%>
+<%@page import="Model.FriendReceive"%>
 <%@page import="DAO.AnnounceDAO"%>
 <%@page import="DAO.UserDAO"%>
 <%@page import="Model.Announce"%>
@@ -32,6 +34,13 @@ List<String> searched = (List<String>) request.getSession().getAttribute("dataSe
 User user = (User) request.getSession().getAttribute("user");
 
 List<Announce> announces = user.getAnnounces();
+List<FriendReceive> receives = user.getFriendReceives();
+List<FriendRequest> requests = user.getFriendRequests();
+
+announces.addAll(receives);
+announces.addAll(requests);
+
+announces.sort((o1, o2) -> o1.getDate().compareTo(o2.getDate()));
 
 request.setAttribute("announces", announces);
 request.setCharacterEncoding("UTF-8");
@@ -57,7 +66,6 @@ request.setCharacterEncoding("UTF-8");
 							<%
 							for (String item : searched) {
 							%>
-
 							<li><a href="<%=url%>/jsp/SearchFriend.jsp"
 								class="dropdown-item"><%=item%></a></li>
 							<%
@@ -92,20 +100,12 @@ request.setCharacterEncoding("UTF-8");
 				<li class="nm_item"><a href="#" class="nm_link"
 					id="open-notify"> <i class="nm_icon fa-solid fa-bell"></i>
 						<div class="notify_more">
-							<ul>
-							<%
-								for(Announce ann : announces)
-								{
-							%>
-								<li><a href="#"> <img src="<%=url%>/img/<%=ann.getUserAvatarRequested()%>" alt="">
-										<p>
-											<%=ann.getMessage()%>
-										</p>
-								</a></li>
-								<%} %>
+							<ul id="announce-list">
+								
 							</ul>
 						</div>
 				</a></li>
+
 				<li class="nm_item"><a href="" class="nm_link"> <img
 						src="<%=url%>/img/<%=user.getAvatar()%>" id="open-profile" />
 						<div class="acc_more">
@@ -139,4 +139,30 @@ request.setCharacterEncoding("UTF-8");
 	</div>
 </body>
 <script type="text/javascript" src="<%=url%>/javascript/Header.js"></script>
+<script type="text/javascript">
+	let announceList = document.getElementById("announce-list")
+	var ws = new WebSocket("ws://localhost:8080/SummerProject/NotificationWebSocket")
+	ws.onopen = function(message) {proccessOpen(message)};
+	ws.onmessage = function(message) {proccessMessage(message)};
+	ws.onclose = function(message) {proccessClose(message)};
+	ws.onerror = function(message) {proccessError(message)};
+	var userId = '<%=user.getUserId()%>'
+	function proccessOpen(message)
+	{
+		console.log('Connect to server successfully')
+		ws.send(userId)
+	}
+	function proccessMessage(message)
+	{
+		let data = message.data
+		announceList.innerHTML = data
+	}
+	function proccessClose(message)
+	{
+	}
+	function proccessError(message)
+	{
+	}
+	
+	</script>
 </html>

@@ -1,4 +1,3 @@
-<%@page import="Cache.UserCache"%>
 <%@page import="DAO.UserDAO"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>

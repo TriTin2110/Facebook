@@ -1,4 +1,3 @@
-<%@page import="Cache.UserCache"%>
 <%@page import="com.github.benmanes.caffeine.cache.Cache"%>
 <%@page import="DAO.AnnounceDAO"%>
 <%@page import="Model.Announce"%>

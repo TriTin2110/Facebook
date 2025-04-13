@@ -1,4 +1,3 @@
-<%@page import="Cache.UserCache"%>
 <%@page import="DAO.UserDAO"%>
 <%@page import="Model.User"%>
 <%@page import="util.CheckingLogin"%>

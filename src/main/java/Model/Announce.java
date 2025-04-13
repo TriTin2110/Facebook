@@ -2,6 +2,7 @@ package Model;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
@@ -20,6 +21,7 @@ public class Announce {
 	private String id;
 	private String message;
 	private Date date;
+	@Column(name = "type_annouce")
 	private TypeAnnouce typeAnnouce;
 	@ManyToOne
 	@JoinColumn(name = "to_user")
@@ -91,6 +93,12 @@ public class Announce {
 
 	public void setTypeAnnouce(TypeAnnouce typeAnnouce) {
 		this.typeAnnouce = typeAnnouce;
+	}
+
+	@Override
+	public String toString() {
+		return "Announce [id=" + id + ", message=" + message + ", date=" + date + ", typeAnnouce=" + typeAnnouce
+				+ ", toUser=" + toUser + "]";
 	}
 
 }

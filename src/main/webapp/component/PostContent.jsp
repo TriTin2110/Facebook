@@ -1,6 +1,5 @@
 <%@page import="Service.UserService"%>
 <%@page import="Service.implement.UserServiceImpl"%>
-<%@page import="Cache.UserCache"%>
 <%@page import="DAO.PostDAO"%>
 <%@page import="java.util.Locale"%>
 <%@page import="java.text.SimpleDateFormat"%>

@@ -14,7 +14,7 @@ public class UserAnnounce {
 			.build(key -> announceDAO.selectAnnoucesByUserId(key));
 
 	public static List<Announce> getAnnounces(String userId) {
-		return announces.getIfPresent(userId);
+		return announces.get(userId);
 	}
 
 	public static void updateAnnounces(String userId) {

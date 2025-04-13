@@ -14,54 +14,10 @@ import javax.servlet.http.HttpSession;
 import DAO.UserDAO;
 import Model.FriendReceive;
 import Model.FriendRequest;
-import Model.FriendRequest2;
 import Model.User;
 import Service.UserService;
 import Service.implement.UserServiceImpl;
 import services.SearchFriendService;
-
-enum TypeAnnouce {
-	FR, SN;
-
-}
-
-class AnnouceForm {
-	private String userName, message, avatar;
-	private TypeAnnouce typeOfAnnouce;
-	@SuppressWarnings("unused")
-	private boolean isReceiver;
-
-	public AnnouceForm(String userName, String avatar, boolean isReceiver) {
-		this.userName = userName;
-		this.avatar = avatar;
-		this.isReceiver = isReceiver;
-		if (isReceiver) {
-			this.message = userName + " đã gửi lời mời kết bạn dành cho bạn!";
-			this.typeOfAnnouce = TypeAnnouce.FR;
-		} else {
-			this.message = "Bạn đã gửi lời mời kết bạn dành cho " + userName + "!";
-			this.typeOfAnnouce = TypeAnnouce.SN;
-		}
-
-	}
-
-	public String getUserName() {
-		return userName;
-	}
-
-	public String getMessage() {
-		return message;
-	}
-
-	public TypeAnnouce getTypeOfAnnouce() {
-		return typeOfAnnouce;
-	}
-
-	public String getAvatar() {
-		return avatar;
-	}
-
-}
 
 /**
  * Servlet implementation class SearchFriend
@@ -154,25 +110,9 @@ public class Friend extends HttpServlet {
 		userDAO.update(receiver);
 		userDAO.update(sender);
 
-//		FriendRequest2 fr = createAnnouce(receiver, sender, idOfReceiverAnnouce);
-//
-//		List<FriendRequest2> receiverFRList = service.getFriendRequests(receiver.getUserId());
-//		List<FriendRequest2> senderFRList = service.getFriendRequests(sender.getUserId());
-//
-//		receiverFRList.add(fr);
-//		senderFRList.add(fr);
-
-//		receiver.setFriendRequests(receiverFRList);
-//		sender.setFriendRequests(senderFRList);
-
 		String url = "/jsp/Profile.jsp?found-user-id=" + idOfReceiverAnnouce;
 		return url;
 
-	}
-
-	private FriendRequest2 createAnnouce(User fromUser, User toUser, String message) {
-		FriendRequest2 fr = new FriendRequest2(fromUser, toUser, "Friend Request");
-		return fr;
 	}
 
 	private void acceptingAddFriend(HttpServletRequest request, HttpServletResponse response) throws Exception {
