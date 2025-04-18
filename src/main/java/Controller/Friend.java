@@ -10,12 +10,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.websocket.Session;
 
+import Cache.UserAnnounce;
 import DAO.UserDAO;
 import Model.Announce;
 import Model.User;
 import Service.UserService;
 import Service.implement.UserServiceImpl;
+import WebSocket.Notification;
 import services.SearchFriendService;
 
 /**
@@ -104,8 +107,34 @@ public class Friend extends HttpServlet {
 
 		sender.getTo_announces().add(announce);
 
-//		userDAO.update(receiver);
 		userDAO.update(sender);
+
+		// Update Announces in cache for 2 users
+		UserAnnounce.insertSentAnnounce(sender.getUserId(), announce);
+		UserAnnounce.insertReceivedAnnounce(receiver.getUserId(), announce);
+
+		Session senderSession = Notification.getSession(sender.getUserId());
+		Session receiverSession = Notification.getSession(receiver.getUserId());
+
+		// Then we will send this friend request to both user
+		if (senderSession != null) {
+			Notification.sendMessage(sender.getUserId(), senderSession);
+			try {
+				Thread.sleep(500);
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+		}
+		if (receiverSession != null) {
+			Notification.sendMessage(receiver.getUserId(), receiverSession);
+			try {
+				Thread.sleep(500);
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+		}
 
 		String url = "/jsp/Profile.jsp?found-user-id=" + idOfReceiverAnnouce;
 		return url;

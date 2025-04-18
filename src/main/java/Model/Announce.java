@@ -104,4 +104,10 @@ public class Announce {
 		this.typeAnnouce = typeAnnouce;
 	}
 
+	@Override
+	public String toString() {
+		return "Announce [id=" + id + ", message=" + message + ", date=" + date + ", typeAnnouce=" + typeAnnouce
+				+ ", from=" + from + ", to=" + to + "]";
+	}
+
 }

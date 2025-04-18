@@ -57,7 +57,7 @@ public class User {
 		this.email = email;
 		this.password = password;
 		this.userId = "";
-		this.identifyStatus = false;
+		this.identifyStatus = true;
 		this.avatar = "friend2.jpg";
 		this.listFriend = new ArrayList<User>();
 		this.userInformation = new UserInformation();

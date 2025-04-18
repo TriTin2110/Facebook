@@ -1,5 +1,3 @@
-<%@page import="Model.FriendRequest"%>
-<%@page import="Model.FriendReceive"%>
 <%@page import="DAO.AnnounceDAO"%>
 <%@page import="DAO.UserDAO"%>
 <%@page import="Model.Announce"%>

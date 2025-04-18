@@ -1,7 +1,10 @@
 package WebSocket;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
@@ -14,26 +17,42 @@ import Model.User;
 
 @ServerEndpoint(value = "/NotificationWebSocket")
 public class Notification {
-	private static List<Session> notifications = new ArrayList<Session>();
+	private static Map<String, Session> notifications = new HashMap<String, Session>();
+
+	public static Session getSession(String userId) {
+		Set<String> keySets = notifications.keySet();
+		for (String key : keySets) {
+			if (userId.equals(key))
+				return notifications.get(key);
+		}
+		return null;
+	}
 
 	@OnOpen
 	public void setupConnection(Session session) {
-		notifications.add(session);
+
 	}
 
 	@OnMessage
-	public void sendMessage(String userId, Session session) {
+	public static void sendMessage(String userId, Session session) {
+		// We will set Key-Value for each session with
+		// Key: userId, Value: session
+		if (!notifications.containsKey(userId)) {
+			notifications.put(userId, session);
+		}
 		// Get all announce from user
-		System.out.println(userId);
 		List<Announce> sentAnnounces = UserAnnounce.getSentAnnounces(userId);
 		List<Announce> receivedAnnounces = UserAnnounce.getReceivedAnnounces(userId);
 		try {
 			// If there is no announce will return empty string
-			if (sentAnnounces.isEmpty() && receivedAnnounces.isEmpty())
+			if (sentAnnounces.isEmpty() && receivedAnnounces.isEmpty()) {
 				session.getBasicRemote().sendText("");
-			else {
+			} else {
 				StringBuilder result = handleAnnounce(userId, sentAnnounces, receivedAnnounces);
-				session.getBasicRemote().sendText(result.toString());
+				if (session.isOpen())
+					session.getBasicRemote().sendText(result.toString());
+				else
+					System.out.println("Session is closed");
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -41,7 +60,8 @@ public class Notification {
 		}
 	}
 
-	public StringBuilder handleAnnounce(String userId, List<Announce> sentAnnounces, List<Announce> receivedAnnounces) {
+	private static StringBuilder handleAnnounce(String userId, List<Announce> sentAnnounces,
+			List<Announce> receivedAnnounces) {
 		List<Announce> announces = new ArrayList<Announce>();
 
 		// Add all element from 2 secondary announces to primary announces
@@ -49,7 +69,7 @@ public class Notification {
 		announces.addAll(receivedAnnounces);
 
 		// Sort announces
-		announces.sort((o1, o2) -> o1.getDate().compareTo(o2.getDate()));
+		announces.sort((o1, o2) -> o2.getDate().compareTo(o1.getDate()));
 
 		StringBuilder result = new StringBuilder();
 
@@ -62,7 +82,7 @@ public class Notification {
 		return result;
 	}
 
-	private String createMessage(String userId, Announce announce, User toUser) {
+	private static String createMessage(String userId, Announce announce, User toUser) {
 		String message;
 		// If this announce is received announce
 		if (userId.equals(announce.getTo().getUserId())) {
