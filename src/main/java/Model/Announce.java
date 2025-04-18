@@ -4,6 +4,8 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
@@ -18,49 +20,64 @@ import Enums.TypeAnnouce;
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Announce {
 	@Id
-	private String id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
 	private String message;
 	private Date date;
 	@Column(name = "type_annouce")
 	private TypeAnnouce typeAnnouce;
+
+	@ManyToOne
+	@JoinColumn(name = "from_user")
+	private User from;
+
 	@ManyToOne
 	@JoinColumn(name = "to_user")
-	private User toUser;
+	private User to;
 
 	public Announce() {
 	}
 
-	public Announce(String id) {
-		this.id = id;
+	public Announce(String message) {
+		this.message = message;
+	}
+
+	public Announce(User from, User to) {
+		this.from = from;
+		this.to = to;
 		this.typeAnnouce = TypeAnnouce.FRIEND_REQUEST;
 		this.date = new Date(System.currentTimeMillis());
 	}
 
-	public Announce(String id, String message) {
-		this.id = id;
+	public Announce(User from, String message, User to) {
+		this.from = from;
 		this.message = message;
-	}
-
-	public Announce(String id, User toUser) {
-		this.id = id;
-		this.toUser = toUser;
-		this.typeAnnouce = TypeAnnouce.FRIEND_REQUEST;
+		this.to = to;
 		this.date = new Date(System.currentTimeMillis());
 	}
 
-	public Announce(String id, String message, User toUser) {
-		this.id = id;
-		this.message = message;
-		this.toUser = toUser;
-		this.date = new Date(System.currentTimeMillis());
-	}
-
-	public String getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
+	}
+
+	public User getFrom() {
+		return from;
+	}
+
+	public void setFrom(User from) {
+		this.from = from;
+	}
+
+	public User getTo() {
+		return to;
+	}
+
+	public void setTo(User to) {
+		this.to = to;
 	}
 
 	public String getMessage() {
@@ -79,26 +96,12 @@ public class Announce {
 		this.date = date;
 	}
 
-	public User getToUser() {
-		return toUser;
-	}
-
-	public void setToUser(User toUser) {
-		this.toUser = toUser;
-	}
-
 	public TypeAnnouce getTypeAnnouce() {
 		return typeAnnouce;
 	}
 
 	public void setTypeAnnouce(TypeAnnouce typeAnnouce) {
 		this.typeAnnouce = typeAnnouce;
-	}
-
-	@Override
-	public String toString() {
-		return "Announce [id=" + id + ", message=" + message + ", date=" + date + ", typeAnnouce=" + typeAnnouce
-				+ ", toUser=" + toUser + "]";
 	}
 
 }

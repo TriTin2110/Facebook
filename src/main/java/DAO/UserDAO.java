@@ -16,9 +16,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
 import HibernateUtil.HibernateUtil;
-import Model.Announce;
 import Model.Friend;
-import Model.FriendRequest2;
 import Model.User;
 
 public class UserDAO implements InterfaceDAO<User> {
@@ -103,11 +101,9 @@ public class UserDAO implements InterfaceDAO<User> {
 		User user = new User();
 		try {
 			user = session.find(User.class, t);
-			Hibernate.initialize(user.getAnnounces()); // Khi load object thì load luôn cả list (do eager không hỗ trợ
-														// nhiều list)
-			Hibernate.initialize(user.getListFriend());
-			Hibernate.initialize(user.getFriendReceives());
-			Hibernate.initialize(user.getFriendRequests());
+			// Khi load object thì load luôn cả list (do eager không hỗ trợ nhiều list)
+			Hibernate.initialize(user.getFrom_announces());
+			Hibernate.initialize(user.getTo_announces());
 		} finally {
 			// TODO: handle finally clause
 			closeSession();
@@ -124,8 +120,9 @@ public class UserDAO implements InterfaceDAO<User> {
 			TypedQuery<User> query = session.createQuery("from User where email = :email");
 			query.setParameter("email", t.getEmail());
 			user = query.getSingleResult();
-			Hibernate.initialize(user.getFriendReceives());
-			Hibernate.initialize(user.getFriendRequests());
+			Hibernate.initialize(user.getListFriend());
+			Hibernate.initialize(user.getFrom_announces());
+			Hibernate.initialize(user.getTo_announces());
 		} catch (NoResultException e) {
 			// TODO: handle exception
 
@@ -188,42 +185,43 @@ public class UserDAO implements InterfaceDAO<User> {
 		return users;
 	}
 
-	public void processAddingFriend(String friendId, User user) {
-		// TODO Auto-generated method stub
-		User friend = new User();
-		String announceId = friendId;
-		friendId = friendId.substring(0, friendId.indexOf("-"));
+//	public void processAddingFriend(String friendId, User user) {
+//		// TODO Auto-generated method stub
+//		User friend = new User();
+//		String announceId = friendId;
+//		friendId = friendId.substring(0, friendId.indexOf("-"));
+//
+//		friend.setUserId(friendId);
+//		friend = selectById(friend.getUserId());
+//
+//		String messageForReceiver = "Bạn và " + friend.getUserInformation().getFullName() + " đã trở thành bạn bè!";
+//		String messageForSender = "Bạn và " + user.getUserInformation().getFullName() + " đã trở thành bạn bè!";
+//
+//		List<Announce> announces = updateAnnouce(user, announceId, messageForReceiver, messageForSender);
+//		user.setAnnounces(announces);
+//
+//		user = addingFriend(user, friend);
+//		update(user);
+//	}
 
-		friend.setUserId(friendId);
-		friend = selectById(friend.getUserId());
-
-		String messageForReceiver = "Bạn và " + friend.getUserInformation().getFullName() + " đã trở thành bạn bè!";
-		String messageForSender = "Bạn và " + user.getUserInformation().getFullName() + " đã trở thành bạn bè!";
-
-		List<Announce> announces = updateAnnouce(user, announceId, messageForReceiver, messageForSender);
-		user.setAnnounces(announces);
-
-		user = addingFriend(user, friend);
-		update(user);
-	}
-
-	private List<Announce> updateAnnouce(User user, String annouceId, String messageForReceiver,
-			String messageForSender) {
-		List<Announce> announces = user.getAnnounces();
-
-		Announce annouceReceiver = announces.stream().filter(a -> a.getId().equals(annouceId)).findFirst().get();
-//		Announce annouceSender = annouceReceiver.getAnnouce();
-
-		announces.remove(annouceReceiver);
-
-		annouceReceiver.setMessage(messageForReceiver);
-//		annouceSender.setMessage(messageForSender);
-//		annouceReceiver.setTypeOfAnnouce("SN");
-
-		announces.add(annouceReceiver);
-
-		return announces;
-	}
+//	private List<Announce> updateAnnouce(User user, String annouceId, String messageForReceiver,
+//			String messageForSender) {
+//		List<Announce> announces = user.getAnnounces();
+//
+//		Announce annouceReceiver = announces.stream().filter(a -> a.getTo().getUserId().equals(annouceId)).findFirst()
+//				.get();
+////		Announce annouceSender = annouceReceiver.getAnnouce();
+//
+//		announces.remove(annouceReceiver);
+//
+//		annouceReceiver.setMessage(messageForReceiver);
+////		annouceSender.setMessage(messageForSender);
+////		annouceReceiver.setTypeOfAnnouce("SN");
+//
+//		announces.add(annouceReceiver);
+//
+//		return announces;
+//	}
 
 	public User addingFriend(User user1, User user2) {
 		List<User> users = user1.getListFriend();
@@ -246,25 +244,6 @@ public class UserDAO implements InterfaceDAO<User> {
 		transaction.commit();
 
 		closeSession();
-
-		return users;
-	}
-
-	public List<FriendRequest2> selectFriendRequestsByUserId(String userId) {
-		List<FriendRequest2> users = new ArrayList<FriendRequest2>();
-
-		openSession();
-		try {
-			CriteriaBuilder builder = session.getCriteriaBuilder();
-			CriteriaQuery<FriendRequest2> query = builder.createQuery(FriendRequest2.class);
-			Root<FriendRequest2> root = query.from(FriendRequest2.class);
-			query.where(builder.like(root.get("userId"), "%" + userId + "%"));
-			users = session.createQuery(query).getResultList();
-		} catch (Exception e) {
-			// TODO: handle exception
-		} finally {
-			closeSession();
-		}
 
 		return users;
 	}

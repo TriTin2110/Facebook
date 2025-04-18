@@ -33,12 +33,7 @@ List<String> searched = (List<String>) request.getSession().getAttribute("dataSe
 
 User user = (User) request.getSession().getAttribute("user");
 
-List<Announce> announces = user.getAnnounces();
-List<FriendReceive> receives = user.getFriendReceives();
-List<FriendRequest> requests = user.getFriendRequests();
-
-announces.addAll(receives);
-announces.addAll(requests);
+List<Announce> announces = user.getFrom_announces();
 
 announces.sort((o1, o2) -> o1.getDate().compareTo(o2.getDate()));
 

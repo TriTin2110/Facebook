@@ -10,14 +10,24 @@ import Model.Announce;
 
 public class UserAnnounce {
 	private static AnnounceDAO announceDAO = new AnnounceDAO();
-	private static LoadingCache<String, List<Announce>> announces = Caffeine.newBuilder()
-			.build(key -> announceDAO.selectAnnoucesByUserId(key));
+	private static LoadingCache<String, List<Announce>> sentAnnounces = Caffeine.newBuilder()
+			.build(key -> announceDAO.selectSendedAnnouncesByFromUserId(key));
+	private static LoadingCache<String, List<Announce>> receivedAnnounces = Caffeine.newBuilder()
+			.build(key -> announceDAO.selectReceivedAnnouncesByToUserId(key));
 
-	public static List<Announce> getAnnounces(String userId) {
-		return announces.get(userId);
+	public static List<Announce> getSentAnnounces(String userId) {
+		return sentAnnounces.get(userId);
 	}
 
-	public static void updateAnnounces(String userId) {
-		announces.refresh(userId);
+	public static void updateSentAnnounces(String userId) {
+		sentAnnounces.refresh(userId);
+	}
+
+	public static List<Announce> getReceivedAnnounces(String userId) {
+		return receivedAnnounces.get(userId);
+	}
+
+	public static void updateReceivedAnnounces(String userId) {
+		receivedAnnounces.refresh(userId);
 	}
 }

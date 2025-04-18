@@ -1,6 +1,5 @@
 package Service.implement;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -8,14 +7,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import Cache.UserAnnounce;
-import Cache.UserFriend;
 import DAO.PostDAO;
 import DAO.UserDAO;
 import Interact.UserInformationInteract;
 import Interact.UserInteract;
-import Model.Announce;
-import Model.FriendRequest2;
 import Model.Post;
 import Model.User;
 import Model.UserInformation;
@@ -102,15 +97,6 @@ public class UserServiceImpl implements UserService {
 			// Kiểm tra mật khẩu và xác thực email
 			boolean passwordAndEmailCorrected = userInt.checkingAccount(passwordInput);
 			if (passwordAndEmailCorrected) {
-				List<Announce> userAnnounces = UserAnnounce.getAnnounces(user.getUserId());
-				List<User> userFriends = UserFriend.getFriends(user.getUserId());
-				if (userAnnounces == null)
-					userAnnounces = new ArrayList<Announce>();
-				if (userFriends == null)
-					userFriends = new ArrayList<User>();
-
-				user.setAnnounces(userAnnounces);
-				user.setListFriend(userFriends);
 				session.setAttribute("user", user);
 				return response;
 			} else {
@@ -142,12 +128,6 @@ public class UserServiceImpl implements UserService {
 	public List<User> getAllFriend(String userId) {
 		// TODO Auto-generated method stub
 		return userDAO.selectFriendsByUserId(userId);
-	}
-
-	@Override
-	public List<FriendRequest2> getFriendRequests(String userId) {
-		// TODO Auto-generated method stub
-		return userDAO.selectFriendRequestsByUserId(userId);
 	}
 
 	@Override

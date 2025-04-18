@@ -12,8 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import DAO.UserDAO;
-import Model.FriendReceive;
-import Model.FriendRequest;
+import Model.Announce;
 import Model.User;
 import Service.UserService;
 import Service.implement.UserServiceImpl;
@@ -51,9 +50,9 @@ public class Friend extends HttpServlet {
 			case "proccess-adding-friend":
 				url.append(proccessAddingFriend(request, response));
 				break;
-			case "add":
-				acceptingAddFriend(request, response);
-				break;
+//			case "add":
+//				acceptingAddFriend(request, response);
+//				break;
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -101,13 +100,11 @@ public class Friend extends HttpServlet {
 		User receiver = service.selectUserByUserId(idOfReceiverAnnouce);
 		sender = service.selectUserByUserId(sender.getUserId());
 
-		FriendRequest friendRequest = new FriendRequest(sender, receiver);
-		FriendReceive friendReceive = new FriendReceive(receiver, sender);
+		Announce announce = new Announce(sender, receiver);
 
-		receiver.getFriendReceives().add(friendReceive);
-		sender.getFriendRequests().add(friendRequest);
+		sender.getTo_announces().add(announce);
 
-		userDAO.update(receiver);
+//		userDAO.update(receiver);
 		userDAO.update(sender);
 
 		String url = "/jsp/Profile.jsp?found-user-id=" + idOfReceiverAnnouce;
@@ -115,12 +112,12 @@ public class Friend extends HttpServlet {
 
 	}
 
-	private void acceptingAddFriend(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		// TODO Auto-generated method stub
-		String idFriend = request.getParameter("friendId");
-		User user = (User) request.getSession().getAttribute("user");
-		userDAO.processAddingFriend(idFriend, user);
-		request.getSession().setAttribute("user", user);
-		response.sendRedirect(request.getContextPath());
-	}
+//	private void acceptingAddFriend(HttpServletRequest request, HttpServletResponse response) throws Exception {
+//		// TODO Auto-generated method stub
+//		String idFriend = request.getParameter("friendId");
+//		User user = (User) request.getSession().getAttribute("user");
+//		userDAO.processAddingFriend(idFriend, user);
+//		request.getSession().setAttribute("user", user);
+//		response.sendRedirect(request.getContextPath());
+//	}
 }

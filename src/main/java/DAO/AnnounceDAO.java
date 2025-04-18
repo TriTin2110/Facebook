@@ -106,12 +106,27 @@ public class AnnounceDAO implements InterfaceDAO<Announce> {
 		return announces;
 	}
 
-	public List<Announce> selectAnnoucesByUserId(String id) {
+	public List<Announce> selectSendedAnnouncesByFromUserId(String id) {
 		List<Announce> announces = new ArrayList<Announce>();
 		openSession();
 		try {
-			TypedQuery<Announce> query = session.createQuery("FROM Announce WHERE id=:id", Announce.class);
-			query.setParameter("id", id);
+			TypedQuery<Announce> query = session.createQuery("FROM Announce WHERE from_user=:from", Announce.class);
+			query.setParameter("from", id);
+			announces = query.getResultList();
+		} finally {
+			// TODO: handle finally clause
+			closeSession();
+		}
+
+		return announces;
+	}
+
+	public List<Announce> selectReceivedAnnouncesByToUserId(String id) {
+		List<Announce> announces = new ArrayList<Announce>();
+		openSession();
+		try {
+			TypedQuery<Announce> query = session.createQuery("FROM Announce WHERE to_user=:to", Announce.class);
+			query.setParameter("to", id);
 			announces = query.getResultList();
 		} finally {
 			// TODO: handle finally clause
