@@ -1,3 +1,6 @@
+<%@page import="java.util.logging.Logger"%>
+<%@page import="Model.Announce"%>
+<%@page import="java.util.List"%>
 <%@page import="Model.UserInformation"%>
 <%@page import="Model.User"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -33,7 +36,21 @@ if(userIdFound == null)
 userDAO = new UserDAO();
 User userPage = userDAO.selectById(userIdFound.toString());
 UserInformation profilePage = userPage.getUserInformation();
-
+List<Announce> announces = userPage.getAnnounces();
+boolean isSentRequest = false;
+User sender = null;
+for(Announce announce : announces)
+{
+	sender = announce.getSender();
+	if(sender != null)
+	{
+		if(sender.getUserId().equals(currentUser.getUserId()))
+		{
+			isSentRequest = true;
+			break;
+		}
+	}
+}
 
 String currenUserId = currentUser.getUserId();
 String currentUserName = currentUser.getUserInformation().getFullName();
@@ -60,11 +77,13 @@ String currentUserAvatar = currentUser.getAvatar();
 				</div>
 
 				
-	
+			<%if(!currentUser.getUserId().equals(userIdFound)){ %>
 				<jsp:include page="../component/profile/FriendAndSelfOption.jsp">
 					<jsp:param value="<%=url%>" name="url" />
 					<jsp:param value="<%=userIdFound.toString()%>" name="idUrl" />
+					<jsp:param value="<%=isSentRequest%>" name="isSentRequest"/> 
 				</jsp:include>
+				<%} %>
 			</div>
 			<div class="avt_list_btn">
 				<ul class="avt_list">

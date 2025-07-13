@@ -449,10 +449,9 @@ display: block; /* Hiển thị khi input được focus */
     align-items: center;
 }
 
-.header a {
+.header a{
     margin-top: -5px;
     font-size: 15px;
-    color: #0064D1;
     padding: 8px 12px;
     text-decoration: none;
 }

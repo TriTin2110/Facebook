@@ -37,9 +37,7 @@ public class ServerWebSocket {
 		// Kết nối với user khác khi có yêu cầu
 		if (message.contains("connectToUser")) {
 			userInteract.connect(currentUser, message, userName, listUser, map);
-		}
-		// khi user ko yêu cầu kết nối với user khác
-		else {
+		} else {
 			try {
 				if (userName == null) {// Tạo user nếu họ chưa có trong danh sách (phần này sẽ tự động thực hiện khi
 										// user đăng nhập vào web)
@@ -50,7 +48,6 @@ public class ServerWebSocket {
 					userInteract.sendMessageForAnother(currentUser, userName, message, map);
 					String[] name = { userName, currentUser.getUserProperties().get("guestName").toString() };
 					Arrays.sort(name);
-					System.out.println("Map content: " + map.get(name[0] + name[1]));
 				}
 			} catch (Exception e) {
 				// TODO: handle exception

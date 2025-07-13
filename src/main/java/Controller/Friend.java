@@ -10,15 +10,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.websocket.Session;
 
-import Cache.UserAnnounce;
+import DAO.AnnounceDAO;
 import DAO.UserDAO;
+import Enums.TypeAnnouce;
 import Model.Announce;
 import Model.User;
 import Service.UserService;
 import Service.implement.UserServiceImpl;
-import WebSocket.Notification;
 import services.SearchFriendService;
 
 /**
@@ -44,24 +43,25 @@ public class Friend extends HttpServlet {
 		createUtil(request);
 
 		String method = request.getParameter("method");
-		StringBuilder url = new StringBuilder();
-		try {
-			switch (method) {
-			case "search":
-				searchFriend(request, response);
-				return;
-			case "proccess-adding-friend":
-				url.append(proccessAddingFriend(request, response));
-				break;
-//			case "add":
-//				acceptingAddFriend(request, response);
-//				break;
+		if (request.getSession().getAttribute("user") != null) {
+			try {
+				switch (method) {
+				case "search":
+					searchFriend(request, response);
+					return;
+				case "proccess-adding-friend":
+					sendFriendRequest(request, response);
+					break;
+				case "add":
+					acceptingAddFriend(request, response);
+					break;
+				}
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
 			}
-		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
-		}
-		request.getRequestDispatcher(url.toString()).forward(request, response);
+		} else
+			request.getRequestDispatcher(request.getContextPath()).forward(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -82,7 +82,7 @@ public class Friend extends HttpServlet {
 		String url = request.getContextPath() + "/jsp/SearchFriend.jsp";
 
 		addSearchingDataToSearchedTable(searched, data);
-
+		System.out.println("Da tim kiem");
 		session.setAttribute("dataSearched", searched);
 		session.setAttribute("listSearched", search.getUsersByData(data));
 
@@ -96,57 +96,58 @@ public class Friend extends HttpServlet {
 		}
 	}
 
-	private String proccessAddingFriend(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	private String sendFriendRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		User sender = (User) request.getSession().getAttribute("user");
-		UserService service = new UserServiceImpl();
 		String idOfReceiverAnnouce = request.getParameter("userId");
-		User receiver = service.selectUserByUserId(idOfReceiverAnnouce);
-		sender = service.selectUserByUserId(sender.getUserId());
+		boolean isAnnounceAlreadyExists = false;
+		AnnounceDAO announceDAO = new AnnounceDAO();
+		List<Announce> senderAnnounces = announceDAO.selectSentAnnouncesByFromUserId(idOfReceiverAnnouce);
+		List<User> senderFriends = sender.getListFriend();
 
-		Announce announce = new Announce(sender, receiver);
-
-		sender.getTo_announces().add(announce);
-
-		userDAO.update(sender);
-
-		// Update Announces in cache for 2 users
-		UserAnnounce.insertSentAnnounce(sender.getUserId(), announce);
-		UserAnnounce.insertReceivedAnnounce(receiver.getUserId(), announce);
-
-		Session senderSession = Notification.getSession(sender.getUserId());
-		Session receiverSession = Notification.getSession(receiver.getUserId());
-
-		// Then we will send this friend request to both user
-		if (senderSession != null) {
-			Notification.sendMessage(sender.getUserId(), senderSession);
-			try {
-				Thread.sleep(500);
-			} catch (Exception e) {
-				// TODO: handle exception
-				e.printStackTrace();
-			}
-		}
-		if (receiverSession != null) {
-			Notification.sendMessage(receiver.getUserId(), receiverSession);
-			try {
-				Thread.sleep(500);
-			} catch (Exception e) {
-				// TODO: handle exception
-				e.printStackTrace();
+		for (Announce announce : senderAnnounces) {
+			if (announce.getUser().getUserId().equals(idOfReceiverAnnouce)) {
+				isAnnounceAlreadyExists = true;
+				break;
 			}
 		}
 
+		for (User user : senderFriends) {
+			if (user.getUserId().equals(idOfReceiverAnnouce)) {
+				isAnnounceAlreadyExists = true;
+				break;
+			}
+		}
+
+		if (!isAnnounceAlreadyExists) {
+			UserService service = new UserServiceImpl();
+			User receiver = service.selectUserByUserId(idOfReceiverAnnouce);
+			sender = service.selectUserByUserId(sender.getUserId());
+			Announce announceSender = Announce.createAnnouceObject(
+					"Bạn đã gửi lời kết bạn cho <strong> " + receiver.getUserInformation().getFullName() + "</strong>",
+					sender, receiver.getAvatar(), TypeAnnouce.FRIEND_REQUEST);
+
+			Announce announceReceiver = Announce.createAnnouceObject("Bạn đã nhận được lời kết bạn từ <strong> "
+					+ sender.getUserInformation().getFullName() + "</strong>", receiver, sender.getAvatar(),
+					TypeAnnouce.FRIEND_RESPONSE);
+			announceReceiver.setSender(sender);
+
+			sender.getAnnounces().add(announceSender);
+			receiver.getAnnounces().add(announceReceiver);
+			userDAO.update(sender);
+			userDAO.update(receiver);
+			request.getSession().setAttribute("user", sender);
+		}
 		String url = "/jsp/Profile.jsp?found-user-id=" + idOfReceiverAnnouce;
+		response.sendRedirect(request.getContextPath() + url);
 		return url;
-
 	}
 
-//	private void acceptingAddFriend(HttpServletRequest request, HttpServletResponse response) throws Exception {
-//		// TODO Auto-generated method stub
-//		String idFriend = request.getParameter("friendId");
-//		User user = (User) request.getSession().getAttribute("user");
-//		userDAO.processAddingFriend(idFriend, user);
-//		request.getSession().setAttribute("user", user);
-//		response.sendRedirect(request.getContextPath());
-//	}
+	private void acceptingAddFriend(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		// TODO Auto-generated method stub
+		String idFriend = request.getParameter("friendId");
+		User user = (User) request.getSession().getAttribute("user");
+		userDAO.processAddingFriend(idFriend, user);
+		request.getSession().setAttribute("user", user);
+		response.sendRedirect(request.getContextPath());
+	}
 }

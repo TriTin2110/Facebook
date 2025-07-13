@@ -1,13 +1,15 @@
 package Enums;
 
 public enum TypeAnnouce {
-	FRIEND_REQUEST() {
-		@Override
-		public String getName() {
-			// TODO Auto-generated method stub
-			return "Friend Request";
-		}
-	};
+	FRIEND_REQUEST("FRIEND_REQUEST"), FRIEND_RESPONSE("FRIEND_RESPONSE"), FRIEND_ACCEPTED("FRIEND_ACCEPTED");
 
-	public abstract String getName();
+	private String message;
+
+	TypeAnnouce(String message) {
+		this.message = message;
+	}
+
+	public String getMessage() {
+		return this.message;
+	}
 }

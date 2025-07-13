@@ -2,57 +2,38 @@ package Model;
 
 import java.util.Date;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import Enums.TypeAnnouce;
 
 @Entity
-//Bảng cha và bảng con sẽ nằm tách biệt và liên kết với nhau thông qua
-// khóa ngoại
-@Inheritance(strategy = InheritanceType.JOINED)
 public class Announce {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	private String message;
 	private Date date;
-	@Column(name = "type_annouce")
-	private TypeAnnouce typeAnnouce;
+	private String type;
+	@ManyToOne
+	@JoinColumn(name = "user_id")
+	private User user;
 
 	@ManyToOne
-	@JoinColumn(name = "from_user")
-	private User from;
-
-	@ManyToOne
-	@JoinColumn(name = "to_user")
-	private User to;
+	@JoinColumn(name = "sender_id")
+	private User sender;
 
 	public Announce() {
-	}
-
-	public Announce(String message) {
-		this.message = message;
-	}
-
-	public Announce(User from, User to) {
-		this.from = from;
-		this.to = to;
-		this.typeAnnouce = TypeAnnouce.FRIEND_REQUEST;
 		this.date = new Date(System.currentTimeMillis());
 	}
 
-	public Announce(User from, String message, User to) {
-		this.from = from;
-		this.message = message;
-		this.to = to;
+	public Announce(String type, User user) {
+		this.type = type;
+		this.user = user;
 		this.date = new Date(System.currentTimeMillis());
 	}
 
@@ -62,22 +43,6 @@ public class Announce {
 
 	public void setId(int id) {
 		this.id = id;
-	}
-
-	public User getFrom() {
-		return from;
-	}
-
-	public void setFrom(User from) {
-		this.from = from;
-	}
-
-	public User getTo() {
-		return to;
-	}
-
-	public void setTo(User to) {
-		this.to = to;
 	}
 
 	public String getMessage() {
@@ -96,18 +61,53 @@ public class Announce {
 		this.date = date;
 	}
 
-	public TypeAnnouce getTypeAnnouce() {
-		return typeAnnouce;
+	public String getType() {
+		return type;
 	}
 
-	public void setTypeAnnouce(TypeAnnouce typeAnnouce) {
-		this.typeAnnouce = typeAnnouce;
+	public void setType(String type) {
+		this.type = type;
 	}
 
-	@Override
-	public String toString() {
-		return "Announce [id=" + id + ", message=" + message + ", date=" + date + ", typeAnnouce=" + typeAnnouce
-				+ ", from=" + from + ", to=" + to + "]";
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public User getSender() {
+		return sender;
+	}
+
+	public void setSender(User sender) {
+		this.sender = sender;
+	}
+
+	public static String createMessage(String rawMessage, String avatar) {
+		StringBuilder message = new StringBuilder();
+		message.append("<a href=\"#\"><img src=\"http://localhost:8080/SummerProject/img/");
+		message.append(avatar);
+		message.append("\" alt=\"\">\r\n" + "<p> ");
+		message.append(rawMessage);
+		message.append("</p>" + "</a>");
+
+		return message.toString();
+	}
+
+	public static Announce createAnnouceObject(String message, User user, String avatar, TypeAnnouce typeAnnouce) {
+		Announce announce = null;
+		try {
+			StringBuilder messageResult = new StringBuilder();
+			messageResult.append(message);
+			announce = new Announce(typeAnnouce.getMessage(), user);
+			announce.setMessage(Announce.createMessage(message, avatar));
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return announce;
 	}
 
 }

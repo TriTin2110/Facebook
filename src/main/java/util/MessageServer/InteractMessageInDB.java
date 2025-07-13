@@ -36,8 +36,7 @@ public class InteractMessageInDB {
 		// Khi tin nhắn giữa 2 người đã tồn tại trong db
 		// Lưu tin nhắn DB vào map
 		// Và gửi tin nhắn trong db cho user gửi yêu cầu
-		Session guest = (Session) currentUser.getUserProperties().get("guest");
-		String[] name = { userName, guest.getUserProperties().get("username").toString() };
+		String[] name = { userName, guestName };
 		Arrays.sort(name);
 		if (messengerInDB != null) {
 			String message = messengerInDB.getMessage();

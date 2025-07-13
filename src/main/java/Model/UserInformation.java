@@ -31,6 +31,11 @@ public class UserInformation {
 		super();
 	}
 
+	public UserInformation(User user, String fullName) {
+		this.user = user;
+		this.fullName = fullName;
+	}
+
 	public UserInformation(String userId) {
 		this.userId = userId;
 	}

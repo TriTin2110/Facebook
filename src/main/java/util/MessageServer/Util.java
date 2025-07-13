@@ -39,11 +39,6 @@ public class Util {
 		}
 	}
 
-	// Cập nhật tin nhắn
-	public static String getNewestMessage(String message) {
-		return message.substring(message.lastIndexOf(";") + 1, message.length());
-	}
-
 	// Form hiển thị tin nhắn của bản thân
 	public static String showMessage(String message, boolean selfMessage) {
 		String chatAppMessage = (selfMessage) ? "chat-app__message chat-app__message--receiver"

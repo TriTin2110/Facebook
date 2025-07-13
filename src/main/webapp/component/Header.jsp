@@ -31,10 +31,9 @@ List<String> searched = (List<String>) request.getSession().getAttribute("dataSe
 
 User user = (User) request.getSession().getAttribute("user");
 
-List<Announce> announces = user.getFrom_announces();
+List<Announce> announces = user.getAnnounces();
 
 announces.sort((o1, o2) -> o1.getDate().compareTo(o2.getDate()));
-
 request.setAttribute("announces", announces);
 request.setCharacterEncoding("UTF-8");
 %>
@@ -59,7 +58,7 @@ request.setCharacterEncoding("UTF-8");
 							<%
 							for (String item : searched) {
 							%>
-							<li><a href="<%=url%>/jsp/SearchFriend.jsp"
+							<li><a href="<%=url%>/Friend?method=search&&searchedData=<%=item%>"
 								class="dropdown-item"><%=item%></a></li>
 							<%
 							}
@@ -94,7 +93,11 @@ request.setCharacterEncoding("UTF-8");
 					id="open-notify"> <i class="nm_icon fa-solid fa-bell"></i>
 						<div class="notify_more">
 							<ul id="announce-list">
-								
+								<%for(Announce announce: announces){
+									%>
+									<li><%=announce.getMessage()%></li>
+									<%
+								} %>
 							</ul>
 						</div>
 				</a></li>

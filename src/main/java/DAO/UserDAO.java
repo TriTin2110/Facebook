@@ -15,9 +15,13 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
+import Enums.TypeAnnouce;
 import HibernateUtil.HibernateUtil;
+import Model.Announce;
 import Model.Friend;
 import Model.User;
+import WebSocket.Notification;
+import thread.SendNotification;
 
 public class UserDAO implements InterfaceDAO<User> {
 	private int result;
@@ -62,6 +66,7 @@ public class UserDAO implements InterfaceDAO<User> {
 	@Override
 	public int remove(User t) {
 		// TODO Auto-generated method stub
+//		removeFriend(t.getUserId());
 		openSession();
 		try {
 			Transaction transaction = session.beginTransaction();
@@ -70,19 +75,36 @@ public class UserDAO implements InterfaceDAO<User> {
 			result = 1;
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
 		} finally {
 			closeSession();
 		}
 		return result;
 	}
 
+	public void removeFriend(String id) {
+		try {
+			openSession();
+			Transaction transaction = session.beginTransaction();
+			session.createNativeQuery("delete from user_friend where user_id = :id").setParameter("id", id)
+					.executeUpdate();
+			transaction.commit();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		} finally {
+			closeSession();
+		}
+
+	}
+
 	@Override
 	public int update(User t) {
 		// TODO Auto-generated method stub
-		openSession();
 		try {
+			openSession();
 			Transaction transaction = session.beginTransaction();
-			session.update(t);
+			session.saveOrUpdate(t);
 			transaction.commit();
 			result = 1;
 		} catch (Exception e) {
@@ -102,8 +124,11 @@ public class UserDAO implements InterfaceDAO<User> {
 		try {
 			user = session.find(User.class, t);
 			// Khi load object thì load luôn cả list (do eager không hỗ trợ nhiều list)
-			Hibernate.initialize(user.getFrom_announces());
-			Hibernate.initialize(user.getTo_announces());
+			Hibernate.initialize(user.getAnnounces());
+			Hibernate.initialize(user.getListFriend());
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
 		} finally {
 			// TODO: handle finally clause
 			closeSession();
@@ -121,8 +146,7 @@ public class UserDAO implements InterfaceDAO<User> {
 			query.setParameter("email", t.getEmail());
 			user = query.getSingleResult();
 			Hibernate.initialize(user.getListFriend());
-			Hibernate.initialize(user.getFrom_announces());
-			Hibernate.initialize(user.getTo_announces());
+			Hibernate.initialize(user.getAnnounces());
 		} catch (NoResultException e) {
 			// TODO: handle exception
 
@@ -140,7 +164,18 @@ public class UserDAO implements InterfaceDAO<User> {
 	@Override
 	public List<User> selectAll() {
 		// TODO Auto-generated method stub
-		return null;
+		List<User> users = null;
+		try {
+			openSession();
+			TypedQuery<User> query = session.createQuery("from User", User.class);
+			users = query.getResultList();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		} finally {
+			closeSession();
+		}
+		return users;
 	}
 
 	public User confirmEmail(String idUser) {
@@ -175,7 +210,6 @@ public class UserDAO implements InterfaceDAO<User> {
 			Query query = session.createQuery(queryStatement, Friend.class);
 			query.setParameter("fullName", "%" + fullName + "%");
 			users = query.getResultList();
-			session.close();
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -185,48 +219,16 @@ public class UserDAO implements InterfaceDAO<User> {
 		return users;
 	}
 
-//	public void processAddingFriend(String friendId, User user) {
-//		// TODO Auto-generated method stub
-//		User friend = new User();
-//		String announceId = friendId;
-//		friendId = friendId.substring(0, friendId.indexOf("-"));
-//
-//		friend.setUserId(friendId);
-//		friend = selectById(friend.getUserId());
-//
-//		String messageForReceiver = "Bạn và " + friend.getUserInformation().getFullName() + " đã trở thành bạn bè!";
-//		String messageForSender = "Bạn và " + user.getUserInformation().getFullName() + " đã trở thành bạn bè!";
-//
-//		List<Announce> announces = updateAnnouce(user, announceId, messageForReceiver, messageForSender);
-//		user.setAnnounces(announces);
-//
-//		user = addingFriend(user, friend);
-//		update(user);
-//	}
-
-//	private List<Announce> updateAnnouce(User user, String annouceId, String messageForReceiver,
-//			String messageForSender) {
-//		List<Announce> announces = user.getAnnounces();
-//
-//		Announce annouceReceiver = announces.stream().filter(a -> a.getTo().getUserId().equals(annouceId)).findFirst()
-//				.get();
-////		Announce annouceSender = annouceReceiver.getAnnouce();
-//
-//		announces.remove(annouceReceiver);
-//
-//		annouceReceiver.setMessage(messageForReceiver);
-////		annouceSender.setMessage(messageForSender);
-////		annouceReceiver.setTypeOfAnnouce("SN");
-//
-//		announces.add(annouceReceiver);
-//
-//		return announces;
-//	}
-
-	public User addingFriend(User user1, User user2) {
-		List<User> users = user1.getListFriend();
-		users.add(user2);
-		user1.setListFriend(users);
+	public User addingFriend(User user1, User user2, Announce announce) {
+		try {
+			List<User> friends = user1.getListFriend();
+			List<Announce> announces = user1.getAnnounces();
+			announces.add(announce);
+			friends.add(user2);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
 		return user1;
 	}
 
@@ -246,6 +248,44 @@ public class UserDAO implements InterfaceDAO<User> {
 		closeSession();
 
 		return users;
+	}
+
+	public void processAddingFriend(String friendId, User user) {
+//	// TODO Auto-generated method stub
+		User friend = selectById(friendId);
+
+		String messageForReceiver = "Bạn và <strong>" + friend.getUserInformation().getFullName()
+				+ "</strong> đã trở thành bạn bè!";
+		String messageForSender = "Bạn và <strong>" + user.getUserInformation().getFullName()
+				+ "</strong> đã trở thành bạn bè!";
+
+		Announce announceForReceiver = Announce.createAnnouceObject(messageForReceiver, user, friend.getAvatar(),
+				TypeAnnouce.FRIEND_ACCEPTED);
+		Announce announceForSender = Announce.createAnnouceObject(messageForSender, friend, user.getAvatar(),
+				TypeAnnouce.FRIEND_ACCEPTED);
+		try {
+			javax.websocket.Session session = Notification.getSession(friendId);
+			SendNotification t1 = new SendNotification(session, messageForSender);
+			t1.start();
+			Thread.sleep(500);
+			// Send notification for receiver
+			session = Notification.getSession(user.getUserId());
+			SendNotification t2 = new SendNotification(session, messageForReceiver);
+			t2.start();
+
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		user.getListFriend().add(friend);
+		user.getAnnounces().add(announceForReceiver);
+		friend.getListFriend().add(user);
+		friend.getAnnounces().add(announceForSender);
+		update(user);
+		update(friend);
+		AnnounceDAO announceDAO = new AnnounceDAO();
+		announceDAO.removeFriendRequest(friend, user);
 	}
 
 }

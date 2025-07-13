@@ -20,6 +20,7 @@ public class UserInteract {
 					Session guestTmp = session2;
 					currentUser.getUserProperties().put("guest", guestTmp);
 					currentUser.getUserProperties().put("guestName", guestName);
+					break;
 				}
 			}
 			messageInDB = getMessageFromDB(currentUser, userName, guestName, map);
@@ -80,6 +81,7 @@ public class UserInteract {
 
 	public void sendMessageForAnother(Session currentUser, String userName, String message, Map<String, String> map) {
 		try {
+			String rawMessage = message;
 			Session guest = (Session) currentUser.getUserProperties().get("guest");
 			String guestName = (String) currentUser.getUserProperties().get("guestName");
 			String[] name = { userName, guestName };
@@ -90,14 +92,12 @@ public class UserInteract {
 			message = proccessMessage(message);
 
 			message = (previousMessage == null) ? userName + ":" + message : previousMessage + userName + ":" + message;
-			System.out.println(message + ";");
 			map.put(name[0] + name[1], message + ";");
 			// Thực hiện lưu tin nhắn của 2 user (kèm tin nhắn của 2 user trong db {nếu có})
 			if (guest.isOpen()) {
 				Session guestOfGuest = (Session) guest.getUserProperties().get("guest");
 				if (guestOfGuest.getUserProperties().get("username").equals(userName)) {
-					message = Util.getNewestMessage(message);
-					guest.getBasicRemote().sendText(Util.showMessage(message.split(":")[1], false));
+					guest.getBasicRemote().sendText(Util.showMessage(rawMessage, false));
 				}
 			}
 		} catch (Exception e) {

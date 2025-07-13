@@ -34,14 +34,11 @@ public class UserServiceImpl implements UserService {
 		UserInformation userInformation = null;
 		User user;
 		String notice = "Tạo tài khoản thành công! Vui lòng kiểm tra email đã đăng ký";
-//		String urlEmailConfirm = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
-//				+ request.getContextPath();
 
 		String firstName = request.getParameter("ten");
 		String lastName = request.getParameter("ho");
 		// Tạo user với email và passowrd
 		user = userInt.createUser();
-		System.out.println(user.getEmail());
 		// Mã hóa email và password cho user đồng thời tạo id cho user
 		user = userInt.encryptPasswordEmailId(user);
 
@@ -87,7 +84,6 @@ public class UserServiceImpl implements UserService {
 		String userEmailInputEncrypted = userInt.hashEncrypt(emailInput);
 		User user = userDAO.selectByEmail(new User(userEmailInputEncrypted));
 		HttpSession session = request.getSession();
-
 		boolean userNotExists = user == null;
 		if (userNotExists) {
 			notice = "Email không tồn tại";

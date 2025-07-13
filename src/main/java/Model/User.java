@@ -34,23 +34,29 @@ public class User {
 	@OneToMany(mappedBy = "user")
 	private List<Post> listPost;
 
-	@OneToMany(mappedBy = "from", cascade = CascadeType.ALL)
-	private List<Announce> from_announces;
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	private List<Announce> announces;
 
-	@OneToMany(mappedBy = "to", cascade = CascadeType.ALL)
-	private List<Announce> to_announces;
+	@OneToMany(mappedBy = "sender", cascade = CascadeType.ALL)
+	private List<Announce> announceFriend;
 
 	public User() {
 		this.listFriend = new ArrayList<User>();
 		this.userInformation = new UserInformation();
 		this.listGroup = new ArrayList<Group>();
 		this.listPost = new ArrayList<Post>();
-		this.from_announces = new ArrayList<Announce>();
-		this.to_announces = new ArrayList<Announce>();
+		this.announces = new ArrayList<Announce>();
+		this.announceFriend = new ArrayList<Announce>();
 	}
 
 	public User(String email) {
 		this.email = email;
+		this.listFriend = new ArrayList<User>();
+		this.userInformation = new UserInformation();
+		this.listGroup = new ArrayList<Group>();
+		this.listPost = new ArrayList<Post>();
+		this.announces = new ArrayList<Announce>();
+		this.announceFriend = new ArrayList<Announce>();
 	}
 
 	public User(String email, String password) {
@@ -63,14 +69,16 @@ public class User {
 		this.userInformation = new UserInformation();
 		this.listGroup = new ArrayList<Group>();
 		this.listPost = new ArrayList<Post>();
-		this.from_announces = new ArrayList<Announce>();
-		this.to_announces = new ArrayList<Announce>();
+		this.announces = new ArrayList<Announce>();
+		this.announceFriend = new ArrayList<Announce>();
 	}
 
 	public User(String userId, String avatar, UserInformation userInformation) {
 		this.userId = userId;
 		this.avatar = avatar;
 		this.userInformation = userInformation;
+		this.listFriend = new ArrayList<User>();
+		this.announceFriend = new ArrayList<Announce>();
 	}
 
 	public User(String userId, String email, String password, boolean identifyStatus, String avatar,
@@ -85,8 +93,8 @@ public class User {
 		this.listFriend = listFriendId;
 		this.listGroup = listGroup;
 		this.listPost = listPost;
-		this.from_announces = new ArrayList<Announce>();
-		this.to_announces = new ArrayList<Announce>();
+		this.announces = new ArrayList<Announce>();
+		this.announceFriend = new ArrayList<Announce>();
 	}
 
 	public String getUserId() {
@@ -169,20 +177,12 @@ public class User {
 		this.listPost = listPost;
 	}
 
-	public List<Announce> getFrom_announces() {
-		return from_announces;
+	public List<Announce> getAnnounces() {
+		return announces;
 	}
 
-	public void setFrom_announces(List<Announce> from_announces) {
-		this.from_announces = from_announces;
-	}
-
-	public List<Announce> getTo_announces() {
-		return to_announces;
-	}
-
-	public void setTo_announces(List<Announce> to_announces) {
-		this.to_announces = to_announces;
+	public void setAnnounces(List<Announce> announces) {
+		this.announces = announces;
 	}
 
 	@Override

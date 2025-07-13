@@ -11,6 +11,7 @@ import org.hibernate.Transaction;
 
 import HibernateUtil.HibernateUtil;
 import Model.Announce;
+import Model.User;
 
 public class AnnounceDAO implements InterfaceDAO<Announce> {
 
@@ -110,7 +111,7 @@ public class AnnounceDAO implements InterfaceDAO<Announce> {
 		List<Announce> announces = new ArrayList<Announce>();
 		openSession();
 		try {
-			TypedQuery<Announce> query = session.createQuery("FROM Announce WHERE from_user=:from", Announce.class);
+			TypedQuery<Announce> query = session.createQuery("FROM Announce WHERE user_id=:from", Announce.class);
 			query.setParameter("from", id);
 			announces = query.getResultList();
 		} catch (Exception e) {
@@ -124,18 +125,22 @@ public class AnnounceDAO implements InterfaceDAO<Announce> {
 		return announces;
 	}
 
-	public List<Announce> selectReceivedAnnouncesByToUserId(String id) {
-		List<Announce> announces = new ArrayList<Announce>();
+	public void removeFriendRequest(User sender, User receiver) {
 		openSession();
 		try {
-			TypedQuery<Announce> query = session.createQuery("FROM Announce WHERE to_user=:to", Announce.class);
-			query.setParameter("to", id);
-			announces = query.getResultList();
+			String sql = "from Announce where sender_id=:sender and user_id=:receiver";
+			TypedQuery<Announce> query = session.createQuery(sql, Announce.class);
+			query.setParameter("sender", sender.getUserId());
+			query.setParameter("receiver", receiver.getUserId());
+			Announce announce = query.getSingleResult();
+			remove(announce);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+
 		} finally {
-			// TODO: handle finally clause
 			closeSession();
 		}
-
-		return announces;
 	}
+
 }
